@@ -72,14 +72,17 @@ public class WeiXinApiServiceImpl implements IWeiXinApiService {
         if (null != jsonObject && Constant.REQUEST_SUCCESS_CODE.equals(jsonObject.getInteger(WeiXinApiUrl.ERRCODE_KEY))) {
             Constant.WEIXIN_ACCESSTOKEN = jsonObject.getString(WeiXinApiUrl.ACCESS_TOKEN_KEY);
         }
-        if (null == jsonObject || !Constant.REQUEST_SUCCESS_CODE.equals(jsonObject.getInteger(WeiXinApiUrl.ERRCODE_KEY))) {
-            return updateAccessToken();
-        }
+//        if (null == jsonObject || !Constant.REQUEST_SUCCESS_CODE.equals(jsonObject.getInteger(WeiXinApiUrl.ERRCODE_KEY))) {
+//            return updateAccessToken();
+//        }
         return ResponseUtil.ok(jsonObject);
     }
 
     @Override
     public String getAccessToken() {
+        if (Constant.WEIXIN_ACCESSTOKEN.trim().isEmpty()) {
+            this.updateAccessToken();
+        }
         return Constant.WEIXIN_ACCESSTOKEN;
     }
 }
