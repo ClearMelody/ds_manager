@@ -29,11 +29,11 @@ public class PayLog {
     @Column(name = "pay_bill")
     private Long payBill;
 
-    @Column(name = "pay_date")
-    private Date payDate;
+    @Column(name = "create_time")
+    private Date createTime;
 
     @Column(name = "pay_desc")
-    private Date payDesc;
+    private String payDesc;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;

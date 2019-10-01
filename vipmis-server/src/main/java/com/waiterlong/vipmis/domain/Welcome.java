@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -31,7 +32,7 @@ public class Welcome {
     private String content;
 
     @Column(name = "create_time")
-    private String createTime;
+    private Date createTime;
 
     @Override
     public boolean equals(Object o) {

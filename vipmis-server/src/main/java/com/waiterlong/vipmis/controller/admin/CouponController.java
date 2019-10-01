@@ -1,4 +1,4 @@
-package com.waiterlong.vipmis.controller;
+package com.waiterlong.vipmis.controller.admin;
 
 import com.google.common.collect.Maps;
 import com.waiterlong.vipmis.component.Result;
@@ -23,7 +23,7 @@ import java.util.Map;
  * @author waiterlong
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/admin")
 public class CouponController {
     @Resource(name = "iCouponService")
     private ICouponService couponService;

@@ -42,6 +42,10 @@ public class UserInfoVo {
 
     private Long goal;
 
+    private Float deposit;
+
+    private LabelVo labelVo;
+
     public static List<UserInfoVo> convertUser(List<User> users){
         List<UserInfoVo> userVos = Lists.newArrayList();
         for (User user : users) {
@@ -57,6 +61,7 @@ public class UserInfoVo {
         UserInfoVo userInfoVo = new UserInfoVo();
         AbstractMyBeanUtils.copyProperties(user, userInfoVo);
         userInfoVo.setFirstLetter(PinyinUtil.getFirstLetter(userInfoVo.realName));
+        userInfoVo.setLabelVo(LabelVo.convertLabel(user.getLabel()));
         return userInfoVo;
     }
 }
