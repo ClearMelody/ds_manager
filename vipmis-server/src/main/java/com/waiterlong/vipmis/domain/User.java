@@ -58,11 +58,26 @@ public class User {
     @Column(name = "goal")
     private Long goal;
 
+    @Column(name = "deposit")
+    private Float deposit;
+
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST,CascadeType.REMOVE}, fetch = FetchType.LAZY)
     private List<GoalLog> goalLogs = Lists.newLinkedList();
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST,CascadeType.REMOVE}, fetch = FetchType.LAZY)
     private List<UserCoupon> userCoupons = Lists.newLinkedList();
+
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST,CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    private List<DepositLog> depositLogs = Lists.newLinkedList();
+
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST,CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    private List<PayLog> payLogs = Lists.newLinkedList();
+
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST,CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    private List<Cat> cats = Lists.newLinkedList();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Label label;
 
     @Override
     public boolean equals(Object o) {
