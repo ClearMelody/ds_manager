@@ -6,6 +6,7 @@ import com.waiterlong.vipmis.domain.DepositLog;
 import com.waiterlong.vipmis.utils.AbstractMyBeanUtils;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,6 +23,12 @@ public class DepositLogVo {
     private String id;
 
     private UserInfoVo userInfoVo;
+
+    private String title;
+
+    private Date time;
+
+    private Float value;
 
     public static DepositLogVo convertDepositLog(DepositLog depositLog) {
         if (null == depositLog) {

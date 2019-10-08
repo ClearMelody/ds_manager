@@ -29,6 +29,12 @@ public class DepositLog {
     @Column(name = "create_time")
     private Date createTime;
 
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "value")
+    private Float value;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 

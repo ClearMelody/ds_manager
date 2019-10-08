@@ -23,6 +23,8 @@ public class GoalLogVo {
 
     private Long goalChange;
 
+    private String title;
+
     private Date createTime;
 
     private UserInfoVo userInfoVo;

@@ -34,9 +34,6 @@ public class User {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "password")
-    private String password;
-
     @Column(name = "wechat_name")
     private String weChatName;
 
@@ -57,6 +54,12 @@ public class User {
 
     @Column(name = "card_cord")
     private String cardCord;
+
+    @Column(name = "birthday")
+    private String birthday;
+
+    @Column(name = "id_card")
+    private String idCard;
 
     @Column(name = "goal")
     private Long goal;

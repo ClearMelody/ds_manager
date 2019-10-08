@@ -2,6 +2,7 @@ package com.waiterlong.vipmis.domain.wxvo;
 
 import com.google.common.collect.Lists;
 import com.waiterlong.vipmis.domain.User;
+import com.waiterlong.vipmis.utils.AbstractMyBeanUtils;
 import lombok.Data;
 
 import java.util.List;
@@ -17,6 +18,8 @@ import java.util.List;
  */
 @Data
 public class VipVo {
+    private String id;
+
     private String vipName;
 
     private String name;
@@ -25,9 +28,15 @@ public class VipVo {
 
     private String cardCord;
 
-    private String balance;
+    private Float balance;
 
-    private String integral;
+    private Long integral;
+
+    private String idCard;
+
+    private String birthday;
+
+    private String sex;
 
     private Integer coupon;
 
@@ -36,6 +45,12 @@ public class VipVo {
             return null;
         }
         VipVo vipVo = new VipVo();
+        AbstractMyBeanUtils.copyProperties(user, vipVo);
+        vipVo.setBalance(user.getDeposit());
+        vipVo.setVipName(user.getWeChatName());
+        vipVo.setName(user.getRealName());
+        vipVo.setIntegral(user.getGoal());
+        vipVo.setSex(user.getWeChatSex());
         return vipVo;
     }
 
