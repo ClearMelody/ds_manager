@@ -24,7 +24,7 @@ import java.util.Map;
 @RequestMapping("/api/admin/goal")
 public class GoalController {
     @Resource(name = "iGoalService")
-    private IGoalService goalService;
+    private IGoalService iGoalService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public Object listGoalLogByPage(
@@ -34,11 +34,11 @@ public class GoalController {
         Pageable pageable = PageRequest.of(page - 1, limit);
         Map<String, Object> paramMap = Maps.newHashMap();
         paramMap.put("userId", userId);
-        return goalService.listGoalLogByPage(paramMap, pageable);
+        return iGoalService.listGoalLogByPage(paramMap, pageable);
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Object addGoalLog(@RequestBody GoalLogVo goalLogVo){
-        return  goalService.addGoalLog(goalLogVo);
+        return  iGoalService.addGoalLog(goalLogVo);
     }
 }

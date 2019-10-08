@@ -1,10 +1,8 @@
 package com.waiterlong.vipmis.controller.admin;
 
 import com.google.common.collect.Maps;
-import com.waiterlong.vipmis.component.Result;
 import com.waiterlong.vipmis.controller.base.BaseController;
 import com.waiterlong.vipmis.domain.vo.UserVo;
-import com.waiterlong.vipmis.service.ICouponService;
 import com.waiterlong.vipmis.service.IUserService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,16 +24,16 @@ import java.util.Map;
 @RequestMapping("/api/admin/sysuser")
 public class SysUserController extends BaseController {
     @Resource(name = "iUserService")
-    private IUserService userService;
+    private IUserService iUserService;
 
     @RequestMapping(value = "/find", method = RequestMethod.GET)
     public Object findUserInfoById(@RequestParam(defaultValue = "") String id){
-        return  userService.findUserInfoById(id);
+        return  iUserService.findUserInfoById(id);
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Object addUser(@RequestBody UserVo userVo){
-        return  userService.addUser(userVo);
+        return  iUserService.addUser(userVo);
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
@@ -46,6 +44,6 @@ public class SysUserController extends BaseController {
         Pageable pageable = PageRequest.of(page - 1, limit);
         Map<String, Object> paramMap = Maps.newHashMap();
         paramMap.put("realName", realName);
-        return userService.listUsersByPage(paramMap, pageable);
+        return iUserService.listUsersByPage(paramMap, pageable);
     }
 }

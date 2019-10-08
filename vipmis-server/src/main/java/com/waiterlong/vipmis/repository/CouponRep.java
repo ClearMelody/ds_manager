@@ -1,6 +1,7 @@
 package com.waiterlong.vipmis.repository;
 
 import com.waiterlong.vipmis.domain.Coupon;
+import com.waiterlong.vipmis.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,4 +25,5 @@ public interface CouponRep extends JpaRepository<Coupon, String> {
      * @return Page<Coupon>
      */
     Page<Coupon> findByOrderByCreateTimeDesc(Pageable pageable);
+
 }

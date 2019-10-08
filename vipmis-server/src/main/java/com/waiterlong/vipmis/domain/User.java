@@ -55,6 +55,9 @@ public class User {
     @Column(name = "last_login_time")
     private Date lastLoginTime;
 
+    @Column(name = "card_cord")
+    private String cardCord;
+
     @Column(name = "goal")
     private Long goal;
 

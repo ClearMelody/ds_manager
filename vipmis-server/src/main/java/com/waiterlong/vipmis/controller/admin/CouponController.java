@@ -26,7 +26,7 @@ import java.util.Map;
 @RequestMapping("/api/admin")
 public class CouponController {
     @Resource(name = "iCouponService")
-    private ICouponService couponService;
+    private ICouponService iCouponService;
 
     @RequestMapping(value = "/coupon/list", method = RequestMethod.GET)
     public Object listCouponByPage(
@@ -34,17 +34,17 @@ public class CouponController {
             @RequestParam(value = "limit", defaultValue = "10") Integer limit){
         Pageable pageable = PageRequest.of(page - 1, limit);
         Map<String, Object> paramMap = Maps.newHashMap();
-        return couponService.listCouponByPage(paramMap, pageable);
+        return iCouponService.listCouponByPage(paramMap, pageable);
     }
 
     @RequestMapping(value = "/coupon/add", method = RequestMethod.POST)
     public Object addCoupon(@RequestBody CouponVo couponVo){
-        return  couponService.addCoupon(couponVo);
+        return  iCouponService.addCoupon(couponVo);
     }
 
     @RequestMapping(value = "/coupon/update", method = RequestMethod.POST)
     public Object updateCoupon(@RequestBody CouponVo couponVo){
-        return  couponService.updateCoupon(couponVo);
+        return  iCouponService.updateCoupon(couponVo);
     }
 
     @RequestMapping(value = "/user/coupon/list", method = RequestMethod.GET)
@@ -55,16 +55,16 @@ public class CouponController {
         Pageable pageable = PageRequest.of(page - 1, limit);
         Map<String, Object> paramMap = Maps.newHashMap();
         paramMap.put("userId", userId);
-        return couponService.listUserCouponByPage(paramMap, pageable);
+        return iCouponService.listUserCouponByPage(paramMap, pageable);
     }
 
     @RequestMapping(value = "/user/coupon/add", method = RequestMethod.POST)
     public Object addUserCoupon(@RequestBody UserCouponVo userCouponVo) {
-        return couponService.addUserCoupon(userCouponVo);
+        return iCouponService.addUserCoupon(userCouponVo);
     }
 
     @RequestMapping(value = "/user/coupon/use", method = RequestMethod.GET)
     public Object updateUserCoupon(@RequestParam String userCouponId) {
-        return couponService.useUserCoupon(userCouponId);
+        return iCouponService.useUserCoupon(userCouponId);
     }
 }

@@ -1,12 +1,8 @@
 package com.waiterlong.vipmis.service;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.waiterlong.vipmis.assets.Constant;
 import com.waiterlong.vipmis.assets.WeiXinApiUrl;
-import com.waiterlong.vipmis.component.Result;
-import com.waiterlong.vipmis.domain.vo.UserInfoVo;
 import com.waiterlong.vipmis.domain.vo.UserVo;
 import org.junit.Test;
 import org.junit.runner.RunWith;

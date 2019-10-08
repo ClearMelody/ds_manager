@@ -22,7 +22,15 @@ public interface UserRep extends JpaRepository<User, String> {
      *
      * @param realName {String}
      * @param pageable {Pageable}
-     * @return Page<User>
+     * @return {Page<User>}
      */
     Page<User> findByRealNameIsContainingOrderByRegisterTimeDesc(String realName, Pageable pageable);
+
+    /**
+     * 根据openid找用户
+     *
+     * @param weChatOpenId {String}
+     * @return {User}
+     */
+    User findByWeChatOpenId(String weChatOpenId);
 }
