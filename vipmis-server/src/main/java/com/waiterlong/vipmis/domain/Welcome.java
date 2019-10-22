@@ -28,7 +28,7 @@ public class Welcome {
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
-    @Column(name="content", columnDefinition="BLOB")
+    @Column(name="content", columnDefinition="LONGBLOB")
     private String content;
 
     @Column(name = "create_time")

@@ -49,7 +49,6 @@ public class UserServiceImpl extends BaseServiceImpl implements IUserService {
             return ResponseUtil.badArgumentValue();
         }
         UserInfoVo userInfoVo = UserInfoVo.convertUser(userOpt.get());
-        System.out.println(JSONObject.toJSONString(GoalLogVo.convertGoalLog(userOpt.get().getGoalLogs())));
         return ResponseUtil.ok(userInfoVo);
     }
 

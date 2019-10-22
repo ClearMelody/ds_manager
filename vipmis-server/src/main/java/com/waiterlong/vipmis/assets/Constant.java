@@ -22,6 +22,8 @@ public class Constant {
      */
     public final static String TEST_USER_COUPON_ID = "8aa7a8ae6c093e60016c093e6fc20000";
 
+    public final static Integer MAX_WELCOME_COUNT = 3;
+
 
     public final static Integer REQUEST_SUCCESS_CODE = 0;
     public final static Integer REQUEST_FAIL_CODE = -1;

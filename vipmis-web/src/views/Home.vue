@@ -1,13 +1,31 @@
 <template>
     <el-container style="height:100%">
-      <el-header style="background-color: #fff; border-bottom: solid 1px #e6e6e6"><h1>问卷调查后台系统</h1></el-header>
+      <el-header style="background-color: #fff; border-bottom: solid 1px #e6e6e6"><h1>喵酱后台管理系统</h1></el-header>
       <el-container style="height:100%" height="100%">
         <el-aside width="13rem">
           <el-menu :default-active="menus.length !== 0 ? menus[0].link : ''" router>
-            <el-menu-item v-for="(item) in menus" :key="item.id" :index="item.link">
-              <i class="el-icon-menu"></i>
-              <span slot="title">{{item.name}}</span>
-            </el-menu-item>
+            <div v-for="(item) in menus" :key="item.id">
+              <el-menu-item v-if="!item.hasChild" :index="item.link">
+                <i class="el-icon-menu"></i>
+                <span slot="title">{{item.name}}</span>
+              </el-menu-item>
+              <el-submenu v-else index="">
+                <template slot="title">
+                  <i class="el-icon-location"></i>
+                  <span>{{item.name}}</span>
+                </template>
+                <el-menu-item-group>
+                  <el-menu-item v-for="(it) in item.childs" :key="it.id" :index="it.link">
+                    <i class="el-icon-menu"></i>
+                    <span slot="title">{{it.name}}</span>
+                  </el-menu-item>
+                </el-menu-item-group>
+              </el-submenu>
+            </div>
+<!--            <el-menu-item v-for="(item) in menus" :key="item.id" :index="item.link">-->
+<!--              <i class="el-icon-menu"></i>-->
+<!--              <span slot="title">{{item.name}}</span>-->
+<!--            </el-menu-item>-->
           </el-menu>
         </el-aside>
         <el-main width="100%"><router-view></router-view></el-main>
@@ -39,7 +57,9 @@
     methods: {
     },
     mounted() {
-      this.menus.push({id: 1, name: "调查管理", link: "/home/questionnaire"}, {id: 2, name: "问卷管理", link: ""})
+      this.menus.push({id: 1, name: "首页", hasChild: false, link: "/home/questionnaire"});
+      this.menus.push({id: 6, name: "用户管理", hasChild: true, childs: [{id: 7, name: "优惠券管理", link: "/home/questionnaire"}, {id: 8, name: "分组管理", link: "/home/questionnaire"}]});
+      this.menus.push({id: 2, name: "系统管理", hasChild: true, childs: [{id: 5, name: "欢迎页管理", link: "/home/wxWelcome"}, {id: 3, name: "管理员管理", link: "/home/questionnaire"}, {id: 4, name: "权限管理", link: "/home/questionnaire"}]});
     }
   }
 </script>

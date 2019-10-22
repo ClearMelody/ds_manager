@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.waiterlong.vipmis.domain.wxvo.VipVo;
 import com.waiterlong.vipmis.service.IUserService;
 import com.waiterlong.vipmis.service.IVipService;
+import com.waiterlong.vipmis.service.IWelcomeService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,8 @@ import java.util.Map;
 public class VipController {
     @Resource(name = "iVipService")
     private IVipService iVipService;
+    @Resource(name = "iWelcomeService")
+    private IWelcomeService iWelcomeService;
 
     @RequestMapping(value = "/vip/find", method = RequestMethod.GET)
     public Object findVipByOpenId(@RequestParam(defaultValue = "") String openid) {
@@ -56,5 +59,10 @@ public class VipController {
         Map<String, Object> paramMap = Maps.newHashMap();
         paramMap.put("userId", userId);
         return iVipService.listGoalLogByPage(paramMap, pageable);
+    }
+
+    @RequestMapping(value = "/welcome", method = RequestMethod.GET)
+    public Object getLastWelcome(){
+        return iWelcomeService.getLastWelcome();
     }
 }

@@ -6,9 +6,12 @@
  \* Description: 该文件用于记录常用的下拉框中等静态值
  \*/
 
+import Env from '../api/env';
+let base = Env.baseURL;
 export default {
   QUESTIONNAIRE: {
     NOTISSUE: "未发布",
     ISSUE: "已发布"
-  }
+  },
+  WELCOME_UPLOAD_URL: `${base}/welcome/img/upload`
 }

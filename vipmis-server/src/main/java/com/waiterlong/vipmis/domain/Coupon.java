@@ -34,8 +34,11 @@ public class Coupon {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "indate")
-    private Date indate;
+    @Column(name = "valid_day")
+    private Integer validDay;
+
+    @Column(name = "min_pay")
+    private String minPay;
 
     @Column(name = "create_time")
     private Date createTime;

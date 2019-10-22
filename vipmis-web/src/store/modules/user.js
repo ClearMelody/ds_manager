@@ -23,20 +23,6 @@ const getters = {
   }
 };
 
-/**
- * 登录后，将后台发送权限数据进行格式化处理
- * @param userData
- */
-function formatCUserPermissions(userData) {
-  let user = JSON.parse(userData);
-  user.roleVo.permissionGroup.forEach(menu => {
-    menu.permission = menu.permission.map(buttonPermission => {
-      return buttonPermission.value;
-    })
-  });
-  return user;
-}
-
 const actions = {
   /**
    * 用户登录
@@ -65,7 +51,6 @@ const actions = {
 };
 
 const mutations = {
-
   setCurrentUser(state, entity) {
     state.currentUser = entity
   },
