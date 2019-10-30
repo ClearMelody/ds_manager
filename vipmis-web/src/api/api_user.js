@@ -9,11 +9,6 @@
 import * as API from './'
 
 export default {
-
-  /**
-   * 获取用户列表
-   * @param params
-   * @returns {*}
-   */
-  alterUserInfo: user => API.POST("", user)
+  listUsersByPage: params => API.GET('/user/list', params),
+  updateUser: params => API.POST(`/user/update`, params)
 }

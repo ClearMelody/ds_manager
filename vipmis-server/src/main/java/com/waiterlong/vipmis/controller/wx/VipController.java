@@ -35,7 +35,7 @@ public class VipController {
     }
 
     @RequestMapping(value = "/vip/update", method = RequestMethod.POST)
-    public Object findVipByOpenId(@RequestBody VipVo vipVo) {
+    public Object updateVipInfo(@RequestBody VipVo vipVo) {
         return iVipService.updateVipInfo(vipVo);
     }
 
