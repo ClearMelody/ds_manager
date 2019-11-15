@@ -24,12 +24,24 @@ public class VipVo {
 
     private String name;
 
+    private String openid;
+
     private String phone;
+
+    private String avatarUrl;
 
     private String cardCord;
 
+    private String cardType;
+
+    /**
+     * 余额
+     */
     private Float balance;
 
+    /**
+     * 积分
+     */
     private Long integral;
 
     private String idCard;
@@ -51,6 +63,7 @@ public class VipVo {
         vipVo.setName(user.getRealName());
         vipVo.setIntegral(user.getGoal());
         vipVo.setSex(user.getWeChatSex());
+        vipVo.setAvatarUrl(user.getWeChatImgUrl());
         return vipVo;
     }
 

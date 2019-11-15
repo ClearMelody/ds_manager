@@ -2,6 +2,7 @@ package com.waiterlong.vipmis.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.waiterlong.vipmis.component.PageResult;
+import com.waiterlong.vipmis.component.Result;
 import com.waiterlong.vipmis.domain.User;
 import com.waiterlong.vipmis.domain.vo.GoalLogVo;
 import com.waiterlong.vipmis.domain.vo.UserInfoVo;
@@ -40,22 +41,22 @@ public class UserServiceImpl extends BaseServiceImpl implements IUserService {
     private UserRep userRep;
 
     @Override
-    public Object findUserInfoById(@NotNull  String id) {
+    public Result findUserInfoById(@NotNull  String id) {
         if (id.isEmpty()) {
-            return ResponseUtil.badArgumentValue();
+            return Result.badArgumentValue();
         }
         Optional<User> userOpt = userRep.findById(id);
         if (!userOpt.isPresent()) {
-            return ResponseUtil.badArgumentValue();
+            return Result.badArgumentValue();
         }
         UserInfoVo userInfoVo = UserInfoVo.convertUser(userOpt.get());
-        return ResponseUtil.ok(userInfoVo);
+        return Result.ok(userInfoVo);
     }
 
     @Override
-    public Object addUser(@NotNull UserVo userVo) {
+    public Result addUser(@NotNull UserVo userVo) {
         if (null != userVo.getId()) {
-            return ResponseUtil.badArgumentValue();
+            return Result.badArgumentValue();
         }
         User user = new User();
         AbstractMyBeanUtils.copyProperties(userVo, user);
@@ -64,12 +65,12 @@ public class UserServiceImpl extends BaseServiceImpl implements IUserService {
         user.setGoal(0L);
 
         user = userRep.save(user);
-        return ResponseUtil.ok(UserInfoVo.convertUser(user));
+        return Result.ok(UserInfoVo.convertUser(user));
     }
 
     @Override
-    public Object listUsersByPage(Map<String, Object> paramMap, Pageable pageable) {
+    public Result listUsersByPage(Map<String, Object> paramMap, Pageable pageable) {
         Page<User> userPage = userRep.findByRealNameIsContainingOrderByRegisterTimeDesc((String)paramMap.get("realName"), pageable);
-        return ResponseUtil.ok(PageResult.setPageResult(pageable, userPage.getTotalElements(), UserInfoVo.convertUser(userPage.getContent())));
+        return Result.ok(PageResult.setPageResult(pageable, userPage.getTotalElements(), UserInfoVo.convertUser(userPage.getContent())));
     }
 }

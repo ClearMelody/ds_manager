@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * \* Created with IntelliJ IDEA.
  * \* Date: 2019/10/8
@@ -24,4 +26,5 @@ public interface DepositLogRep extends JpaRepository<DepositLog, String> {
      * @return Page<DepositLog>
      */
     Page<DepositLog> findByUser_IdOrderByCreateTimeDesc(String userId, Pageable pageable);
+    List<DepositLog> findByUser_Id(String userId);
 }

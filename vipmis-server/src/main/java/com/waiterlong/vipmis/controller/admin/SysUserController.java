@@ -1,6 +1,7 @@
 package com.waiterlong.vipmis.controller.admin;
 
 import com.google.common.collect.Maps;
+import com.waiterlong.vipmis.component.Result;
 import com.waiterlong.vipmis.controller.base.BaseController;
 import com.waiterlong.vipmis.domain.vo.UserVo;
 import com.waiterlong.vipmis.service.IUserService;
@@ -27,17 +28,17 @@ public class SysUserController extends BaseController {
     private IUserService iUserService;
 
     @RequestMapping(value = "/find", method = RequestMethod.GET)
-    public Object findUserInfoById(@RequestParam(defaultValue = "") String id){
+    public Result findUserInfoById(@RequestParam(defaultValue = "") String id){
         return  iUserService.findUserInfoById(id);
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public Object addUser(@RequestBody UserVo userVo){
+    public Result addUser(@RequestBody UserVo userVo){
         return  iUserService.addUser(userVo);
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public Object listTasksByPage(
+    public Result listTasksByPage(
                                   @RequestParam(defaultValue = "") String realName,
                                   @RequestParam(value = "page", defaultValue = "1") Integer page,
                                   @RequestParam(value = "limit", defaultValue = "10") Integer limit){

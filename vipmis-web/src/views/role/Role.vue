@@ -1,12 +1,12 @@
 <template>
     <div>
-      its admin
+      its role
     </div>
 </template>
 
 <script>
   export default {
-    name: "Admin"
+    name: "Role"
   }
 </script>
 

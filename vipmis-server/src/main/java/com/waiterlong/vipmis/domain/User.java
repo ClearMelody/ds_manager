@@ -61,6 +61,12 @@ public class User {
     @Column(name = "id_card")
     private String idCard;
 
+    /**
+     * 会员卡类型：普通VIP，超级VIP
+     */
+    @Column(name = "card_type")
+    private String cardType;
+
     @Column(name = "goal")
     private Long goal;
 

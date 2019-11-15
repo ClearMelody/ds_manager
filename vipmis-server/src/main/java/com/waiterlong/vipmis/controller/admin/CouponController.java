@@ -29,7 +29,7 @@ public class CouponController {
     private ICouponService iCouponService;
 
     @RequestMapping(value = "/coupon/list", method = RequestMethod.GET)
-    public Object listCouponByPage(
+    public Result listCouponByPage(
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "limit", defaultValue = "10") Integer limit){
         Pageable pageable = PageRequest.of(page - 1, limit);
@@ -38,17 +38,17 @@ public class CouponController {
     }
 
     @RequestMapping(value = "/coupon/add", method = RequestMethod.POST)
-    public Object addCoupon(@RequestBody CouponVo couponVo){
+    public Result addCoupon(@RequestBody CouponVo couponVo){
         return  iCouponService.addCoupon(couponVo);
     }
 
     @RequestMapping(value = "/coupon/update", method = RequestMethod.POST)
-    public Object updateCoupon(@RequestBody CouponVo couponVo){
+    public Result updateCoupon(@RequestBody CouponVo couponVo){
         return  iCouponService.updateCoupon(couponVo);
     }
 
     @RequestMapping(value = "/user/coupon/list", method = RequestMethod.GET)
-    public Object listUserCouponByPage(
+    public Result listUserCouponByPage(
             @RequestParam String userId,
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "limit", defaultValue = "10") Integer limit){
@@ -59,7 +59,7 @@ public class CouponController {
     }
 
     @RequestMapping(value = "/user/coupon/add", method = RequestMethod.POST)
-    public Object addUserCoupon(@RequestBody UserCouponVo userCouponVo) {
+    public Result addUserCoupon(@RequestBody UserCouponVo userCouponVo) {
         return iCouponService.addUserCoupon(userCouponVo);
     }
 

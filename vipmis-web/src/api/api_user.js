@@ -10,5 +10,7 @@ import * as API from './'
 
 export default {
   listUsersByPage: params => API.GET('/user/list', params),
+  charge: params => API.POST(`/user/charge`, params),
+  pay: params => API.POST(`/user/pay`, params),
   updateUser: params => API.POST(`/user/update`, params)
 }

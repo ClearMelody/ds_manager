@@ -1,5 +1,7 @@
 package com.waiterlong.vipmis.service;
 
+import com.waiterlong.vipmis.component.Result;
+
 /**
  * \* Created with IntelliJ IDEA.
  * \* Date: 2019-04-23 17:04
@@ -16,16 +18,16 @@ public interface IWeiXinApiService {
      * @param code       String
      * @param secretCode String
      * @param appid      String
-     * @return Object
+     * @return Result
      */
-    Object getOpenid(String code, String secretCode, String appid);
+    Result getOpenid(String code, String secretCode, String appid);
 
     /**
      * 更新access_token
      *
-     * @return Object
+     * @return Result
      */
-    Object updateAccessToken();
+    Result updateAccessToken();
 
     /**
      * 获取access_token

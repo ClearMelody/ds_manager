@@ -1,9 +1,11 @@
 package com.waiterlong.vipmis.controller.wx;
 
 import com.google.common.collect.Maps;
+import com.waiterlong.vipmis.component.Result;
 import com.waiterlong.vipmis.domain.wxvo.VipVo;
 import com.waiterlong.vipmis.service.IUserService;
 import com.waiterlong.vipmis.service.IVipService;
+import com.waiterlong.vipmis.service.IWeiXinApiService;
 import com.waiterlong.vipmis.service.IWelcomeService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,24 +25,31 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/wx")
-public class VipController {
+public class WxVipController {
     @Resource(name = "iVipService")
     private IVipService iVipService;
     @Resource(name = "iWelcomeService")
     private IWelcomeService iWelcomeService;
+    @Resource(name = "iWeiXinApiService")
+    private IWeiXinApiService iWeiXinApiService;
 
     @RequestMapping(value = "/vip/find", method = RequestMethod.GET)
-    public Object findVipByOpenId(@RequestParam(defaultValue = "") String openid) {
+    public Result findVipByOpenId(@RequestParam(defaultValue = "") String openid) {
         return iVipService.findVipByOpenId(openid);
     }
 
     @RequestMapping(value = "/vip/update", method = RequestMethod.POST)
-    public Object updateVipInfo(@RequestBody VipVo vipVo) {
+    public Result updateVipInfo(@RequestBody VipVo vipVo) {
         return iVipService.updateVipInfo(vipVo);
     }
 
-    @RequestMapping(value = "/vip/balance/list", method = RequestMethod.POST)
-    public Object listDepositLogByPage(
+    @RequestMapping(value = "/vip/add", method = RequestMethod.POST)
+    public Result addVipInfo(@RequestBody VipVo vipVo) {
+        return iVipService.addVipInfo(vipVo);
+    }
+
+    @RequestMapping(value = "/vip/balance/list", method = RequestMethod.GET)
+    public Result listDepositLogByPage(
             @RequestParam String userId,
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "limit", defaultValue = "10") Integer limit) {
@@ -50,8 +59,8 @@ public class VipController {
         return iVipService.listDepositLogByPage(paramMap, pageable);
     }
 
-    @RequestMapping(value = "/vip/integral/list", method = RequestMethod.POST)
-    public Object listGoalLogByPage(
+    @RequestMapping(value = "/vip/integral/list", method = RequestMethod.GET)
+    public Result listGoalLogByPage(
             @RequestParam String userId,
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "limit", defaultValue = "10") Integer limit) {
@@ -61,8 +70,29 @@ public class VipController {
         return iVipService.listGoalLogByPage(paramMap, pageable);
     }
 
+    @RequestMapping(value = "/vip/delete", method = RequestMethod.GET)
+    public Result listGoalLogByPage(
+            @RequestParam String userId) {
+        return iVipService.deleteUser(userId);
+    }
+
     @RequestMapping(value = "/welcome", method = RequestMethod.GET)
-    public Object getLastWelcome(){
+    public Result getLastWelcome(){
         return iWelcomeService.getLastWelcome();
+    }
+
+    /**
+     * 微信小程序获取openid
+     * @param code String
+     * @param secretCode String
+     * @param appid String
+     * @return Result
+     */
+    @RequestMapping(value = "/wxapi/openid", method = RequestMethod.GET)
+    public Result getOpenid(
+            @RequestParam(defaultValue = "") String code,
+            @RequestParam(defaultValue = "") String secretCode,
+            @RequestParam(defaultValue = "") String appid){
+        return iWeiXinApiService.getOpenid(code, secretCode, appid);
     }
 }

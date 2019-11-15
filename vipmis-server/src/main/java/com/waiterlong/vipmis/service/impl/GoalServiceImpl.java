@@ -1,6 +1,7 @@
 package com.waiterlong.vipmis.service.impl;
 
 import com.waiterlong.vipmis.component.PageResult;
+import com.waiterlong.vipmis.component.Result;
 import com.waiterlong.vipmis.domain.GoalLog;
 import com.waiterlong.vipmis.domain.User;
 import com.waiterlong.vipmis.domain.vo.GoalLogVo;
@@ -41,19 +42,19 @@ public class GoalServiceImpl extends BaseServiceImpl implements IGoalService {
     private UserRep userRep;
 
     @Override
-    public Object listGoalLogByPage(Map<String, Object> paramMap, Pageable pageable) {
+    public Result listGoalLogByPage(Map<String, Object> paramMap, Pageable pageable) {
         Page<GoalLog> goalLogPage = goalLogRep.findByUser_IdOrderByCreateTimeDesc((String)paramMap.get("userId"), pageable);
-        return ResponseUtil.ok(PageResult.setPageResult(pageable, goalLogPage.getTotalElements(), GoalLogVo.convertGoalLog(goalLogPage.getContent())));
+        return Result.ok(PageResult.setPageResult(pageable, goalLogPage.getTotalElements(), GoalLogVo.convertGoalLog(goalLogPage.getContent())));
     }
 
     @Override
-    public Object addGoalLog(@NotNull GoalLogVo goalLogVo) {
+    public Result addGoalLog(@NotNull GoalLogVo goalLogVo) {
         if (null == goalLogVo.getUserInfoVo() || null == goalLogVo.getUserInfoVo().getId()) {
-            return ResponseUtil.badArgumentValue();
+            return Result.badArgumentValue();
         }
         Optional<User> userOptional = userRep.findById(goalLogVo.getUserInfoVo().getId());
         if (!userOptional.isPresent()) {
-            return ResponseUtil.badArgumentValue();
+            return Result.badArgumentValue();
         }
         User user = userOptional.get();
         Long goal = user.getGoal();
@@ -69,6 +70,6 @@ public class GoalServiceImpl extends BaseServiceImpl implements IGoalService {
         goalLog.setUser(user);
         goalLog = goalLogRep.save(goalLog);
 
-        return ResponseUtil.ok(GoalLogVo.convertGoalLog(goalLog));
+        return Result.ok(GoalLogVo.convertGoalLog(goalLog));
     }
 }

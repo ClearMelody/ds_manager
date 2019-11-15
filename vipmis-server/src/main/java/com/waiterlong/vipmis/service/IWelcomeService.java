@@ -1,5 +1,6 @@
 package com.waiterlong.vipmis.service;
 
+import com.waiterlong.vipmis.component.Result;
 import com.waiterlong.vipmis.service.base.IBaseService;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,11 +19,11 @@ public interface IWelcomeService extends IBaseService {
      * @param file MultipartFile
      * @return Object
      */
-    Object uploadWelcomeImg(MultipartFile file);
+    Result uploadWelcomeImg(MultipartFile file);
 
     /**
      * 获取最后一个Welcome
      * @return Object
      */
-    Object getLastWelcome();
+    Result getLastWelcome();
 }

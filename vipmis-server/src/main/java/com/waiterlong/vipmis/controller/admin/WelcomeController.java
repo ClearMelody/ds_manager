@@ -1,5 +1,6 @@
 package com.waiterlong.vipmis.controller.admin;
 
+import com.waiterlong.vipmis.component.Result;
 import com.waiterlong.vipmis.service.IWelcomeService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,12 +25,12 @@ public class WelcomeController {
     private IWelcomeService iWelcomeService;
 
     @RequestMapping(value = "/welcome/img/upload", method = RequestMethod.POST)
-    public Object uploadWelcomeImg(MultipartFile file){
+    public Result uploadWelcomeImg(MultipartFile file){
         return iWelcomeService.uploadWelcomeImg(file);
     }
 
     @RequestMapping(value = "/welcome/last", method = RequestMethod.GET)
-    public Object getLastWelcome(){
+    public Result getLastWelcome(){
         return iWelcomeService.getLastWelcome();
     }
 }

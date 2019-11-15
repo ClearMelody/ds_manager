@@ -34,7 +34,7 @@ public class WeiXinApiJob {
     @Scheduled(cron = "0 0/20 * * * ?")
     public void updateAccessToken() {
         logger.info("update accessToken begin : " + DateUtil.dateToString(new Date()));
-        Map res = (Map)iWeiXinApiService.updateAccessToken();
-        logger.info("update accessToken end : " + DateUtil.dateToString(new Date()) + "  msg:" + res.get(WeiXinApiUrl.ERRMSG_KEY));
+        String msg = iWeiXinApiService.updateAccessToken().getErrmsg();
+        logger.info("update accessToken end : " + DateUtil.dateToString(new Date()) + "  msg:" + msg);
     }
 }

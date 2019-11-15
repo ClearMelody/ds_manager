@@ -74,6 +74,9 @@ public class DateUtil {
      * @return ：String
      */
     public static String dateToString(Date date) {
+        if (null == date) {
+            return null;
+        }
         SimpleDateFormat simpDateFormat = new SimpleDateFormat(FMT_DEFAULT);
         return simpDateFormat.format(date);
     }

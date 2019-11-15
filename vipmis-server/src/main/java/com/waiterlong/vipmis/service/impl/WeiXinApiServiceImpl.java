@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.waiterlong.vipmis.assets.Constant;
 import com.waiterlong.vipmis.assets.WeiXinApiUrl;
+import com.waiterlong.vipmis.component.Result;
 import com.waiterlong.vipmis.service.IWeiXinApiService;
 import com.waiterlong.vipmis.utils.HttpUtil;
 import com.waiterlong.vipmis.utils.ResponseUtil;
@@ -36,9 +37,13 @@ public class WeiXinApiServiceImpl implements IWeiXinApiService {
     private String weixinAppid;
 
     @Override
-    public Object getOpenid(@NotNull String code, @NotNull String secretCode, @NotNull String appid) {
+    public Result getOpenid(@NotNull String code, @NotNull String secretCode, @NotNull String appid) {
+        logger.debug("getOpenid code: {}", code);
+        logger.debug("getOpenid secretCode: {}", secretCode);
+        logger.debug("getOpenid appid: {}", appid);
+
         if (code.isEmpty() || secretCode.isEmpty() || appid.isEmpty()) {
-            return ResponseUtil.badArgumentValue();
+            return Result.badArgumentValue();
         }
         Map<String, Object> paramMap = Maps.newHashMap();
         paramMap.put("js_code", code);
@@ -48,19 +53,16 @@ public class WeiXinApiServiceImpl implements IWeiXinApiService {
         JSONObject jsonObj;
         try {
             jsonObj = HttpUtil.doGet(WeiXinApiUrl.GET_USER_APPID, paramMap);
-            logger.debug("getOpenid data: {}", jsonObj);
+            logger.debug("getOpenid res data: {}", jsonObj);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return ResponseUtil.fail();
+            return Result.fail();
         }
-        if (!Constant.REQUEST_SUCCESS_CODE.equals(jsonObj.getInteger(WeiXinApiUrl.ERRCODE_KEY))) {
-            return ResponseUtil.fail(Constant.REQUEST_FAIL_CODE, jsonObj.getString(WeiXinApiUrl.ERRMSG_KEY));
-        }
-        return ResponseUtil.ok(jsonObj);
+        return Result.ok(jsonObj);
     }
 
     @Override
-    public Object updateAccessToken() {
+    public Result updateAccessToken() {
         JSONObject jsonObject = null;
         try {
             String url = WeiXinApiUrl.GET_ACCESSTOKEN + weixinAppid + "&secret=" + weixinSecret;
@@ -75,7 +77,7 @@ public class WeiXinApiServiceImpl implements IWeiXinApiService {
 //        if (null == jsonObject || !Constant.REQUEST_SUCCESS_CODE.equals(jsonObject.getInteger(WeiXinApiUrl.ERRCODE_KEY))) {
 //            return updateAccessToken();
 //        }
-        return ResponseUtil.ok(jsonObject);
+        return Result.ok(jsonObject);
     }
 
     @Override

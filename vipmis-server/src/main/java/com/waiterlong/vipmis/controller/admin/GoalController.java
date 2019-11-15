@@ -27,7 +27,7 @@ public class GoalController {
     private IGoalService iGoalService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public Object listGoalLogByPage(
+    public Result listGoalLogByPage(
             @RequestParam(defaultValue = "") String userId,
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "limit", defaultValue = "10") Integer limit){
@@ -38,7 +38,7 @@ public class GoalController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public Object addGoalLog(@RequestBody GoalLogVo goalLogVo){
+    public Result addGoalLog(@RequestBody GoalLogVo goalLogVo){
         return  iGoalService.addGoalLog(goalLogVo);
     }
 }

@@ -3,6 +3,7 @@ package com.waiterlong.vipmis.domain.vo;
 import com.google.common.collect.Lists;
 import com.waiterlong.vipmis.domain.User;
 import com.waiterlong.vipmis.utils.AbstractMyBeanUtils;
+import com.waiterlong.vipmis.utils.DateUtil;
 import com.waiterlong.vipmis.utils.PinyinUtil;
 import lombok.Data;
 
@@ -36,15 +37,27 @@ public class UserInfoVo {
 
     private Date registerTime;
 
+    private String registerTimeStr;
+
     private Date lastLoginTime;
 
+    private String lastLoginTimeStr;
+
     private String firstLetter;
+
+    private String cardType;
 
     private Long goal;
 
     private Float deposit;
 
     private LabelVo labelVo;
+
+    private Float catSell;
+
+    private Float washProtectService;
+
+    private Float peripheralProducts;
 
     public static List<UserInfoVo> convertUser(List<User> users){
         List<UserInfoVo> userVos = Lists.newArrayList();
@@ -62,6 +75,8 @@ public class UserInfoVo {
         AbstractMyBeanUtils.copyProperties(user, userInfoVo);
         userInfoVo.setFirstLetter(PinyinUtil.getFirstLetter(userInfoVo.realName));
         userInfoVo.setLabelVo(LabelVo.convertLabel(user.getLabel()));
+        userInfoVo.setLastLoginTimeStr(DateUtil.dateToString(userInfoVo.getLastLoginTime()));
+        userInfoVo.setRegisterTimeStr(DateUtil.dateToString(userInfoVo.getRegisterTime()));
         return userInfoVo;
     }
 }

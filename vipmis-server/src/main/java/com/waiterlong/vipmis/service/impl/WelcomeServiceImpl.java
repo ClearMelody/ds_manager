@@ -1,12 +1,13 @@
 package com.waiterlong.vipmis.service.impl;
 
-import com.sun.org.apache.xml.internal.security.utils.Base64;
 import com.waiterlong.vipmis.assets.Constant;
+import com.waiterlong.vipmis.component.Result;
 import com.waiterlong.vipmis.domain.Welcome;
 import com.waiterlong.vipmis.domain.vo.WelcomeVo;
 import com.waiterlong.vipmis.repository.WelcomeRep;
 import com.waiterlong.vipmis.service.IWelcomeService;
 import com.waiterlong.vipmis.service.base.BaseServiceImpl;
+import com.waiterlong.vipmis.utils.Base64;
 import com.waiterlong.vipmis.utils.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,15 +34,15 @@ public class WelcomeServiceImpl extends BaseServiceImpl implements IWelcomeServi
     private WelcomeRep welcomeRep;
 
     @Override
-    public Object uploadWelcomeImg(MultipartFile file) {
+    public Result uploadWelcomeImg(MultipartFile file) {
         String base64 = null;
         try {
-            base64 = Base64.encode(file.getBytes());
+            base64 = Base64.encodeToString(file.getBytes(), false);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
         if (null == base64 || base64.isEmpty()) {
-            return ResponseUtil.fail();
+            return Result.fail();
         } else {
             Welcome welcome = new Welcome();
             welcome.setContent("data:image/png;base64," + base64);
@@ -50,12 +51,12 @@ public class WelcomeServiceImpl extends BaseServiceImpl implements IWelcomeServi
             if (welcomeRep.count() > Constant.MAX_WELCOME_COUNT) {
                 welcomeRep.delete(welcomeRep.findTopByOrderByCreateTimeAsc());
             }
-            return ResponseUtil.ok(WelcomeVo.convertWelcome(welcome));
+            return Result.ok(WelcomeVo.convertWelcome(welcome));
         }
     }
 
     @Override
-    public Object getLastWelcome() {
-        return ResponseUtil.ok(WelcomeVo.convertWelcome(welcomeRep.findTopByOrderByCreateTimeDesc()));
+    public Result getLastWelcome() {
+        return Result.ok(WelcomeVo.convertWelcome(welcomeRep.findTopByOrderByCreateTimeDesc()));
     }
 }

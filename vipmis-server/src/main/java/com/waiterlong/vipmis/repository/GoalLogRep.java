@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * \* Created with IntelliJ IDEA.
  * \* Date: 2019-07-16 09:15
@@ -24,4 +26,6 @@ public interface GoalLogRep extends JpaRepository<GoalLog, String> {
      * @return Page<User>
      */
     Page<GoalLog> findByUser_IdOrderByCreateTimeDesc(String userId, Pageable pageable);
+
+    List<GoalLog> findByUser_Id(String userId);
 }

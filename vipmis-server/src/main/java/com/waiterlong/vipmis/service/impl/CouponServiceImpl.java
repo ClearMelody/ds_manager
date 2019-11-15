@@ -1,6 +1,7 @@
 package com.waiterlong.vipmis.service.impl;
 
 import com.waiterlong.vipmis.component.PageResult;
+import com.waiterlong.vipmis.component.Result;
 import com.waiterlong.vipmis.domain.Coupon;
 import com.waiterlong.vipmis.domain.User;
 import com.waiterlong.vipmis.domain.UserCoupon;
@@ -44,57 +45,57 @@ public class CouponServiceImpl extends BaseServiceImpl implements ICouponService
     private UserRep userRep;
 
     @Override
-    public Object listCouponByPage(Map<String, Object> paramMap, Pageable pageable) {
+    public Result listCouponByPage(Map<String, Object> paramMap, Pageable pageable) {
         Page<Coupon> couponPage = couponRep.findByOrderByCreateTimeDesc(pageable);
-        return ResponseUtil.ok(PageResult.setPageResult(pageable, couponPage.getTotalElements(), CouponVo.convertCoupon(couponPage.getContent())));
+        return Result.ok(PageResult.setPageResult(pageable, couponPage.getTotalElements(), CouponVo.convertCoupon(couponPage.getContent())));
     }
 
     @Override
-    public Object listUserCouponByPage(Map<String, Object> paramMap, Pageable pageable) {
+    public Result listUserCouponByPage(Map<String, Object> paramMap, Pageable pageable) {
         Page<UserCoupon> userCouponPage = userCouponRep.findByUser_IdOrderByCreateTimeDesc((String)paramMap.get("userId"), pageable);
-        return ResponseUtil.ok(PageResult.setPageResult(pageable, userCouponPage.getTotalElements(), UserCouponVo.convertUserCoupon(userCouponPage.getContent())));
+        return Result.ok(PageResult.setPageResult(pageable, userCouponPage.getTotalElements(), UserCouponVo.convertUserCoupon(userCouponPage.getContent())));
     }
 
     @Override
-    public Object addCoupon(@NotNull CouponVo couponVo) {
+    public Result addCoupon(@NotNull CouponVo couponVo) {
         if (null != couponVo.getId()) {
-            return ResponseUtil.badArgumentValue();
+            return Result.badArgumentValue();
         }
         Coupon coupon = new Coupon();
         AbstractMyBeanUtils.copyProperties(couponVo, coupon);
         coupon.setCreateTime(new Date());
         coupon = couponRep.save(coupon);
-        return ResponseUtil.ok(CouponVo.convertCoupon(coupon));
+        return Result.ok(CouponVo.convertCoupon(coupon));
     }
 
     @Override
-    public Object updateCoupon(@NotNull CouponVo couponVo) {
+    public Result updateCoupon(@NotNull CouponVo couponVo) {
         if (null == couponVo.getId() || couponVo.getId().isEmpty()) {
-            return ResponseUtil.badArgumentValue();
+            return Result.badArgumentValue();
         }
         Optional<Coupon> couponOptional = couponRep.findById(couponVo.getId());
         if (!couponOptional.isPresent()) {
-            return ResponseUtil.badArgumentValue();
+            return Result.badArgumentValue();
         }
         Coupon coupon = new Coupon();
         AbstractMyBeanUtils.copyProperties(couponVo, coupon);
         coupon.setCreateTime(couponOptional.get().getCreateTime());
         coupon = couponRep.save(coupon);
-        return ResponseUtil.ok(CouponVo.convertCoupon(coupon));
+        return Result.ok(CouponVo.convertCoupon(coupon));
     }
 
     @Override
-    public Object addUserCoupon(@NotNull UserCouponVo userCouponVo) {
+    public Result addUserCoupon(@NotNull UserCouponVo userCouponVo) {
         if (null != userCouponVo.getId()) {
-            return ResponseUtil.badArgumentValue();
+            return Result.badArgumentValue();
         }
         Optional<Coupon> couponOptional = couponRep.findById(userCouponVo.getCouponVo().getId());
         if (!couponOptional.isPresent()) {
-            return ResponseUtil.badArgumentValue();
+            return Result.badArgumentValue();
         }
         Optional<User> userOptional = userRep.findById(userCouponVo.getUserInfoVo().getId());
         if (!userOptional.isPresent()) {
-            return ResponseUtil.badArgumentValue();
+            return Result.badArgumentValue();
         }
         UserCoupon userCoupon = new UserCoupon();
         AbstractMyBeanUtils.copyProperties(userCouponVo, userCoupon);
@@ -102,21 +103,21 @@ public class CouponServiceImpl extends BaseServiceImpl implements ICouponService
         userCoupon.setCoupon(couponOptional.get());
         userCoupon.setCreateTime(new Date());
         userCoupon = userCouponRep.save(userCoupon);
-        return ResponseUtil.ok(UserCouponVo.convertUserCoupon(userCoupon));
+        return Result.ok(UserCouponVo.convertUserCoupon(userCoupon));
     }
 
     @Override
-    public Object useUserCoupon(@NotNull String userCouponId) {
+    public Result useUserCoupon(@NotNull String userCouponId) {
         if (userCouponId.isEmpty()) {
-            return ResponseUtil.badArgumentValue();
+            return Result.badArgumentValue();
         }
         Optional<UserCoupon> userCouponOptional = userCouponRep.findById(userCouponId);
         if (!userCouponOptional.isPresent()) {
-            return ResponseUtil.badArgumentValue();
+            return Result.badArgumentValue();
         }
         UserCoupon userCoupon = userCouponOptional.get();
         userCoupon.setUsedTime(new Date());
         userCoupon = userCouponRep.save(userCoupon);
-        return ResponseUtil.ok(UserCouponVo.convertUserCoupon(userCoupon));
+        return Result.ok(UserCouponVo.convertUserCoupon(userCoupon));
     }
 }
