@@ -47,4 +47,5 @@ public class UserController {
     public Result pay(@RequestBody UserInfoVo userInfoVo) {
         return iVipService.pay(userInfoVo);
     }
+
 }

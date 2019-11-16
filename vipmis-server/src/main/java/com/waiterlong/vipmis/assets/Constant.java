@@ -29,4 +29,8 @@ public class Constant {
     public final static Integer REQUEST_FAIL_CODE = -1;
 
     public static String WEIXIN_ACCESSTOKEN = "";
+
+    public static String WASH_PROTECT_SERVICE = "洗护服务";
+    public static String CAT_SELL = "猫咪售卖";
+    public static String PERIPHERAL_PRODUCTS = "周边产品";
 }

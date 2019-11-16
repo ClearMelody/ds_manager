@@ -214,7 +214,7 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
             deposit = deposit - userInfoVo.getCatSell();
             Float t = userInfoVo.getCatSell() * 100;
             goal += t.longValue();
-            String title = "猫咪售卖";
+            String title = Constant.CAT_SELL;
 
             goalLogs.add(makeGoalLog(t.longValue(), title, nowDate, user));
 
@@ -224,7 +224,7 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
             deposit = deposit - userInfoVo.getPeripheralProducts();
             Float t = userInfoVo.getPeripheralProducts() * 100;
             goal += t.longValue();
-            String title = "周边产品";
+            String title = Constant.PERIPHERAL_PRODUCTS;
 
             goalLogs.add(makeGoalLog(t.longValue(), title, nowDate, user));
 
@@ -234,7 +234,7 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
             deposit = deposit - userInfoVo.getWashProtectService();
             Float t = userInfoVo.getWashProtectService() * 100;
             goal += t.longValue();
-            String title = "洗护服务";
+            String title = Constant.WASH_PROTECT_SERVICE;
 
             goalLogs.add(makeGoalLog(t.longValue(), title, nowDate, user));
 
