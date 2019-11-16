@@ -70,43 +70,43 @@
     },
     methods: {
       listCouponsByPage() {
-        let _this = this;
-        API.listCouponByPage(_this.queryParam).then(result => {
+        let _that = this;
+        API.listCouponByPage(_that.queryParam).then(result => {
           if (!result) {
             return;
           }
           result.pageSizes = [5];
-          _this.pageData = result;
+          _that.pageData = result;
         }).catch(() => {
 
         })
       },
       resetPage() {
-        let _this = this;
-        _this.queryParam = {
+        let _that = this;
+        _that.queryParam = {
           name: "",
           limit: 10,
           page: 1
         };
-        _this.listCouponsByPage();
+        _that.listCouponsByPage();
       },
       handleCurrentChange(val) {
-        let _this = this;
-        _this.queryParam.page = val;
-        _this.listCouponByPage();
+        let _that = this;
+        _that.queryParam.page = val;
+        _that.listCouponByPage();
       },
       handleSizeChange(val) {
-        let _this = this;
-        _this.queryParam.pageSize = val;
-        _this.listCouponByPage();
+        let _that = this;
+        _that.queryParam.pageSize = val;
+        _that.listCouponByPage();
       },
       query() {
-        let _this = this;
-        _this.listQuestionnairesByPage();
+        let _that = this;
+        _that.listQuestionnairesByPage();
       },
       reset() {
-        let _this = this;
-        _this.resetPage();
+        let _that = this;
+        _that.resetPage();
       }
     }
   }

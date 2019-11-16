@@ -140,93 +140,93 @@
     },
     methods: {
       listUsersByPage() {
-        let _this = this;
-        API.listUsersByPage(_this.queryParam).then(result => {
+        let _that = this;
+        API.listUsersByPage(_that.queryParam).then(result => {
           if (!result) {
             return;
           }
           result.pageSizes = [5];
-          _this.pageData = result;
+          _that.pageData = result;
           console.log(result);
         }).catch(() => {
 
         })
       },
       resetPage() {
-        let _this = this;
-        _this.queryParam = {
+        let _that = this;
+        _that.queryParam = {
           name: "",
           limit: 10,
           page: 1
         };
-        _this.listUsersByPage();
+        _that.listUsersByPage();
       },
       handleCurrentChange(val) {
-        let _this = this;
-        _this.queryParam.page = val;
-        _this.listUsersByPage();
+        let _that = this;
+        _that.queryParam.page = val;
+        _that.listUsersByPage();
       },
       handleSizeChange(val) {
-        let _this = this;
-        _this.queryParam.pageSize = val;
-        _this.listUsersByPage();
+        let _that = this;
+        _that.queryParam.pageSize = val;
+        _that.listUsersByPage();
       },
       query() {
-        let _this = this;
-        _this.listUsersByPage();
+        let _that = this;
+        _that.listUsersByPage();
       },
       reset() {
-        let _this = this;
-        _this.resetPage();
+        let _that = this;
+        _that.resetPage();
       },
       chargeDialogShow(val) {
-        let _this = this;
-        _this.chargeFormData.money = "";
-        _this.chargeDialog.currentData = val;
-        _this.chargeDialog.dialogVisible = true;
+        let _that = this;
+        _that.chargeFormData.money = "";
+        _that.chargeDialog.currentData = val;
+        _that.chargeDialog.dialogVisible = true;
       },
       payDialogShow(val) {
-        let _this = this;
-        _this.payFormData = {
+        let _that = this;
+        _that.payFormData = {
           catSell: "",
           washProtectService: "",
           peripheralProducts: ""
         };
-        _this.payDialog.currentData = val;
-        _this.payDialog.dialogVisible = true;
+        _that.payDialog.currentData = val;
+        _that.payDialog.dialogVisible = true;
       },
       charge() {
-        let _this = this;
-        _this.loading = true;
-        _this.chargeDialog.currentData.deposit = _this.chargeFormData.money;
-        API.charge(_this.chargeDialog.currentData).then(() => {
-          _this.loading = false;
-          _this.chargeDialog.dialogVisible = false;
-          _this.query();
+        let _that = this;
+        _that.loading = true;
+        _that.chargeDialog.currentData.deposit = _that.chargeFormData.money;
+        API.charge(_that.chargeDialog.currentData).then(() => {
+          _that.loading = false;
+          _that.chargeDialog.dialogVisible = false;
+          _that.query();
         }).catch(() => {
-          _this.loading = false;
-          _this.chargeDialog.dialogVisible = false;
+          _that.loading = false;
+          _that.chargeDialog.dialogVisible = false;
         });
       },
       pay() {
-        let _this = this;
-        _this.loading = true;
-        _this.payDialog.currentData.catSell = _this.payFormData.catSell;
-        _this.payDialog.currentData.washProtectService = _this.payFormData.washProtectService;
-        _this.payDialog.currentData.peripheralProducts = _this.payFormData.peripheralProducts;
-        API.pay(_this.payDialog.currentData).then(() => {
-          _this.loading = false;
-          _this.payDialog.dialogVisible = false;
-          _this.query();
+        let _that = this;
+        _that.loading = true;
+        _that.payDialog.currentData.catSell = _that.payFormData.catSell;
+        _that.payDialog.currentData.washProtectService = _that.payFormData.washProtectService;
+        _that.payDialog.currentData.peripheralProducts = _that.payFormData.peripheralProducts;
+        API.pay(_that.payDialog.currentData).then(() => {
+          _that.loading = false;
+          _that.payDialog.dialogVisible = false;
+          _that.query();
         }).catch(() => {
-          _this.loading = false;
-          _this.payDialog.dialogVisible = false;
+          _that.loading = false;
+          _that.payDialog.dialogVisible = false;
         });
       }
     },
     mounted() {
-      let _this = this;
-      _this.resetPage();
+      let _that = this;
+      _that.resetPage();
     }
   }
 </script>

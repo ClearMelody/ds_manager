@@ -58,11 +58,11 @@
     methods: {
     },
     mounted() {
-      let _this = this;
+      let _that = this;
       this.menus.push({id: 1, name: "首页", hasChild: false, link: "/home/index"});
       this.menus.push({id: 6, name: "用户管理", hasChild: true, childs: [{id: 8, name: "会员管理", link: "/home/user"}, {id: 7, name: "分组管理", link: "/home/label"}, {id: 9, name: "优惠券管理", link: "/home/coupon"}]});
       this.menus.push({id: 2, name: "系统管理", hasChild: true, childs: [{id: 5, name: "欢迎页管理", link: "/home/wxWelcome"}, {id: 3, name: "管理员管理", link: "/home/admin"}, {id: 4, name: "权限管理", link: "/home/role"}]});
-      _this.menuDefaultActive = _this.$route.path;
+      _that.menuDefaultActive = _that.$route.path;
     }
   }
 </script>

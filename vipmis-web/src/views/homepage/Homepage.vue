@@ -1,12 +1,16 @@
 <template>
     <div>
-      its home
+      <product-sale-proportion-pie></product-sale-proportion-pie>
     </div>
 </template>
 
 <script>
+  import ProductSaleProportionPie from "./ProductSaleProportionPie"
   export default {
-    name: "Homepage"
+    name: "Homepage",
+    components: {
+      ProductSaleProportionPie
+    }
   }
 </script>
 
