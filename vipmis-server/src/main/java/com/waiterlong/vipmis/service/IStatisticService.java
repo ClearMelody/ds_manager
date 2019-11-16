@@ -15,5 +15,5 @@ import java.util.Date;
  * @author walter_long
  */
 public interface IStatisticService extends IBaseService {
-    Result getProductProportion(Date start, Date end);
+    Result getProductProportion(String start, String end);
 }

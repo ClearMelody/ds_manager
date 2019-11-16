@@ -33,4 +33,5 @@ public class Constant {
     public static String WASH_PROTECT_SERVICE = "洗护服务";
     public static String CAT_SELL = "猫咪售卖";
     public static String PERIPHERAL_PRODUCTS = "周边产品";
+    public static String CHARGE = "充值";
 }

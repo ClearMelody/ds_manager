@@ -20,6 +20,7 @@
   import ECharts from 'vue-echarts'
   import 'echarts/lib/chart/pie'
   import api from "../../api/api_statistic"
+  import dateUtil from "../../common/date_util"
   export default {
     name: "ProductSaleProportionPie",
     components: {
@@ -64,7 +65,7 @@
     methods: {
       dateChange() {
         let _that = this;
-        console.log(_that.value);
+        _that.refreshPie();
       },
       initTime() {
         let _that = this;
@@ -73,59 +74,47 @@
         start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
         _that.datePicker.value = [start, end];
       },
-      initPie() {
+      refreshPie() {
         let _that = this;
         let params = {
-          start: new Date(_that.datePicker.value[0]),
-          end: new Date(_that.datePicker.value[1])
+          start: dateUtil.dateFormat(_that.datePicker.value[0], "yyyy-MM-dd"),
+          end: dateUtil.dateFormat(_that.datePicker.value[1], "yyyy-MM-dd"),
         };
         api.getProductProportion(params).then(res => {
-          console.log(res);
-        }).catch(() => {});
-        _that.options = {
-          title : {
-            text: '某站点用户访问来源',
-            subtext: '纯属虚构',
-            x:'center'
-          },
-          tooltip : {
-            trigger: 'item',
-            formatter: "{a} <br/>{b} : {c} ({d}%)"
-          },
-          legend: {
-            orient: 'vertical',
-            left: 'left',
-            data: ['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
-          },
-          series : [
-            {
-              name: '访问来源',
-              type: 'pie',
-              radius : '55%',
-              center: ['50%', '60%'],
-              data:[
-                {value:335, name:'直接访问'},
-                {value:310, name:'邮件营销'},
-                {value:234, name:'联盟广告'},
-                {value:135, name:'视频广告'},
-                {value:1548, name:'搜索引擎'}
-              ],
-              itemStyle: {
-                emphasis: {
-                  shadowBlur: 10,
-                  shadowOffsetX: 0,
-                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+          let data = [];
+          res.forEach(v => {
+            let value = v.sum ? (v.sum < 0 ? -v.sum : v.sum) : 0;
+            let name = v.title ? v.title : "";
+            data.push({
+              value,
+              name
+            });
+          });
+          _that.options = {
+            series : [
+              {
+                name: '产品消费占比',
+                type: 'pie',
+                radius : '55%',
+                center: ['50%', '50%'],
+                data,
+                itemStyle: {
+                  emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                  }
                 }
               }
-            }
-          ]
-        };
+            ]
+          };
+        }).catch(() => {});
       }
     },
     mounted() {
       let _that = this;
       _that.initTime();
-      _that.initPie();
+      _that.refreshPie();
     }
   }
 </script>

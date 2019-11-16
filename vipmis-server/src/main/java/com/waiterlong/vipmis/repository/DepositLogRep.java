@@ -31,6 +31,6 @@ public interface DepositLogRep extends JpaRepository<DepositLog, String> {
     Page<DepositLog> findByUser_IdOrderByCreateTimeDesc(String userId, Pageable pageable);
     List<DepositLog> findByUser_Id(String userId);
 
-    @Query(nativeQuery = true, value = "select title, sum(value) as sum from deposit_log where create_time between ? and ? GROUP BY title")
-    List<Map<String, Object>> getProductProportion(Date start, Date end);
+    @Query(nativeQuery = true, value = "select title, sum(value) as sum from deposit_log where title <> ? and create_time between ? and ? GROUP BY title")
+    List<Map<String, Object>> getProductProportion(String notTitle, String start, String end);
 }

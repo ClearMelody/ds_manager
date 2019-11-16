@@ -1,9 +1,7 @@
 package com.waiterlong.vipmis.controller.admin;
 
 import com.waiterlong.vipmis.component.Result;
-import com.waiterlong.vipmis.domain.vo.UserInfoVo;
 import com.waiterlong.vipmis.service.IStatisticService;
-import com.waiterlong.vipmis.service.IUserService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -26,8 +24,8 @@ public class StatisticController {
 
     @RequestMapping(value = "/statistic/product/proportion", method = RequestMethod.GET)
     public Result getProductProportion(
-            @RequestParam Date start,
-            @RequestParam Date end) {
+            @RequestParam String start,
+            @RequestParam String end) {
         return iStatisticService.getProductProportion(start, end);
     }
 }
