@@ -127,10 +127,12 @@
     methods: {
       addDialogShow() {
         let _that = this;
+        _that.addLabelFormData.name = "";
         _that.addLabelDialog.dialogVisible = true;
       },
       editDialogShow(val) {
         let _that = this;
+        _that.editLabelFormData.name = "";
         _that.editLabelDialog.dialogVisible = true;
         _that.editLabelDialog.currentData = val;
       },
@@ -178,10 +180,10 @@
         params.name = _that.editLabelFormData.name;
         API.editLabel(params).then(res => {
           _that.listLabelsByPage().then(() => {
-            _that.addLabelDialog.dialogVisible = false;
+            _that.editLabelDialog.dialogVisible = false;
             _that.loading = false;
           }).catch(() => {
-            _that.addLabelDialog.dialogVisible = false;
+            _that.editLabelDialog.dialogVisible = false;
             _that.loading = false;
           });
         }).catch(() => {

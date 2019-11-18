@@ -39,7 +39,7 @@ public class LabelServiceImpl extends BaseServiceImpl implements ILabelService {
 
     @Override
     public Result addLabel(@NotNull LabelVo labelVo) {
-        if (null != labelVo.getId() || !labelVo.getId().trim().isEmpty()) {
+        if (null != labelVo.getId()) {
             return Result.badArgumentValue();
         }
         Label label = new Label();
