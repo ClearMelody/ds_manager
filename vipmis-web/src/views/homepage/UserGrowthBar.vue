@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>产品消费占比</h3>
+    <h3>用户增长</h3>
     <el-date-picker
       v-model="datePicker.value"
       type="daterange"
@@ -12,21 +12,21 @@
       @change="dateChange"
       :picker-options="datePicker.pickerOptions">
     </el-date-picker>
-    <pie ref="pie" :options="options" :auto-resize="false" style="width: 100%;"></pie>
+    <bar ref="bar" :options="options" :auto-resize="false" style="width: 100%;"></bar>
   </div>
 </template>
 
 <script>
   import ECharts from 'vue-echarts'
-  import 'echarts/lib/chart/pie'
+  import 'echarts/lib/chart/bar'
   import 'echarts/lib/component/tooltip'
   import 'echarts/lib/component/legend'
   import api from "../../api/api_statistic"
   import dateUtil from "../../common/date_util"
   export default {
-    name: "ProductSaleProportionPie",
+    name: "UserGrowthBar",
     components: {
-      pie: ECharts
+      bar: ECharts
     },
     data() {
       return {
@@ -82,42 +82,49 @@
           start: dateUtil.dateFormat(_that.datePicker.value[0], "yyyy-MM-dd"),
           end: dateUtil.dateFormat(_that.datePicker.value[1], "yyyy-MM-dd"),
         };
-        api.getProductProportion(params).then(res => {
+        api.getUserGrowth(params).then(res => {
+          console.log(res);
           let data = [], nameArr = [];
           res.forEach(v => {
-            let value = v.sum ? (v.sum < 0 ? -v.sum : v.sum) : 0;
-            let name = v.title ? v.title : "";
-            data.push({
-              value: (value * 1).toFixed(2),
-              name
-            });
-            nameArr.push({
-              name
-            });
+            let value = v.sum ? v.sum : 0;
+            let name = v.name ? v.name : "";
+            data.push(value);
+            nameArr.push(name);
           });
           _that.options = {
+            color: ['#3398DB'],
             tooltip : {
-              trigger: 'item',
-              formatter: "{a} <br/>{b} : {c} ({d}%)"
+              trigger: 'axis',
+              axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+              }
             },
-            legend: {
-              left: 'center',
-              data: nameArr
+            grid: {
+              left: '3%',
+              right: '4%',
+              bottom: '3%',
+              containLabel: true
             },
+            xAxis : [
+              {
+                type : 'category',
+                data : nameArr,
+                axisTick: {
+                  alignWithLabel: true
+                }
+              }
+            ],
+            yAxis : [
+              {
+                type : 'value'
+              }
+            ],
             series : [
               {
-                name: '产品消费占比',
-                type: 'pie',
-                radius : '55%',
-                center: ['50%', '50%'],
-                data,
-                itemStyle: {
-                  emphasis: {
-                    shadowBlur: 10,
-                    shadowOffsetX: 0,
-                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                  }
-                }
+                name:'用户增长',
+                type:'bar',
+                barWidth: '60%',
+                data
               }
             ]
           };

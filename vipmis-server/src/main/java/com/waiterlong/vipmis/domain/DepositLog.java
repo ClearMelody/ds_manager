@@ -32,7 +32,7 @@ public class DepositLog {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "value")
+    @Column(name = "value", scale=2)
     private Float value;
 
     @ManyToOne(fetch = FetchType.LAZY)

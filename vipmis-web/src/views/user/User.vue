@@ -1,18 +1,33 @@
 <template>
   <div>
     <el-form :inline="true" :model="queryParam" style="text-align: start">
-      <!--      <el-form-item label="问卷名">-->
-      <!--        <el-input v-model="queryParam.name" placeholder="" @keyup.enter.native.prevent="query()"></el-input>-->
-      <!--      </el-form-item>-->
+      <el-form-item label="用户姓名">
+        <el-input v-model="queryParam.realName" placeholder="" @keyup.enter.native.prevent="query()"></el-input>
+      </el-form-item>
+      <el-form-item label="微信昵称">
+        <el-input v-model="queryParam.weChatName" placeholder="" @keyup.enter.native.prevent="query()"></el-input>
+      </el-form-item>
+      <el-form-item label="手机号">
+        <el-input v-model="queryParam.phone" placeholder="" @keyup.enter.native.prevent="query()"></el-input>
+      </el-form-item>
+      <el-form-item label="身份证号">
+        <el-input v-model="queryParam.idCard" placeholder="" @keyup.enter.native.prevent="query()"></el-input>
+      </el-form-item>
+      <el-form-item label="VIP卡号">
+        <el-input v-model="queryParam.cardCord" placeholder="" @keyup.enter.native.prevent="query()"></el-input>
+      </el-form-item>
       <el-form-item>
-        <!--        <el-button type="primary" @click="query()">查询</el-button>-->
-        <!--        <el-button type="primary" @click="reset()">重置</el-button>-->
+        <el-button type="primary" @click="query()">查询</el-button>
+        <el-button type="primary" @click="reset()">重置</el-button>
       </el-form-item>
     </el-form>
     <el-table :data="pageData.rows" stripe>
       <el-table-column align="center" min-width="80" label="用户姓名" prop="realName"></el-table-column>
-      <el-table-column align="center" min-width="160" label="微信昵称" prop="weChatName"></el-table-column>
-      <el-table-column align="center" min-width="160" label="微信号" prop="weChatOpenId"></el-table-column>
+      <el-table-column align="center" min-width="120" label="微信昵称" prop="weChatName"></el-table-column>
+      <el-table-column align="center" min-width="100" label="微信号" prop="weChatOpenId"></el-table-column>
+      <el-table-column align="center" min-width="100" label="手机号" prop="phone"></el-table-column>
+      <el-table-column align="center" min-width="100" label="VIP卡号" prop="cardCord"></el-table-column>
+      <el-table-column align="center" min-width="100" label="身份证" prop="idCard"></el-table-column>
       <el-table-column align="center" min-width="80" label="余额(元)" prop="deposit"></el-table-column>
       <el-table-column align="center" min-width="80" label="积分" prop="goal"></el-table-column>
       <el-table-column align="center" min-width="160" label="最近登录" prop="lastLoginTimeStr"></el-table-column>
@@ -78,7 +93,11 @@
       return {
         loading: false,
         queryParam: {
-          name: "",
+          realName: "",
+          weChatName: "",
+          phone: "",
+          idCard: "",
+          cardCord: "",
           limit: 10,
           page: 1
         },
@@ -155,7 +174,11 @@
       resetPage() {
         let _that = this;
         _that.queryParam = {
-          name: "",
+          realName: "",
+          weChatName: "",
+          phone: "",
+          idCard: "",
+          cardCord: "",
           limit: 10,
           page: 1
         };

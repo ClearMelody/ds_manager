@@ -30,11 +30,19 @@ public class UserController {
     @RequestMapping(value = "/user/list", method = RequestMethod.GET)
     public Result listDepositLogByPage(
             @RequestParam(defaultValue = "") String realName,
+            @RequestParam(defaultValue = "") String weChatName,
+            @RequestParam(defaultValue = "") String phone,
+            @RequestParam(defaultValue = "") String idCard,
+            @RequestParam(defaultValue = "") String cardCord,
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "limit", defaultValue = "10") Integer limit) {
         Pageable pageable = PageRequest.of(page - 1, limit);
         Map<String, Object> paramMap = Maps.newHashMap();
         paramMap.put("realName", realName);
+        paramMap.put("weChatName", weChatName);
+        paramMap.put("phone", phone);
+        paramMap.put("idCard", idCard);
+        paramMap.put("cardCord", cardCord);
         return iVipService.listVipsByPage(paramMap, pageable);
     }
 

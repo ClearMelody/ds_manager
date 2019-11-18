@@ -27,6 +27,10 @@ public class UserInfoVo {
 
     private String phone;
 
+    private String cardCord;
+
+    private String idCard;
+
     private String weChatName;
 
     private String weChatSex;

@@ -133,7 +133,7 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
         logger.debug("listVipsByPage paramMap: {}", paramMap);
         logger.debug("listVipsByPage pageable: {}", pageable);
 
-        Page<User> userPage = userRep.findByRealNameIsContainingOrderByRegisterTimeDesc((String)paramMap.get("realName"), pageable);
+        Page<User> userPage = userRep.findByRealNameContainsAndCardCordContainsAndIdCardContainsAndPhoneContainsAndWeChatNameContainsOrderByRegisterTimeDesc((String)paramMap.get("realName"), (String)paramMap.get("cardCord"), (String)paramMap.get("idCard"), (String)paramMap.get("phone"), (String)paramMap.get("weChatName"), pageable);
         return Result.ok(PageResult.setPageResult(pageable, userPage.getTotalElements(), UserInfoVo.convertUser(userPage.getContent())));
     }
 

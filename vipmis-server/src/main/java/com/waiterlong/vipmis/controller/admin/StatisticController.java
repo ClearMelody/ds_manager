@@ -28,4 +28,11 @@ public class StatisticController {
             @RequestParam String end) {
         return iStatisticService.getProductProportion(start, end);
     }
+
+    @RequestMapping(value = "/statistic/user/growth", method = RequestMethod.GET)
+    public Result getUserGrowth(
+            @RequestParam String start,
+            @RequestParam String end) {
+        return iStatisticService.getUserGrowth(start, end);
+    }
 }

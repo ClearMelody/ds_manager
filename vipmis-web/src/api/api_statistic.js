@@ -9,4 +9,6 @@ import * as API from './'
 
 export default {
   getProductProportion: params => API.GET('/statistic/product/proportion', params),
+  getUserGrowth: params => API.GET('/statistic/user/growth', params),
+
 }

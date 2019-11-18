@@ -29,13 +29,13 @@ public class User {
     private String id;
 
     @Column(name="real_name")
-    private String realName;
+    private String realName = "";
 
     @Column(name = "phone")
-    private String phone;
+    private String phone = "";
 
     @Column(name = "wechat_name")
-    private String weChatName;
+    private String weChatName = "";
 
     @Column(name = "wechat_sex")
     private String weChatSex;
@@ -53,13 +53,13 @@ public class User {
     private Date lastLoginTime;
 
     @Column(name = "card_cord")
-    private String cardCord;
+    private String cardCord = "";
 
     @Column(name = "birthday")
     private String birthday;
 
     @Column(name = "id_card")
-    private String idCard;
+    private String idCard = "";
 
     /**
      * 会员卡类型：普通VIP，超级VIP
