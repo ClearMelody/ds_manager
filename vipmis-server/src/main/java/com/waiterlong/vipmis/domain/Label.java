@@ -5,6 +5,7 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,6 +30,9 @@ public class Label {
 
     @Column(name="name")
     private String name;
+
+    @Column(name="create_time")
+    private Date createTime;
 
     @OneToMany(mappedBy = "label", cascade = {CascadeType.PERSIST,CascadeType.REMOVE}, fetch = FetchType.LAZY)
     private List<User> users = Lists.newLinkedList();

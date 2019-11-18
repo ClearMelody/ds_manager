@@ -2,12 +2,13 @@
   <div>
     <div>
       <el-form :inline="true" :model="queryParam" style="text-align: start">
-        <!--      <el-form-item label="问卷名">-->
-        <!--        <el-input v-model="queryParam.name" placeholder="" @keyup.enter.native.prevent="query()"></el-input>-->
-        <!--      </el-form-item>-->
+        <el-form-item label="分组名">
+          <el-input v-model="queryParam.name" placeholder="" @keyup.enter.native.prevent="query()"></el-input>
+        </el-form-item>
         <el-form-item>
-          <!--        <el-button type="primary" @click="query()">查询</el-button>-->
-          <!--        <el-button type="primary" @click="reset()">重置</el-button>-->
+          <el-button :loading="loading" type="primary" @click="query()">查询</el-button>
+          <el-button type="primary" @click="resetPage()">重置</el-button>
+          <el-button type="primary" @click="addDialogShow()">添加</el-button>
         </el-form-item>
       </el-form>
       <el-table :data="pageData.rows" stripe>
@@ -33,7 +34,7 @@
         width="30%">
         <el-form :model="addLabelFormData" :rules="rules" ref="addLabelForm" label-width="100px">
           <el-form-item label="分组名" prop="name">
-            <el-input v-model="addLabelFormData.name" :precision="2" :step="0.01"></el-input>
+            <el-input v-model="addLabelFormData.name" maxlength="50" show-word-limit></el-input>
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -48,7 +49,7 @@
         width="30%">
         <el-form :model="editLabelFormData" :rules="rules" ref="editLabelForm" label-width="100px">
           <el-form-item label="分组名" prop="name">
-            <el-input v-model="editLabelFormData.name" :precision="2" :step="0.01"></el-input>
+            <el-input v-model="editLabelFormData.name" maxlength="50" show-word-limit></el-input>
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -56,11 +57,25 @@
               <el-button type="primary" :loading="loading" @click="edit()">确 定</el-button>
             </span>
       </el-dialog>
+
+      <el-dialog
+        title="删除分组"
+        :visible.sync="delLabelDialog.dialogVisible"
+        width="30%">
+        <el-row>
+          确定删除该分组吗？
+        </el-row>
+        <span slot="footer" class="dialog-footer">
+              <el-button @click="delLabelDialog.dialogVisible = false">取 消</el-button>
+              <el-button type="primary" :loading="loading" @click="del()">确 定</el-button>
+            </span>
+      </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
+  import API from "../../api/api_label";
   export default {
     name: "Label",
     data() {
@@ -71,6 +86,9 @@
           limit: 10,
           page: 1
         },
+        labelVo: {
+          name: ""
+        },
         pageData: {
           currentPage: 1,
           pageSize: 5,
@@ -79,8 +97,7 @@
           rows: []
         },
         addLabelDialog: {
-          dialogVisible: false,
-          currentData: {}
+          dialogVisible: false
         },
         addLabelFormData: {
           name: ""
@@ -97,18 +114,124 @@
         editLabelFormData: {
           name: ""
         },
+        delLabelDialog: {
+          dialogVisible: false,
+          currentData: {}
+        },
       }
     },
+    mounted() {
+      let _that = this;
+      _that.resetPage();
+    },
     methods: {
+      addDialogShow() {
+        let _that = this;
+        _that.addLabelDialog.dialogVisible = true;
+      },
+      editDialogShow(val) {
+        let _that = this;
+        _that.editLabelDialog.dialogVisible = true;
+        _that.editLabelDialog.currentData = val;
+      },
+      deleteDialogShow(val) {
+        let _that = this;
+        _that.delLabelDialog.dialogVisible = true;
+        _that.delLabelDialog.currentData = val;
+      },
+      handleCurrentChange(val) {
+        let _that = this;
+        _that.queryParam.page = val;
+        _that.listLabelsByPage();
+      },
+      handleSizeChange(val) {
+        let _that = this;
+        _that.queryParam.pageSize = val;
+        _that.listLabelsByPage();
+      },
+      query() {
+        let _that = this;
+        _that.listLabelsByPage();
+      },
       add() {
-
+        let _that = this;
+        _that.loading = true;
+        let params = {
+          name: _that.addLabelFormData.name
+        };
+        API.addLabel(params).then(res => {
+          _that.listLabelsByPage().then(() => {
+            _that.addLabelDialog.dialogVisible = false;
+            _that.loading = false;
+          }).catch(() => {
+            _that.addLabelDialog.dialogVisible = false;
+            _that.loading = false;
+          });
+        }).catch(() => {
+          _that.loading = false;
+        });
       },
       edit() {
-
+        let _that = this;
+        _that.loading = true;
+        let params = _that.editLabelDialog.currentData;
+        params.name = _that.editLabelFormData.name;
+        API.editLabel(params).then(res => {
+          _that.listLabelsByPage().then(() => {
+            _that.addLabelDialog.dialogVisible = false;
+            _that.loading = false;
+          }).catch(() => {
+            _that.addLabelDialog.dialogVisible = false;
+            _that.loading = false;
+          });
+        }).catch(() => {
+          _that.loading = false;
+        });
       },
-      delete() {
-
-      }
+      del() {
+        let _that = this;
+        _that.loading = true;
+        API.delLabel(_that.delLabelDialog.currentData).then(res => {
+          _that.listLabelsByPage().then(() => {
+            _that.delLabelDialog.dialogVisible = false;
+            _that.loading = false;
+          }).catch(() => {
+            _that.delLabelDialog.dialogVisible = false;
+            _that.loading = false;
+          });
+        }).catch(() => {
+          _that.loading = false;
+        });
+      },
+      listLabelsByPage() {
+        let _that = this;
+        _that.loading = true;
+        return new Promise((resolve, reject) => {
+          API.listLabelsByPage(_that.queryParam).then(result => {
+            if (!result) {
+              _that.loading = false;
+              reject(result);
+              return;
+            }
+            result.pageSizes = [5];
+            _that.pageData = result;
+            _that.loading = false;
+            resolve(result);
+          }).catch(e => {
+            _that.loading = false;
+            reject(e);
+          });
+        });
+      },
+      resetPage() {
+        let _that = this;
+        _that.queryParam = {
+          name: "",
+          limit: 10,
+          page: 1
+        };
+        _that.listLabelsByPage();
+      },
     }
   }
 </script>

@@ -12,60 +12,75 @@ import Role from '@/views/role/Role'
 
 Vue.use(Router)
 
-export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'root',
-      redirect: 'home'
-    },
-    {
-      path: '/home',
-      name: 'home',
-      component: Home,
-      redirect: '/home/index',
-      children: [
-        {
-          path: 'user',
-          component: User,
-          name: 'user',
-        },
-        {
-          path: 'admin',
-          component: Admin,
-          name: 'admin',
-        },
-        {
-          path: 'wxWelcome',
-          component: WxWelcome,
-          name: 'wxWelcome',
-        },
-        {
-          path: 'coupon',
-          component: Coupon,
-          name: 'coupon',
-        },
-        {
-          path: 'label',
-          component: Label,
-          name: 'label',
-        },
-        {
-          path: 'index',
-          component: Homepage,
-          name: 'index',
-        },
-        {
-          path: 'role',
-          component: Role,
-          name: 'role',
-        },
-      ]
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: Login,
-    }
-  ]
-})
+const routes = [
+  {
+    path: '/',
+    name: 'root',
+    redirect: 'login'
+  },
+  {
+    path: '/home',
+    name: 'home',
+    component: Home,
+    redirect: '/home/index',
+    children: [
+      {
+        path: 'user',
+        component: User,
+        name: 'user',
+      },
+      {
+        path: 'admin',
+        component: Admin,
+        name: 'admin',
+      },
+      {
+        path: 'wxWelcome',
+        component: WxWelcome,
+        name: 'wxWelcome',
+      },
+      {
+        path: 'coupon',
+        component: Coupon,
+        name: 'coupon',
+      },
+      {
+        path: 'label',
+        component: Label,
+        name: 'label',
+      },
+      {
+        path: 'index',
+        component: Homepage,
+        name: 'index',
+      },
+      {
+        path: 'role',
+        component: Role,
+        name: 'role',
+      },
+    ]
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login,
+  }
+];
+
+const router = new Router({
+  routes
+});
+
+router.beforeEach((to, from, next) => {
+  let loginFlag = sessionStorage.getItem("loginFlag");
+  if (to.fullPath === "/login" || loginFlag === "isLogin") {
+    next();
+  } else {
+    next({
+      path: '/login'
+    })
+  }
+});
+
+export default router
