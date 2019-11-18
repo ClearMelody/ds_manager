@@ -32,6 +32,7 @@
       <el-table-column align="center" min-width="80" label="积分" prop="goal"></el-table-column>
       <el-table-column align="center" min-width="160" label="最近登录" prop="lastLoginTimeStr"></el-table-column>
       <el-table-column align="center" min-width="160" label="注册时间" prop="registerTimeStr"></el-table-column>
+      <el-table-column align="center" min-width="80" label="分组" prop="labelVo.name"></el-table-column>
       <el-table-column align="center" min-width="160" label="操作">
         <template slot-scope="props">
           <el-button type="primary" size="mini" @click="payDialogShow(props.row)">消费</el-button>
