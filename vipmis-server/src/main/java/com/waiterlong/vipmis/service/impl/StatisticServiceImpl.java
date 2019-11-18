@@ -62,8 +62,10 @@ public class StatisticServiceImpl extends BaseServiceImpl implements IStatisticS
         end += " 23:59:59";
         List<Map<String ,Object>> dest = Lists.newLinkedList();
         Long count = userRep.countByRegisterTimeLessThan(DateUtil.stringToDate(start));
+        //返回的只是数据库里存在的日期当天统计，因此需要从入参日期start到日期end一天一天的遍历进行统计
         List<Map<String, Object>> mapList = userRep.getUserGrowth(start, end);
 
+        //返回的只是数据库里存在的日期当天统计，因此需要从入参日期start到日期end一天一天的遍历进行统计
         for (Date date = startDate; date.before(endDate) || date.equals(endDate);) {
             boolean isHasData = false;
             for (Map<String, Object> map : mapList) {
