@@ -25,14 +25,14 @@
       <el-table-column align="center" min-width="80" label="用户姓名" prop="realName"></el-table-column>
       <el-table-column align="center" min-width="120" label="微信昵称" prop="weChatName"></el-table-column>
       <el-table-column align="center" min-width="100" label="微信号" prop="weChatOpenId"></el-table-column>
-      <el-table-column align="center" min-width="100" label="手机号" prop="phone"></el-table-column>
+      <el-table-column align="center" min-width="110" label="手机号" prop="phone"></el-table-column>
       <el-table-column align="center" min-width="100" label="VIP卡号" prop="cardCord"></el-table-column>
-      <el-table-column align="center" min-width="100" label="身份证" prop="idCard"></el-table-column>
+      <el-table-column align="center" min-width="80" label="身份证" prop="idCard"></el-table-column>
       <el-table-column align="center" min-width="80" label="余额(元)" prop="deposit"></el-table-column>
       <el-table-column align="center" min-width="80" label="积分" prop="goal"></el-table-column>
-      <el-table-column align="center" min-width="160" label="最近登录" prop="lastLoginTimeStr"></el-table-column>
-      <el-table-column align="center" min-width="160" label="注册时间" prop="registerTimeStr"></el-table-column>
-      <el-table-column align="center" min-width="80" label="分组">
+      <el-table-column align="center" min-width="150" label="最近登录" prop="lastLoginTimeStr"></el-table-column>
+      <el-table-column align="center" min-width="150" label="注册时间" prop="registerTimeStr"></el-table-column>
+      <el-table-column align="center" min-width="100" label="分组">
         <template slot-scope="props">
           <el-tag effect="dark" style="cursor: pointer;" @click="selectLabelDialogShow(props.row)" :color="props.row.labelVo ? props.row.labelVo.color : ''">{{props.row.labelVo ? props.row.labelVo.name : '无分组'}}</el-tag>
         </template>
