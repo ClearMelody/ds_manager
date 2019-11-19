@@ -31,6 +31,9 @@ public class Label {
     @Column(name="name")
     private String name;
 
+    @Column(name="color")
+    private String color;
+
     @Column(name="create_time")
     private Date createTime;
 

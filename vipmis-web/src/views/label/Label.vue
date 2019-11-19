@@ -12,7 +12,11 @@
         </el-form-item>
       </el-form>
       <el-table :data="pageData.rows" stripe>
-        <el-table-column align="center" min-width="160" label="分组名" prop="name"></el-table-column>
+        <el-table-column align="center" min-width="160" label="分组">
+          <template slot-scope="props">
+            <el-tag effect="dark" :color="props.row.color">{{props.row.name}}</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column align="center" min-width="160" label="操作">
           <template slot-scope="props">
             <el-button type="primary" size="mini" @click="editDialogShow(props.row)">编辑</el-button>
@@ -36,6 +40,12 @@
           <el-form-item label="分组名" prop="name">
             <el-input v-model="addLabelFormData.name" maxlength="50" show-word-limit></el-input>
           </el-form-item>
+          <el-form-item label="颜色" prop="color">
+            <el-color-picker v-model="addLabelFormData.color"></el-color-picker>
+          </el-form-item>
+          <el-form-item label="效果">
+            <el-tag effect="dark" :color="addLabelFormData.color">{{addLabelFormData.name}}</el-tag>
+          </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
               <el-button @click="addLabelDialog.dialogVisible = false">取 消</el-button>
@@ -50,6 +60,12 @@
         <el-form :model="editLabelFormData" :rules="rules" ref="editLabelForm" label-width="100px">
           <el-form-item label="分组名" prop="name">
             <el-input v-model="editLabelFormData.name" maxlength="50" show-word-limit></el-input>
+          </el-form-item>
+          <el-form-item label="颜色" prop="color">
+            <el-color-picker v-model="editLabelFormData.color"></el-color-picker>
+          </el-form-item>
+          <el-form-item label="效果">
+            <el-tag effect="dark" :color="editLabelFormData.color">{{editLabelFormData.name}}</el-tag>
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -87,7 +103,8 @@
           page: 1
         },
         labelVo: {
-          name: ""
+          name: "",
+          color: ""
         },
         pageData: {
           currentPage: 1,
@@ -100,7 +117,8 @@
           dialogVisible: false
         },
         addLabelFormData: {
-          name: ""
+          name: "",
+          color: ""
         },
         rules: {
           name: [
@@ -112,7 +130,8 @@
           currentData: {}
         },
         editLabelFormData: {
-          name: ""
+          name: "",
+          color: ""
         },
         delLabelDialog: {
           dialogVisible: false,
@@ -128,11 +147,13 @@
       addDialogShow() {
         let _that = this;
         _that.addLabelFormData.name = "";
+        _that.addLabelFormData.color = "#409EFF";
         _that.addLabelDialog.dialogVisible = true;
       },
       editDialogShow(val) {
         let _that = this;
-        _that.editLabelFormData.name = "";
+        _that.editLabelFormData.name = val.name;
+        _that.editLabelFormData.color = val.color;
         _that.editLabelDialog.dialogVisible = true;
         _that.editLabelDialog.currentData = val;
       },
@@ -159,9 +180,10 @@
         let _that = this;
         _that.loading = true;
         let params = {
-          name: _that.addLabelFormData.name
+          name: _that.addLabelFormData.name,
+          color: _that.addLabelFormData.color
         };
-        API.addLabel(params).then(res => {
+        API.addLabel(params).then(() => {
           _that.listLabelsByPage().then(() => {
             _that.addLabelDialog.dialogVisible = false;
             _that.loading = false;
@@ -178,7 +200,8 @@
         _that.loading = true;
         let params = _that.editLabelDialog.currentData;
         params.name = _that.editLabelFormData.name;
-        API.editLabel(params).then(res => {
+        params.color = _that.editLabelFormData.color;
+        API.editLabel(params).then(() => {
           _that.listLabelsByPage().then(() => {
             _that.editLabelDialog.dialogVisible = false;
             _that.loading = false;
@@ -193,7 +216,7 @@
       del() {
         let _that = this;
         _that.loading = true;
-        API.delLabel(_that.delLabelDialog.currentData).then(res => {
+        API.delLabel(_that.delLabelDialog.currentData).then(() => {
           _that.listLabelsByPage().then(() => {
             _that.delLabelDialog.dialogVisible = false;
             _that.loading = false;

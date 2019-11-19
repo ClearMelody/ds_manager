@@ -2,6 +2,7 @@ package com.waiterlong.vipmis.service;
 
 import com.waiterlong.vipmis.component.Result;
 import com.waiterlong.vipmis.domain.vo.LabelVo;
+import com.waiterlong.vipmis.domain.vo.UserInfoVo;
 import com.waiterlong.vipmis.service.base.IBaseService;
 import org.springframework.data.domain.Pageable;
 
@@ -24,4 +25,8 @@ public interface ILabelService extends IBaseService {
     Result delLabel(LabelVo labelVo);
 
     Result listLabelsByPage(Map<String, Object> paramMap, Pageable pageable);
+
+    Result listAllLabels();
+
+    Result changeUserLabel(UserInfoVo userInfoVo);
 }

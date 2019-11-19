@@ -5,6 +5,7 @@ import com.waiterlong.vipmis.component.Result;
 import com.waiterlong.vipmis.domain.Label;
 import com.waiterlong.vipmis.domain.User;
 import com.waiterlong.vipmis.domain.vo.LabelVo;
+import com.waiterlong.vipmis.domain.vo.UserInfoVo;
 import com.waiterlong.vipmis.repository.LabelRep;
 import com.waiterlong.vipmis.repository.UserRep;
 import com.waiterlong.vipmis.service.ILabelService;
@@ -60,6 +61,7 @@ public class LabelServiceImpl extends BaseServiceImpl implements ILabelService {
         }
         Label label = labelOptional.get();
         label.setName(labelVo.getName());
+        label.setColor(labelVo.getColor());
 
         label = labelRep.save(label);
         return Result.ok(LabelVo.convertLabel(label));
@@ -89,5 +91,30 @@ public class LabelServiceImpl extends BaseServiceImpl implements ILabelService {
     public Result listLabelsByPage(@NotNull Map<String, Object> paramMap, @NotNull Pageable pageable) {
         Page<Label> labelPage = labelRep.findByNameIsContainingOrderByCreateTimeDesc((String)paramMap.get("name"), pageable);
         return Result.ok(PageResult.setPageResult(pageable, labelPage.getTotalElements(), LabelVo.convertLabel(labelPage.getContent())));
+    }
+
+    @Override
+    public Result listAllLabels() {
+        return Result.ok(LabelVo.convertLabel(labelRep.findAll()));
+    }
+
+    @Override
+    public Result changeUserLabel(@NotNull UserInfoVo userInfoVo) {
+        if (null == userInfoVo.getId() || userInfoVo.getId().trim().isEmpty() || null == userInfoVo.getLabelVo() || null == userInfoVo.getLabelVo().getId() || userInfoVo.getLabelVo().getId().trim().isEmpty()) {
+            return Result.badArgumentValue();
+        }
+        Optional<User> userOptional = userRep.findById(userInfoVo.getId());
+        if (!userOptional.isPresent()) {
+            return Result.badArgumentValue();
+        }
+        Optional<Label> labelOptional = labelRep.findById(userInfoVo.getLabelVo().getId());
+        if (!labelOptional.isPresent()) {
+            return Result.badArgumentValue();
+        }
+        User user = userOptional.get();
+        Label label = labelOptional.get();
+        user.setLabel(label);
+        user = userRep.save(user);
+        return Result.ok(UserInfoVo.convertUser(user));
     }
 }

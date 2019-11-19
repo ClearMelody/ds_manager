@@ -32,7 +32,11 @@
       <el-table-column align="center" min-width="80" label="积分" prop="goal"></el-table-column>
       <el-table-column align="center" min-width="160" label="最近登录" prop="lastLoginTimeStr"></el-table-column>
       <el-table-column align="center" min-width="160" label="注册时间" prop="registerTimeStr"></el-table-column>
-      <el-table-column align="center" min-width="80" label="分组" prop="labelVo.name"></el-table-column>
+      <el-table-column align="center" min-width="80" label="分组">
+        <template slot-scope="props">
+          <el-tag effect="dark" style="cursor: pointer;" @click="selectLabelDialogShow(props.row)" :color="props.row.labelVo ? props.row.labelVo.color : ''">{{props.row.labelVo ? props.row.labelVo.name : '无分组'}}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column align="center" min-width="160" label="操作">
         <template slot-scope="props">
           <el-button type="primary" size="mini" @click="payDialogShow(props.row)">消费</el-button>
@@ -83,11 +87,36 @@
               <el-button type="primary" :loading="loading" @click="pay()">确 定</el-button>
             </span>
     </el-dialog>
+
+    <el-dialog
+      title="修改分组"
+      :visible.sync="selectLabelDialog.dialogVisible" :close-on-click-modal="false"
+      width="30%">
+      <el-form :model="selectLabelFormData" ref="selectLabelForm" label-width="100px">
+        <el-form-item label="选择分组">
+          <el-select v-model="selectLabelFormData.id" filterable placeholder="请选择">
+            <el-option
+              v-for="item in labels"
+              :key="item.id"
+              :color="item.color"
+              :label="item.name"
+              :value="item.id">
+              <el-tag effect="dark" :color="item.color">{{item.name}}</el-tag>
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+              <el-button @click="selectLabelDialog.dialogVisible = false">取 消</el-button>
+              <el-button type="primary" :loading="loading" @click="changeLabel()">确 定</el-button>
+            </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import API from "../../api/api_user";
+  import LABEL_API from "../../api/api_label";
   export default {
     name: "User",
     data() {
@@ -155,7 +184,15 @@
               message: '填数字',
             }
           ]
-        }
+        },
+        selectLabelDialog: {
+          dialogVisible: false,
+          currentData: {}
+        },
+        selectLabelFormData: {
+          id: ""
+        },
+        labels: []
       }
     },
     methods: {
@@ -246,6 +283,38 @@
           _that.loading = false;
           _that.payDialog.dialogVisible = false;
         });
+      },
+      selectLabelDialogShow(val) {
+        let _that = this;
+        _that.selectLabelDialog.dialogVisible = true;
+        _that.selectLabelDialog.currentData = val;
+        _that.selectLabelFormData.id = val.labelVo ? val.labelVo.name : "";
+        LABEL_API.listAllLabels().then(res => {
+          if (!res || res.length === 0) {
+            _that.selectLabelDialog.dialogVisible = false;
+            return;
+          }
+          _that.labels = res;
+        }).catch(() => {
+          _that.selectLabelDialog.dialogVisible = false;
+        })
+      },
+      changeLabel() {
+        let _that = this;
+        _that.loading = true;
+        let userVo = {
+          id: _that.selectLabelDialog.currentData.id,
+          labelVo: {
+            id: _that.selectLabelFormData.id
+          }
+        };
+        LABEL_API.changeUserLabel(userVo).then(() => {
+          _that.loading = false;
+          _that.selectLabelDialog.dialogVisible = false;
+          _that.query();
+        }).catch(() => {
+          _that.loading = false;
+        })
       }
     },
     mounted() {

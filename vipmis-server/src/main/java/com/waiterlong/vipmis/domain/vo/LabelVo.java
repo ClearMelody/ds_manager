@@ -22,6 +22,8 @@ public class LabelVo {
 
     private String name;
 
+    private String color;
+
     public static LabelVo convertLabel(Label label) {
         if (null == label) {
             return null;
