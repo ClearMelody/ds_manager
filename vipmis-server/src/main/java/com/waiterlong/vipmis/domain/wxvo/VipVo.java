@@ -1,11 +1,15 @@
 package com.waiterlong.vipmis.domain.wxvo;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.waiterlong.vipmis.domain.Cat;
 import com.waiterlong.vipmis.domain.User;
+import com.waiterlong.vipmis.domain.vo.CatVo;
 import com.waiterlong.vipmis.utils.AbstractMyBeanUtils;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * \* Created with IntelliJ IDEA.
@@ -52,6 +56,8 @@ public class VipVo {
 
     private Integer coupon;
 
+    private List<Map<String, Object>> cats;
+
     public static VipVo convertUser(User user) {
         if (null == user) {
             return null;
@@ -64,6 +70,17 @@ public class VipVo {
         vipVo.setIntegral(user.getGoal());
         vipVo.setSex(user.getWeChatSex());
         vipVo.setAvatarUrl(user.getWeChatImgUrl());
+
+        List<Map<String, Object>> mapList = Lists.newLinkedList();
+        for (Cat cat : user.getCats()) {
+            Map<String, Object> map = Maps.newLinkedHashMap();
+            map.put("id", cat.getId());
+            map.put("sex", cat.getSex());
+            map.put("name", cat.getName());
+            map.put("breed", cat.getBreed());
+            mapList.add(map);
+        }
+        vipVo.setCats(mapList);
         return vipVo;
     }
 

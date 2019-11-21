@@ -37,7 +37,7 @@
         const isJPG = file.type === 'image/jpeg';
         const isLt500M = file.size / 1024 / 1024 < 500;
 
-        if (!isJPG && !isPNG) {
+        if (!isJPG) {
           this.$message.error('上传头像图片只能是 JPG 格式!');
         }
         if (!isLt500M) {

@@ -27,6 +27,53 @@ public class Cat {
     @Column(name = "id")
     private String id;
 
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name="img", columnDefinition="LONGBLOB")
+    private String img;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "birthday")
+    private String birthday;
+
+    /**
+     * 公猫 母猫
+     */
+    @Column(name = "sex")
+    private String sex;
+
+    /**
+     * 品种 英国短毛猫金渐层色
+     */
+    @Column(name = "breed")
+    private String breed;
+
+    /**
+     * 是否绝育 未绝育
+     */
+    @Column(name = "sterilization")
+    private String sterilization;
+
+    /**
+     * 疫苗初次时间
+     */
+    @Column(name = "vaccine_first")
+    private String vaccineFirst;
+
+    /**
+     * 疫苗最近时间
+     */
+    @Column(name = "vaccine_last")
+    private String vaccineLast;
+
+    /**
+     * 疫苗下次时间
+     */
+    @Column(name = "vaccine_next")
+    private String vaccineNext;
+
     @OneToMany(mappedBy = "cat", cascade = {CascadeType.PERSIST,CascadeType.REMOVE}, fetch = FetchType.LAZY)
     private List<CatLog> catLogs = Lists.newLinkedList();
 

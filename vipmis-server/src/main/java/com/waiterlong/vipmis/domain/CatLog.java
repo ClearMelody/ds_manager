@@ -25,6 +25,30 @@ public class CatLog {
     @Column(name = "id")
     private String id;
 
+    /**
+     * 洗澡时间
+     */
+    @Column(name = "wash_time")
+    private String washTime;
+
+    /**
+     * 体重
+     */
+    @Column(name = "weight")
+    private String weight;
+
+    /**
+     * 建议体内驱虫时间
+     */
+    @Column(name = "vivo")
+    private String vivo;
+
+    /**
+     * 建议体外驱虫时间
+     */
+    @Column(name = "vitro")
+    private String vitro;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Cat cat;
 

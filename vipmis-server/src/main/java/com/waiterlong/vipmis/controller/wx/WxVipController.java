@@ -3,10 +3,7 @@ package com.waiterlong.vipmis.controller.wx;
 import com.google.common.collect.Maps;
 import com.waiterlong.vipmis.component.Result;
 import com.waiterlong.vipmis.domain.wxvo.VipVo;
-import com.waiterlong.vipmis.service.IUserService;
-import com.waiterlong.vipmis.service.IVipService;
-import com.waiterlong.vipmis.service.IWeiXinApiService;
-import com.waiterlong.vipmis.service.IWelcomeService;
+import com.waiterlong.vipmis.service.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +29,8 @@ public class WxVipController {
     private IWelcomeService iWelcomeService;
     @Resource(name = "iWeiXinApiService")
     private IWeiXinApiService iWeiXinApiService;
+    @Resource(name = "iCatService")
+    private ICatService iCatService;
 
     @RequestMapping(value = "/vip/find", method = RequestMethod.GET)
     public Result findVipByOpenId(@RequestParam(defaultValue = "") String openid) {
@@ -74,6 +73,12 @@ public class WxVipController {
     public Result listGoalLogByPage(
             @RequestParam String userId) {
         return iVipService.deleteUser(userId);
+    }
+
+    @RequestMapping(value = "/cat/detail", method = RequestMethod.GET)
+    public Result getCatDetail(
+            @RequestParam String catId) {
+        return iCatService.getCatDetail(catId);
     }
 
     @RequestMapping(value = "/welcome", method = RequestMethod.GET)

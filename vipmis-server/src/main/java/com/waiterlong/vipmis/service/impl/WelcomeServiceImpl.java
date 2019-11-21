@@ -7,14 +7,15 @@ import com.waiterlong.vipmis.domain.vo.WelcomeVo;
 import com.waiterlong.vipmis.repository.WelcomeRep;
 import com.waiterlong.vipmis.service.IWelcomeService;
 import com.waiterlong.vipmis.service.base.BaseServiceImpl;
-import com.waiterlong.vipmis.utils.Base64;
 import com.waiterlong.vipmis.utils.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.Base64;
 import java.util.Date;
 
 /**
@@ -37,7 +38,7 @@ public class WelcomeServiceImpl extends BaseServiceImpl implements IWelcomeServi
     public Result uploadWelcomeImg(MultipartFile file) {
         String base64 = null;
         try {
-            base64 = Base64.encodeToString(file.getBytes(), false);
+            base64 = Base64Utils.encodeToString(file.getBytes());
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
