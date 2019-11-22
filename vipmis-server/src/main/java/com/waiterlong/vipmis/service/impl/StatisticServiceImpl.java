@@ -104,17 +104,24 @@ public class StatisticServiceImpl extends BaseServiceImpl implements IStatisticS
         Date endDate = DateUtil.stringToDate(end, DateUtil.FMT_YYYY_MM_DD);
         List<String> dateList = DateUtil.getRangeEveryDay(startDate, endDate);
 
+        start += " 00:00:00";
+        end += " 23:59:59";
+
         List<Map<String,Object>> totalList = depositLogRep.getConsumeLimitDayGroup(Constant.CHARGE, start, end);
         List<Object> consumeTotalList = new ArrayList<>();
         if(dateList != null & dateList.size() > 0){
             for (String dateStr : dateList) {
+                boolean hasValue = false;
                 for (Map<String,Object> map : totalList) {
                     String time = (String)map.get("time");
                     if(dateStr.equals(time)){
+                        hasValue = true;
                         consumeTotalList.add(map.get("consume"));break;
                     }
                 }
-                consumeTotalList.add(0);
+                if(!hasValue){
+                    consumeTotalList.add(0);
+                }
             }
         }
 
@@ -130,14 +137,18 @@ public class StatisticServiceImpl extends BaseServiceImpl implements IStatisticS
         for (String title : titleList){
             List<Object> tempList = new ArrayList<>();
             for (String dateStr : dateList) {
+                boolean hasValue = false;
                 for (Map<String, Object> map : titleConsumeList) {
                     String curTitle = (String) map.get("title");
                     String curTime = (String) map.get("time");
                     if(title.equals(curTitle) && dateStr.equals(curTime)){
+                        hasValue = true;
                         tempList.add(map.get("consume"));break;
                     }
                 }
-                tempList.add(0);
+                if(!hasValue){
+                    tempList.add(0);
+                }
             }
             titleConsumeMap.put(title, tempList);
         }
