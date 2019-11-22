@@ -58,7 +58,7 @@
       width="30%">
       <el-form :model="chargeFormData" :rules="rules" ref="chargeForm" label-width="100px">
         <el-form-item label="金额(元)" prop="money">
-          <el-input-number v-model="chargeFormData.money" :precision="2" :step="0.01"></el-input-number>
+          <el-input-number v-model="chargeFormData.money" :precision="0" :step="10"></el-input-number>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -73,13 +73,13 @@
       width="30%">
       <el-form :model="payFormData" :rules="payRules" ref="payForm" label-width="100px">
         <el-form-item label="猫咪售卖(元)" prop="money">
-          <el-input-number v-model="payFormData.catSell" :precision="2" :step="0.01"></el-input-number>
+          <el-input-number v-model="payFormData.catSell" :precision="0" :step="10"></el-input-number>
         </el-form-item>
         <el-form-item label="洗护服务(元)" prop="money">
-          <el-input-number v-model="payFormData.washProtectService" :precision="2" :step="0.01"></el-input-number>
+          <el-input-number v-model="payFormData.washProtectService" :precision="0" :step="10"></el-input-number>
         </el-form-item>
         <el-form-item label="周边产品(元)" prop="money">
-          <el-input-number v-model="payFormData.peripheralProducts" :precision="2" :step="0.01"></el-input-number>
+          <el-input-number v-model="payFormData.peripheralProducts" :precision="0" :step="10"></el-input-number>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">

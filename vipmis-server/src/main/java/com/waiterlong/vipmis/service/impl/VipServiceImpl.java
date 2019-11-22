@@ -213,7 +213,7 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
         Date nowDate = new Date();
         if (userInfoVo.getCatSell().compareTo(BigDecimal.ZERO) != 0) {
             deposit = deposit.subtract(userInfoVo.getCatSell());
-            BigDecimal t = userInfoVo.getCatSell().multiply(new BigDecimal(100));
+            BigDecimal t = userInfoVo.getCatSell();
             goal += t.longValue();
             String title = Constant.CAT_SELL;
 
@@ -223,7 +223,7 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
         }
         if (userInfoVo.getPeripheralProducts().compareTo(BigDecimal.ZERO) != 0) {
             deposit = deposit.subtract(userInfoVo.getPeripheralProducts());
-            BigDecimal t = userInfoVo.getPeripheralProducts().multiply(new BigDecimal(100));
+            BigDecimal t = userInfoVo.getPeripheralProducts();
             goal += t.longValue();
             String title = Constant.PERIPHERAL_PRODUCTS;
 
@@ -233,7 +233,7 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
         }
         if (userInfoVo.getWashProtectService().compareTo(BigDecimal.ZERO) != 0) {
             deposit = deposit.subtract(userInfoVo.getWashProtectService());
-            BigDecimal t = userInfoVo.getWashProtectService().multiply(new BigDecimal(100));
+            BigDecimal t = userInfoVo.getWashProtectService();
             goal += t.longValue();
             String title = Constant.WASH_PROTECT_SERVICE;
 
