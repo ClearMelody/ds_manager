@@ -8,7 +8,7 @@
           <user-growth-bar></user-growth-bar>
         </el-col>
       </el-row>
-      <el-row>
+      <el-row :span="12">
         <consume-limit-line></consume-limit-line>
       </el-row>
     </div>
