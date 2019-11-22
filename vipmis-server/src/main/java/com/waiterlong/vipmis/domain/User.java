@@ -5,6 +5,7 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -71,7 +72,7 @@ public class User {
     private Long goal;
 
     @Column(name = "deposit")
-    private Float deposit;
+    private BigDecimal deposit;
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST,CascadeType.REMOVE}, fetch = FetchType.LAZY)
     private List<GoalLog> goalLogs = Lists.newLinkedList();

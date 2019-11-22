@@ -58,11 +58,11 @@ public class UserInfoVo {
 
     private LabelVo labelVo;
 
-    private Float catSell;
+    private BigDecimal catSell;
 
-    private Float washProtectService;
+    private BigDecimal washProtectService;
 
-    private Float peripheralProducts;
+    private BigDecimal peripheralProducts;
 
     public static List<UserInfoVo> convertUser(List<User> users){
         List<UserInfoVo> userVos = Lists.newArrayList();

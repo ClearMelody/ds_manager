@@ -158,7 +158,7 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
         user.setBirthday(vipVo.getBirthday());
         user.setWeChatImgUrl(vipVo.getAvatarUrl());
         user.setGoal(0L);
-        user.setDeposit(0F);
+        user.setDeposit(new BigDecimal("0.0"));
         user.setCardType("普通VIP");
         user.setRegisterTime(new Date());
         //TODO
@@ -180,7 +180,7 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
             return Result.badArgumentValue();
         }
         User user = userOptional.get();
-        user.setDeposit(Float.sum(user.getDeposit().floatValue(), userInfoVo.getDeposit().floatValue()));
+        user.setDeposit(user.getDeposit().add(userInfoVo.getDeposit()));
         user = userRep.save(user);
 
         DepositLog depositLog = new DepositLog();
@@ -206,14 +206,14 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
             return Result.badArgumentValue();
         }
         User user = userOptional.get();
-        Float deposit = user.getDeposit().floatValue();
+        BigDecimal deposit = user.getDeposit();
         Long goal = user.getGoal();
         List<GoalLog> goalLogs = Lists.newLinkedList();
         List<DepositLog> depositLogs = Lists.newLinkedList();
         Date nowDate = new Date();
-        if (0F != userInfoVo.getCatSell()) {
-            deposit = deposit - userInfoVo.getCatSell();
-            Float t = userInfoVo.getCatSell() * 100;
+        if (userInfoVo.getCatSell().compareTo(BigDecimal.ZERO) != 0) {
+            deposit = deposit.subtract(userInfoVo.getCatSell());
+            BigDecimal t = userInfoVo.getCatSell().multiply(new BigDecimal(100));
             goal += t.longValue();
             String title = Constant.CAT_SELL;
 
@@ -221,9 +221,9 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
 
             depositLogs.add(makeDepositLog(userInfoVo.getCatSell(), title, nowDate, user));
         }
-        if (0F != userInfoVo.getPeripheralProducts()) {
-            deposit = deposit - userInfoVo.getPeripheralProducts();
-            Float t = userInfoVo.getPeripheralProducts() * 100;
+        if (userInfoVo.getPeripheralProducts().compareTo(BigDecimal.ZERO) != 0) {
+            deposit = deposit.subtract(userInfoVo.getPeripheralProducts());
+            BigDecimal t = userInfoVo.getPeripheralProducts().multiply(new BigDecimal(100));
             goal += t.longValue();
             String title = Constant.PERIPHERAL_PRODUCTS;
 
@@ -231,9 +231,9 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
 
             depositLogs.add(makeDepositLog(userInfoVo.getPeripheralProducts(), title, nowDate, user));
         }
-        if (0F != userInfoVo.getWashProtectService()) {
-            deposit = deposit - userInfoVo.getWashProtectService();
-            Float t = userInfoVo.getWashProtectService() * 100;
+        if (userInfoVo.getWashProtectService().compareTo(BigDecimal.ZERO) != 0) {
+            deposit = deposit.subtract(userInfoVo.getWashProtectService());
+            BigDecimal t = userInfoVo.getWashProtectService().multiply(new BigDecimal(100));
             goal += t.longValue();
             String title = Constant.WASH_PROTECT_SERVICE;
 
@@ -271,9 +271,9 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
         return Result.ok();
     }
 
-    private DepositLog makeDepositLog(Float goalChange, String title, Date createTime, User user) {
+    private DepositLog makeDepositLog(BigDecimal goalChange, String title, Date createTime, User user) {
         DepositLog depositLog = new DepositLog();
-        depositLog.setValue( BigDecimal.valueOf(-goalChange));
+        depositLog.setValue(goalChange.multiply(new BigDecimal(-1)));
         depositLog.setTitle(title);
         depositLog.setCreateTime(createTime);
         depositLog.setUser(user);

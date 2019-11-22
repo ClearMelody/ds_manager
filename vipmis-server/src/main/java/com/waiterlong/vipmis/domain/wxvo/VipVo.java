@@ -8,6 +8,7 @@ import com.waiterlong.vipmis.domain.vo.CatVo;
 import com.waiterlong.vipmis.utils.AbstractMyBeanUtils;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +42,7 @@ public class VipVo {
     /**
      * 余额
      */
-    private Float balance;
+    private BigDecimal balance;
 
     /**
      * 积分
