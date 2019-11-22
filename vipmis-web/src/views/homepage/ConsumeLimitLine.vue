@@ -12,14 +12,13 @@
       @change="dateChange"
       :picker-options="datePicker.pickerOptions">
     </el-date-picker>
-    <chart  ref="chart1" :options="options" :auto-resize="false" style="width: 100%;"></chart >
+    <chart  ref="chart1" :options="options" :auto-resize="false" style="width: 100%;"></chart>
   </div>
 </template>
 
 <script>
   import Vue from 'vue'
   import ECharts from 'vue-echarts'
-  import 'echarts/lib/chart/bar'
   import 'echarts/lib/chart/line'
   import 'echarts/lib/component/tooltip'
   import 'echarts/lib/component/legend'
@@ -29,7 +28,7 @@
   export default {
     name: "ConsumeLimitLine",
     components: {
-      line: ECharts
+      chart: ECharts
     },
     data() {
       return {
