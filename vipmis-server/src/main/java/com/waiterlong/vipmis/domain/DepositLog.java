@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
 
@@ -33,7 +34,7 @@ public class DepositLog {
     private String title;
 
     @Column(name = "value", scale=2)
-    private Float value;
+    private BigDecimal value;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;

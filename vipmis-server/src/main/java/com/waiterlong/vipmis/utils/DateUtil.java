@@ -5,10 +5,7 @@ import org.apache.commons.lang3.time.DateUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  * Date Operate Class
@@ -387,5 +384,33 @@ public class DateUtil {
         now.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
         return now.getTime();
     }
+
+    /**
+     * 获取时间段内每一天日期
+     * @param sDate
+     * @param eDate
+     * @return
+     */
+    public static List<String> getRangeEveryDay(Date sDate, Date eDate)
+    {
+        SimpleDateFormat format = new SimpleDateFormat(FMT_YYYY_MM_DD);
+        List lDate = new ArrayList();
+        lDate.add(format.format(sDate));
+        Calendar calBegin = Calendar.getInstance();
+        // 使用给定的 Date 设置此 Calendar 的时间
+        calBegin.setTime(sDate);
+        Calendar calEnd = Calendar.getInstance();
+        // 使用给定的 Date 设置此 Calendar 的时间
+        calEnd.setTime(eDate);
+        // 测试此日期是否在指定日期之后
+        while (eDate.after(calBegin.getTime()))
+        {
+            // 根据日历的规则，为给定的日历字段添加或减去指定的时间量
+            calBegin.add(Calendar.DAY_OF_MONTH, 1);
+            lDate.add(format.format(calBegin.getTime()));
+        }
+        return lDate;
+    }
+
 
 }

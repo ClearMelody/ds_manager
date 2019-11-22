@@ -7,6 +7,7 @@ import com.waiterlong.vipmis.utils.DateUtil;
 import com.waiterlong.vipmis.utils.PinyinUtil;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class UserInfoVo {
 
     private Long goal;
 
-    private Float deposit;
+    private BigDecimal deposit;
 
     private LabelVo labelVo;
 

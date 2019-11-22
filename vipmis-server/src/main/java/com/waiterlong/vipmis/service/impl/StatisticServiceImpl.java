@@ -17,10 +17,7 @@ import sun.rmi.runtime.Log;
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * \* Created with IntelliJ IDEA.
@@ -97,6 +94,61 @@ public class StatisticServiceImpl extends BaseServiceImpl implements IStatisticS
         return Result.ok(dest);
     }
 
+    @Override
+    public Result getConsumeLimitGrowth(String start, String end) {
+        if (!isDate(start) || !isDate(end)) {
+            return Result.badArgumentValue();
+        }
+
+        Date startDate = DateUtil.stringToDate(start, DateUtil.FMT_YYYY_MM_DD);
+        Date endDate = DateUtil.stringToDate(end, DateUtil.FMT_YYYY_MM_DD);
+        List<String> dateList = DateUtil.getRangeEveryDay(startDate, endDate);
+
+        List<Map<String,Object>> totalList = depositLogRep.getConsumeLimitDayGroup(Constant.CHARGE, start, end);
+        List<Object> consumeTotalList = new ArrayList<>();
+        if(dateList != null & dateList.size() > 0){
+            for (String dateStr : dateList) {
+                for (Map<String,Object> map : totalList) {
+                    String time = (String)map.get("time");
+                    if(dateStr.equals(time)){
+                        consumeTotalList.add(map.get("consume"));break;
+                    }
+                }
+                consumeTotalList.add(0);
+            }
+        }
+
+        Map<String, List<Object>> titleConsumeMap = new HashMap<>();
+        List<Map<String,Object>> titleConsumeList = depositLogRep.getConsumeLimitTitleAndDayGroup(Constant.CHARGE, start, end);
+        List<String> titleList = new ArrayList<>();
+        for (Map<String, Object> map : titleConsumeList){
+            String title = (String) map.get("title");
+            if(!titleList.contains(title)){
+                titleList.add(title);
+            }
+        }
+        for (String title : titleList){
+            List<Object> tempList = new ArrayList<>();
+            for (String dateStr : dateList) {
+                for (Map<String, Object> map : titleConsumeList) {
+                    String curTitle = (String) map.get("title");
+                    String curTime = (String) map.get("time");
+                    if(title.equals(curTitle) && dateStr.equals(curTime)){
+                        tempList.add(map.get("consume"));break;
+                    }
+                }
+                tempList.add(0);
+            }
+            titleConsumeMap.put(title, tempList);
+        }
+        Map<String,Object> result = new HashMap<>();
+        result.put("titleList", titleList);
+        result.put("dateList", dateList);
+        result.put("lineResult", consumeTotalList);
+        result.put("barResult", titleConsumeMap);
+        return Result.ok(result);
+    }
+
     private Boolean isDate(String date) {
         if (null == date || date.trim().isEmpty()) {
             return false;
@@ -108,4 +160,6 @@ public class StatisticServiceImpl extends BaseServiceImpl implements IStatisticS
         }
         return true;
     }
+
+
 }

@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.text.spi.DecimalFormatSymbolsProvider;
 import java.util.Date;
 import java.util.List;
@@ -179,7 +180,7 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
             return Result.badArgumentValue();
         }
         User user = userOptional.get();
-        user.setDeposit(Float.sum(user.getDeposit(), userInfoVo.getDeposit()));
+        user.setDeposit(Float.sum(user.getDeposit().floatValue(), userInfoVo.getDeposit().floatValue()));
         user = userRep.save(user);
 
         DepositLog depositLog = new DepositLog();
@@ -205,7 +206,7 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
             return Result.badArgumentValue();
         }
         User user = userOptional.get();
-        Float deposit = user.getDeposit();
+        Float deposit = user.getDeposit().floatValue();
         Long goal = user.getGoal();
         List<GoalLog> goalLogs = Lists.newLinkedList();
         List<DepositLog> depositLogs = Lists.newLinkedList();
@@ -272,7 +273,7 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
 
     private DepositLog makeDepositLog(Float goalChange, String title, Date createTime, User user) {
         DepositLog depositLog = new DepositLog();
-        depositLog.setValue(-goalChange);
+        depositLog.setValue( BigDecimal.valueOf(-goalChange));
         depositLog.setTitle(title);
         depositLog.setCreateTime(createTime);
         depositLog.setUser(user);

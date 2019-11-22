@@ -18,4 +18,6 @@ public interface IStatisticService extends IBaseService {
     Result getProductProportion(String start, String end);
 
     Result getUserGrowth(String start, String end);
+
+    Result getConsumeLimitGrowth(String start, String end);
 }

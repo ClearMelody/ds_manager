@@ -35,4 +35,11 @@ public class StatisticController {
             @RequestParam String end) {
         return iStatisticService.getUserGrowth(start, end);
     }
+
+    @RequestMapping(value = "/statistic/consume-limit/growth", method = RequestMethod.GET)
+    public Result getConsumeLimitGrowth(
+            @RequestParam String start,
+            @RequestParam String end) {
+        return iStatisticService.getConsumeLimitGrowth(start, end);
+    }
 }

@@ -33,4 +33,10 @@ public interface DepositLogRep extends JpaRepository<DepositLog, String> {
 
     @Query(nativeQuery = true, value = "select title, sum(value) as sum from deposit_log where title <> ? and create_time between ? and ? GROUP BY title")
     List<Map<String, Object>> getProductProportion(String notTitle, String start, String end);
+
+    @Query(nativeQuery = true, value = "SELECT DATE_FORMAT(create_time,'%Y-%m-%d') as time,sum(value) as consume FROM deposit_log where title <> ? and create_time between ? and ? GROUP BY  DATE_FORMAT(create_time,'%Y-%m-%d')")
+    List<Map<String,Object>> getConsumeLimitDayGroup(String notTitle, String start, String end);
+
+    @Query(nativeQuery = true, value = "SELECT DATE_FORMAT(create_time,'%Y-%m-%d') as time,title,sum(value) as consume FROM deposit_log where title <> ? and create_time between ? and ? GROUP BY  DATE_FORMAT(create_time,'%Y-%m-%d'),title")
+    List<Map<String,Object>> getConsumeLimitTitleAndDayGroup(String notTitle, String start, String end);
 }
