@@ -17,6 +17,7 @@ import com.waiterlong.vipmis.repository.UserCouponRep;
 import com.waiterlong.vipmis.repository.UserRep;
 import com.waiterlong.vipmis.service.IVipService;
 import com.waiterlong.vipmis.service.base.BaseServiceImpl;
+import com.waiterlong.vipmis.utils.CardCordUtil;
 import com.waiterlong.vipmis.utils.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -162,7 +163,7 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
         user.setCardType("普通VIP");
         user.setRegisterTime(new Date());
         //TODO
-        user.setCardCord("");
+        user.setCardCord(CardCordUtil.getBrankNumber());
         user.setWeChatOpenId(vipVo.getOpenid());
         user = userRep.save(user);
         return Result.ok(VipVo.convertUser(user));
