@@ -8,17 +8,22 @@
           <user-growth-bar></user-growth-bar>
         </el-col>
       </el-row>
+      <el-row>
+        <consume-limit-line></consume-limit-line>
+      </el-row>
     </div>
 </template>
 
 <script>
   import ProductSaleProportionPie from "./ProductSaleProportionPie"
   import UserGrowthBar from "./UserGrowthBar"
+  import ConsumeLimitLine from "./ConsumeLimitLine"
   export default {
     name: "Homepage",
     components: {
       ProductSaleProportionPie,
-      UserGrowthBar
+      UserGrowthBar,
+      ConsumeLimitLine
     }
   }
 </script>
