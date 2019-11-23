@@ -38,29 +38,39 @@ function dealResultData(res) {
 export const POST = (url, params) => {
   return axios.post(`${base}${url}`, params).then(res => {
     return dealResultData(res)
-  })
+  }).catch(() => {
+    alert("系统错误，请刷新页面");
+  });
 };
 
 export const GET = (url, params) => {
   return axios.get(`${base}${url}`, {params: params}).then(res => {
     return dealResultData(res)
-  })
+  }).catch(() => {
+    alert("系统错误，请刷新页面");
+  });
 };
 
 export const PUT = (url, params) => {
   return axios.put(`${base}${url}`, params).then(res => {
     return dealResultData(res)
-  })
+  }).catch(() => {
+    alert("系统错误，请刷新页面");
+  });
 };
 
 export const DELETE = (url, params) => {
   return axios.delete(`${base}${url}`, {params: params}).then(res => {
     return dealResultData(res)
-  })
+  }).catch(() => {
+    alert("系统错误，请刷新页面");
+  });
 };
 
 export const PATCH = (url, params) => {
   return axios.patch(`${base}${url}`, params).then(res => {
     return dealResultData(res)
-  })
+  }).catch(() => {
+    alert("系统错误，请刷新页面");
+  });
 };

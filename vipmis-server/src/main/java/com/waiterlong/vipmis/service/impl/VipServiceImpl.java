@@ -151,13 +151,13 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
             return Result.fail(1, "该用户已存在");
         }
         User user = new User();
-        user.setIdCard(vipVo.getIdCard());
-        user.setPhone(vipVo.getPhone());
-        user.setWeChatSex(vipVo.getSex());
-        user.setRealName(vipVo.getName());
-        user.setWeChatName(vipVo.getVipName());
-        user.setBirthday(vipVo.getBirthday());
-        user.setWeChatImgUrl(vipVo.getAvatarUrl());
+        user.setIdCard(null == vipVo.getIdCard() ? "" : vipVo.getIdCard());
+        user.setPhone(null == vipVo.getPhone() ? "" : vipVo.getPhone());
+        user.setWeChatSex(null == vipVo.getSex() ? "" : vipVo.getSex());
+        user.setRealName(null == vipVo.getName() ? "" : vipVo.getName());
+        user.setWeChatName(null == vipVo.getVipName() ? "" : vipVo.getVipName());
+        user.setBirthday(null == vipVo.getBirthday() ? "" : vipVo.getBirthday());
+        user.setWeChatImgUrl(null == vipVo.getAvatarUrl() ? "" : vipVo.getAvatarUrl());
         user.setGoal(0L);
         user.setDeposit(new BigDecimal("0.0"));
         user.setCardType("普通VIP");
@@ -182,14 +182,17 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
         }
         User user = userOptional.get();
         user.setDeposit(user.getDeposit().add(userInfoVo.getDeposit()));
+        user.setGoal(user.getGoal() + userInfoVo.getDeposit().longValue());
         user = userRep.save(user);
 
-        DepositLog depositLog = new DepositLog();
-        depositLog.setUser(user);
-        depositLog.setCreateTime(new Date());
-        depositLog.setTitle("充值");
-        depositLog.setValue(userInfoVo.getDeposit());
+        Date nowDate = new Date();
+        String title = "充值";
+
+        DepositLog depositLog = makeDepositLog(userInfoVo.getDeposit(), title, nowDate, user);
         depositLogRep.save(depositLog);
+
+        GoalLog goalLog = makeGoalLog(userInfoVo.getDeposit().longValue(), title, nowDate, user);
+        goalLogRep.save(goalLog);
 
         return Result.ok();
     }
@@ -208,45 +211,32 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
         }
         User user = userOptional.get();
         BigDecimal deposit = user.getDeposit();
-        Long goal = user.getGoal();
-        List<GoalLog> goalLogs = Lists.newLinkedList();
         List<DepositLog> depositLogs = Lists.newLinkedList();
         Date nowDate = new Date();
         if (userInfoVo.getCatSell().compareTo(BigDecimal.ZERO) != 0) {
             deposit = deposit.subtract(userInfoVo.getCatSell());
             BigDecimal t = userInfoVo.getCatSell();
-            goal += t.longValue();
             String title = Constant.CAT_SELL;
-
-            goalLogs.add(makeGoalLog(t.longValue(), title, nowDate, user));
 
             depositLogs.add(makeDepositLog(userInfoVo.getCatSell(), title, nowDate, user));
         }
         if (userInfoVo.getPeripheralProducts().compareTo(BigDecimal.ZERO) != 0) {
             deposit = deposit.subtract(userInfoVo.getPeripheralProducts());
             BigDecimal t = userInfoVo.getPeripheralProducts();
-            goal += t.longValue();
             String title = Constant.PERIPHERAL_PRODUCTS;
-
-            goalLogs.add(makeGoalLog(t.longValue(), title, nowDate, user));
 
             depositLogs.add(makeDepositLog(userInfoVo.getPeripheralProducts(), title, nowDate, user));
         }
         if (userInfoVo.getWashProtectService().compareTo(BigDecimal.ZERO) != 0) {
             deposit = deposit.subtract(userInfoVo.getWashProtectService());
             BigDecimal t = userInfoVo.getWashProtectService();
-            goal += t.longValue();
             String title = Constant.WASH_PROTECT_SERVICE;
-
-            goalLogs.add(makeGoalLog(t.longValue(), title, nowDate, user));
 
             depositLogs.add(makeDepositLog(userInfoVo.getWashProtectService(), title, nowDate, user));
         }
         user.setDeposit(deposit);
-        user.setGoal(goal);
         user = userRep.save(user);
 
-        goalLogRep.saveAll(goalLogs);
         depositLogRep.saveAll(depositLogs);
 
         return Result.ok(UserInfoVo.convertUser(user));
@@ -269,6 +259,30 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
         List<DepositLog> depositLogs = depositLogRep.findByUser_Id(userId);
         depositLogRep.deleteAll(depositLogs);
         userRep.delete(userOptional.get());
+        return Result.ok();
+    }
+
+    @Override
+    public Result useGoal(UserInfoVo userInfoVo) {
+        logger.debug("useGoal userInfoVo: {}", userInfoVo);
+
+        if (null == userInfoVo.getId() || userInfoVo.getId().trim().isEmpty()) {
+            return Result.badArgumentValue();
+        }
+        Optional<User> userOptional = userRep.findById(userInfoVo.getId());
+        if (!userOptional.isPresent()) {
+            return Result.badArgumentValue();
+        }
+        User user = userOptional.get();
+        user.setGoal(user.getGoal() - userInfoVo.getGoal());
+        user = userRep.save(user);
+
+        Date nowDate = new Date();
+        String title = "使用积分";
+
+        GoalLog goalLog = makeGoalLog(-userInfoVo.getGoal(), title, nowDate, user);
+        goalLogRep.save(goalLog);
+
         return Result.ok();
     }
 

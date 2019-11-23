@@ -57,4 +57,6 @@ public interface IVipService extends IBaseService {
     Result pay(UserInfoVo userInfoVo);
 
     Result deleteUser(String userId);
+
+    Result useGoal(UserInfoVo userInfoVo);
 }

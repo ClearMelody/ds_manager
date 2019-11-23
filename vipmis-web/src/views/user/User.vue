@@ -17,14 +17,13 @@
         <el-input v-model="queryParam.cardCord" placeholder="" @keyup.enter.native.prevent="query()"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="query()">查询</el-button>
+        <el-button type="primary" @click="query()" :loading="loading">查询</el-button>
         <el-button type="primary" @click="reset()">重置</el-button>
       </el-form-item>
     </el-form>
-    <el-table :data="pageData.rows" stripe>
+    <el-table v-loading="loading" :data="pageData.rows" stripe>
       <el-table-column align="center" min-width="80" label="用户姓名" prop="realName"></el-table-column>
       <el-table-column align="center" min-width="120" label="微信昵称" prop="weChatName"></el-table-column>
-      <el-table-column align="center" min-width="100" label="微信号" prop="weChatOpenId"></el-table-column>
       <el-table-column align="center" min-width="110" label="手机号" prop="phone"></el-table-column>
       <el-table-column align="center" min-width="100" label="VIP卡号" prop="cardCord"></el-table-column>
       <el-table-column align="center" min-width="80" label="身份证" prop="idCard"></el-table-column>
@@ -37,9 +36,10 @@
           <el-tag effect="dark" style="cursor: pointer;" @click="selectLabelDialogShow(props.row)" :color="props.row.labelVo ? props.row.labelVo.color : ''">{{props.row.labelVo ? props.row.labelVo.name : '无分组'}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" min-width="160" label="操作">
+      <el-table-column align="center" min-width="240" label="操作">
         <template slot-scope="props">
           <el-button type="primary" size="mini" @click="payDialogShow(props.row)">消费</el-button>
+          <el-button type="primary" size="mini" @click="userGoalDialogShow(props.row)">使用积分</el-button>
           <el-button type="primary" size="mini" @click="chargeDialogShow(props.row)">充值</el-button>
 <!--          <el-button type="primary" size="mini" :disabled="false">详情</el-button>-->
         </template>
@@ -58,7 +58,7 @@
       width="30%">
       <el-form :model="chargeFormData" :rules="rules" ref="chargeForm" label-width="100px">
         <el-form-item label="金额(元)" prop="money">
-          <el-input-number v-model="chargeFormData.money" :precision="0" :step="10"></el-input-number>
+          <el-input-number v-model="chargeFormData.money" :precision="0" :step="10" @keyup.enter.native.prevent="charge()"></el-input-number>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -68,18 +68,33 @@
     </el-dialog>
 
     <el-dialog
+      title="使用积分"
+      :visible.sync="useGoalDialog.dialogVisible" :close-on-click-modal="false"
+      width="30%">
+      <el-form :model="useGoalFormData" ref="useGoalForm" label-width="100px">
+        <el-form-item label="积分" prop="goal">
+          <el-input-number v-model="useGoalFormData.goal" :precision="0" :step="10" @keyup.enter.native.prevent="useGoal()"></el-input-number>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+              <el-button @click="useGoalDialog.dialogVisible = false">取 消</el-button>
+              <el-button type="primary" :loading="loading" @click="useGoal()">确 定</el-button>
+            </span>
+    </el-dialog>
+
+    <el-dialog
       title="消费"
       :visible.sync="payDialog.dialogVisible" :close-on-click-modal="false"
       width="30%">
       <el-form :model="payFormData" :rules="payRules" ref="payForm" label-width="100px">
         <el-form-item label="猫咪售卖(元)" prop="money">
-          <el-input-number v-model="payFormData.catSell" :precision="0" :step="10"></el-input-number>
+          <el-input-number v-model="payFormData.catSell" :precision="0" :step="10" @keyup.enter.native.prevent="pay()"></el-input-number>
         </el-form-item>
         <el-form-item label="洗护服务(元)" prop="money">
-          <el-input-number v-model="payFormData.washProtectService" :precision="0" :step="10"></el-input-number>
+          <el-input-number v-model="payFormData.washProtectService" :precision="0" :step="10" @keyup.enter.native.prevent="pay()"></el-input-number>
         </el-form-item>
         <el-form-item label="周边产品(元)" prop="money">
-          <el-input-number v-model="payFormData.peripheralProducts" :precision="0" :step="10"></el-input-number>
+          <el-input-number v-model="payFormData.peripheralProducts" :precision="0" :step="10" @keyup.enter.native.prevent="pay()"></el-input-number>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -145,6 +160,13 @@
         chargeFormData: {
           money: ""
         },
+        useGoalDialog: {
+          dialogVisible: false,
+          currentData: {}
+        },
+        useGoalFormData: {
+          goal: ""
+        },
         payDialog: {
           dialogVisible: false,
           currentData: {}
@@ -198,15 +220,18 @@
     methods: {
       listUsersByPage() {
         let _that = this;
+        _that.loading = true;
         API.listUsersByPage(_that.queryParam).then(result => {
           if (!result) {
+            _that.loading = false;
             return;
           }
           result.pageSizes = [5];
           _that.pageData = result;
+          _that.loading = false;
           console.log(result);
         }).catch(() => {
-
+          _that.loading = false;
         })
       },
       resetPage() {
@@ -256,17 +281,36 @@
         _that.payDialog.currentData = val;
         _that.payDialog.dialogVisible = true;
       },
+      userGoalDialogShow(val) {
+        let _that = this;
+        _that.useGoalFormData.goal = "";
+        _that.useGoalDialog.currentData = val;
+        _that.useGoalDialog.dialogVisible = true;
+      },
       charge() {
         let _that = this;
         _that.loading = true;
-        _that.chargeDialog.currentData.deposit = _that.chargeFormData.money;
-        API.charge(_that.chargeDialog.currentData).then(() => {
+        let params = _that.chargeDialog.currentData;
+        params.deposit = _that.chargeFormData.money;
+        API.charge(params).then(() => {
           _that.loading = false;
           _that.chargeDialog.dialogVisible = false;
           _that.query();
         }).catch(() => {
           _that.loading = false;
-          _that.chargeDialog.dialogVisible = false;
+        });
+      },
+      useGoal() {
+        let _that = this;
+        _that.loading = true;
+        let params = _that.useGoalDialog.currentData;
+        params.goal = _that.useGoalFormData.goal;
+        API.useGoal(params).then(() => {
+          _that.loading = false;
+          _that.useGoalDialog.dialogVisible = false;
+          _that.query();
+        }).catch(() => {
+          _that.loading = false;
         });
       },
       pay() {
@@ -281,7 +325,6 @@
           _that.query();
         }).catch(() => {
           _that.loading = false;
-          _that.payDialog.dialogVisible = false;
         });
       },
       selectLabelDialogShow(val) {

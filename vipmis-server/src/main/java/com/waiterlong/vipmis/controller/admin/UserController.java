@@ -56,4 +56,8 @@ public class UserController {
         return iVipService.pay(userInfoVo);
     }
 
+    @RequestMapping(value = "/user/goal/use", method = RequestMethod.POST)
+    public Result useGoal(@RequestBody UserInfoVo userInfoVo) {
+        return iVipService.useGoal(userInfoVo);
+    }
 }

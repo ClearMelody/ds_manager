@@ -11,7 +11,7 @@
           <el-button type="primary" @click="addDialogShow()">添加</el-button>
         </el-form-item>
       </el-form>
-      <el-table :data="pageData.rows" stripe>
+      <el-table v-loading="loading" :data="pageData.rows" stripe>
         <el-table-column align="center" min-width="160" label="分组">
           <template slot-scope="props">
             <el-tag effect="dark" :color="props.row.color">{{props.row.name}}</el-tag>
