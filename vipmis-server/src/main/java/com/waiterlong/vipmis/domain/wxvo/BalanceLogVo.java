@@ -6,6 +6,7 @@ import com.waiterlong.vipmis.utils.AbstractMyBeanUtils;
 import com.waiterlong.vipmis.utils.DateUtil;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -23,7 +24,7 @@ public class BalanceLogVo {
 
     private String time;
 
-    private Float value;
+    private BigDecimal value;
 
     public static BalanceLogVo convertDepositLog(DepositLog depositLog) {
         if (null == depositLog) {
