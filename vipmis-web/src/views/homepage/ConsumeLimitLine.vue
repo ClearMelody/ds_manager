@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>消费额度</h3>
+    <h3>消费统计</h3>
     <el-date-picker
       v-model="datePicker.value"
       type="daterange"
@@ -97,7 +97,7 @@
             series.push(obj)
           }
           series.push({
-            name:'日额度',
+            name:'日总',
             type:'line',
             data:res.lineResult
           })

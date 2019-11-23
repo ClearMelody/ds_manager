@@ -69,7 +69,7 @@ public class WxVipController {
         return iVipService.listGoalLogByPage(paramMap, pageable);
     }
 
-    @RequestMapping(value = "/vip/delete", method = RequestMethod.GET)
+//    @RequestMapping(value = "/vip/delete", method = RequestMethod.GET)
     public Result listGoalLogByPage(
             @RequestParam String userId) {
         return iVipService.deleteUser(userId);

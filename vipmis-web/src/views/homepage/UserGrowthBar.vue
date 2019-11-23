@@ -121,7 +121,7 @@
             ],
             series : [
               {
-                name:'用户增长',
+                name:'用户数',
                 type:'bar',
                 barWidth: '60%',
                 data
