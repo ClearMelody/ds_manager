@@ -85,13 +85,14 @@
           end: dateUtil.dateFormat(_that.datePicker.value[1], "yyyy-MM-dd"),
         };
         api.getConsumeLimitGrowth(params).then(res => {
+          let titleList = res.titleList;
           let data = res.barResult;
           let series = [];
-          for (let i in data) {
+          for (let i = 0,len = titleList.length; i < len; i++) {
             let obj = {
-              name:i,
+              name:titleList[i],
               type:'bar',
-              data:data[i]
+              data:data[titleList[i]]
             }
             series.push(obj)
           }
@@ -119,7 +120,7 @@
               }
             },
             legend: {
-              data:res.titleList
+              data:titleList
             },
             xAxis: [
               {
