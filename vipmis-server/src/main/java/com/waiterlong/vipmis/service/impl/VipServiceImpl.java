@@ -188,7 +188,11 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
         Date nowDate = new Date();
         String title = "充值";
 
-        DepositLog depositLog = makeDepositLog(userInfoVo.getDeposit(), title, nowDate, user);
+        DepositLog depositLog = new DepositLog();
+        depositLog.setUser(user);
+        depositLog.setCreateTime(nowDate);
+        depositLog.setTitle(title);
+        depositLog.setValue(userInfoVo.getDeposit());
         depositLogRep.save(depositLog);
 
         GoalLog goalLog = makeGoalLog(userInfoVo.getDeposit().longValue(), title, nowDate, user);
