@@ -18,7 +18,6 @@ import com.waiterlong.vipmis.repository.UserRep;
 import com.waiterlong.vipmis.service.IVipService;
 import com.waiterlong.vipmis.service.base.BaseServiceImpl;
 import com.waiterlong.vipmis.utils.CardCordUtil;
-import com.waiterlong.vipmis.utils.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -29,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.text.spi.DecimalFormatSymbolsProvider;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +44,7 @@ import java.util.Optional;
  */
 @Service("iVipService")
 public class VipServiceImpl extends BaseServiceImpl implements IVipService {
-    Logger logger = LoggerFactory.getLogger(VipServiceImpl.class);
+    private Logger logger = LoggerFactory.getLogger(VipServiceImpl.class);
 
     @Resource(name="userRep")
     private UserRep userRep;
@@ -218,21 +216,18 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
         Date nowDate = new Date();
         if (userInfoVo.getCatSell().compareTo(BigDecimal.ZERO) != 0) {
             deposit = deposit.subtract(userInfoVo.getCatSell());
-            BigDecimal t = userInfoVo.getCatSell();
             String title = Constant.CAT_SELL;
 
             depositLogs.add(makeDepositLog(userInfoVo.getCatSell(), title, nowDate, user));
         }
         if (userInfoVo.getPeripheralProducts().compareTo(BigDecimal.ZERO) != 0) {
             deposit = deposit.subtract(userInfoVo.getPeripheralProducts());
-            BigDecimal t = userInfoVo.getPeripheralProducts();
             String title = Constant.PERIPHERAL_PRODUCTS;
 
             depositLogs.add(makeDepositLog(userInfoVo.getPeripheralProducts(), title, nowDate, user));
         }
         if (userInfoVo.getWashProtectService().compareTo(BigDecimal.ZERO) != 0) {
             deposit = deposit.subtract(userInfoVo.getWashProtectService());
-            BigDecimal t = userInfoVo.getWashProtectService();
             String title = Constant.WASH_PROTECT_SERVICE;
 
             depositLogs.add(makeDepositLog(userInfoVo.getWashProtectService(), title, nowDate, user));
