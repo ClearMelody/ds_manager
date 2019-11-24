@@ -1,14 +1,20 @@
 <template>
     <div>
-      <el-upload
-        class="avatar-uploader"
-        :action="uploadUrl"
-        :show-file-list="false"
-        :on-success="handleAvatarSuccess"
-        :before-upload="beforeAvatarUpload">
-        <img v-if="imageUrl" :src="imageUrl" class="avatar">
-        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-      </el-upload>
+      <el-card class="box-card">
+         <div slot="header" class="clearfix">
+          <span>分享小程序图片上传</span>
+        </div>
+         <img v-if="imageUrl" :src="imageUrl" class="avatar">
+          <el-upload
+            class="avatar-uploader"
+            :action="uploadUrl"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            list-type="picture-card"
+            :before-upload="beforeAvatarUpload">
+            <i class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+        </el-card>
     </div>
 </template>
 
@@ -29,8 +35,8 @@
     },
     methods: {
       handleAvatarSuccess(res, file) {
-        console.log(res);
-        console.log(file);
+        // console.log(res);
+        // console.log(file);
         this.imageUrl = URL.createObjectURL(file.raw);
       },
       beforeAvatarUpload(file) {
@@ -71,14 +77,23 @@
   .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
+    line-height: 148px;
     text-align: center;
   }
+  .el-upload{
+    float: left;
+    
+  }
   .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
+    width: 148px;
+    height:148px;
+    float: left;
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    margin-right: 20px;
+  }
+  .box-card:after{
+    content: "";
+    clear: both;
   }
 </style>

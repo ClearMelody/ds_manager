@@ -1,6 +1,11 @@
 <template>
     <div>
-      its admin
+        <el-card class="box-card">
+         <div slot="header" class="clearfix">
+          <span>管理员页面</span>
+        </div>
+        this admin
+        </el-card>
     </div>
 </template>
 

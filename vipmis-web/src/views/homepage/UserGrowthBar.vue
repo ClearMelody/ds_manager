@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h3>用户增长</h3>
     <el-date-picker
       v-model="datePicker.value"
       type="daterange"
@@ -83,7 +82,7 @@
           end: dateUtil.dateFormat(_that.datePicker.value[1], "yyyy-MM-dd"),
         };
         api.getUserGrowth(params).then(res => {
-          console.log(res);
+          // console.log(res);
           let data = [], nameArr = [];
           res.forEach(v => {
             let value = v.sum ? v.sum : 0;

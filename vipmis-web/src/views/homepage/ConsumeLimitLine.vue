@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h3>消费统计</h3>
     <el-date-picker
       v-model="datePicker.value"
       type="daterange"

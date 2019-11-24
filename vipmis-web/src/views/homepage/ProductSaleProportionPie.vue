@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h3>产品消费占比</h3>
     <el-date-picker
       v-model="datePicker.value"
       type="daterange"

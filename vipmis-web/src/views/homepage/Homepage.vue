@@ -1,23 +1,38 @@
 <template>
-    <div>
-      <el-row>
-        <el-col :span="12">
+  <div>
+    <el-row>
+      <el-col :span="12">
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+          <span>产品消费占比</span>
+        </div>
           <product-sale-proportion-pie></product-sale-proportion-pie>
-        </el-col>
-        <el-col :span="12">
+        </el-card>
+      </el-col>
+      <el-col :span="12">
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+          <span>用户增长</span>
+        </div>
           <user-growth-bar></user-growth-bar>
-        </el-col>
-      </el-row>
-      <el-row :span="12">
+        </el-card>
+      </el-col>
+    </el-row>
+    <el-row :span="12">
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>消费统计</span>
+        </div>
         <consume-limit-line></consume-limit-line>
-      </el-row>
-    </div>
+      </el-card>
+    </el-row>
+  </div>
 </template>
 
 <script>
-  import ProductSaleProportionPie from "./ProductSaleProportionPie"
-  import UserGrowthBar from "./UserGrowthBar"
-  import ConsumeLimitLine from "./ConsumeLimitLine"
+  import ProductSaleProportionPie from "./ProductSaleProportionPie";
+  import UserGrowthBar from "./UserGrowthBar";
+  import ConsumeLimitLine from "./ConsumeLimitLine";
   export default {
     name: "Homepage",
     components: {
@@ -25,9 +40,8 @@
       UserGrowthBar,
       ConsumeLimitLine
     }
-  }
+  };
 </script>
 
 <style scoped>
-
 </style>
