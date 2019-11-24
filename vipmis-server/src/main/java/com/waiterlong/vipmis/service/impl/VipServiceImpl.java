@@ -162,7 +162,6 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
         user.setDeposit(new BigDecimal("0.0"));
         user.setCardType("普通VIP");
         user.setRegisterTime(new Date());
-        //TODO
         user.setCardCord(CardCordUtil.getBrankNumber());
         user.setWeChatOpenId(vipVo.getOpenid());
         user = userRep.save(user);
