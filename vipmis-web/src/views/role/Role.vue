@@ -94,11 +94,19 @@
       },
       roleAdd() {
         var _this = this;
+        _this.role = {
+          name: null,
+          permissionIds: null
+        }
         _this.roleAddVisible = true;
         _this.initPermissionTree();
       },
       roleEdit(row) {
         let _this = this;
+        _this.role = {
+          name: null,
+          permissionIds: null
+        }
         _this.formLoading = true;
         API_ROLE.getSysRole(row.id).then(res => {
           _this.roleAddVisible = true;
