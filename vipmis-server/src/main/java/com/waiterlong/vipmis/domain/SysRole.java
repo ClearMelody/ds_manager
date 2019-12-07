@@ -27,9 +27,18 @@ public class SysRole {
     @GeneratedValue(generator = "system_uuid")
     @Column(name = "id")
     private String id;
+    @Column(name = "name")
+    private String name;
+    @Column(name = "create_time")
+    private Date createTime;
+    @Column(name = "update_time")
+    private Date updateTime;
 
-    @OneToMany(mappedBy = "sysRole", cascade = {CascadeType.PERSIST,CascadeType.REMOVE}, fetch = FetchType.LAZY)
-    private List<SysUser> sysUsers = Lists.newLinkedList();
+
+    @ManyToMany
+    @JoinTable(name = "sys_role_permission",joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    private List<SysPermission> sysPermissions = Lists.newLinkedList();
 
     @Override
     public boolean equals(Object o) {

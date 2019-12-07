@@ -9,6 +9,7 @@ import Coupon from '@/views/coupon/Coupon'
 import Homepage from '@/views/homepage/Homepage'
 import Label from '@/views/label/Label'
 import Role from '@/views/role/Role'
+import Permission from '@/views/permission/Permission'
 
 Vue.use(Router)
 
@@ -58,6 +59,11 @@ const routes = [
         path: 'role',
         component: Role,
         name: 'role',
+      },
+      {
+        path: 'permission',
+        component: Permission,
+        name: 'permission',
       },
     ]
   },
