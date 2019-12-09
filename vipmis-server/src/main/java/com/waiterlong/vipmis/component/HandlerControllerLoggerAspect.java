@@ -2,6 +2,7 @@ package com.waiterlong.vipmis.component;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.waiterlong.vipmis.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -35,10 +36,10 @@ public class HandlerControllerLoggerAspect {
     public Object process(ProceedingJoinPoint joinPoint) throws Throwable {
         //类和方法名称
         String classAndMethodName = joinPoint.getTarget().getClass().getSimpleName() + "." + joinPoint.getSignature().getName();
-        log.debug("Controller Execute：{},input parameter：{}", classAndMethodName, JSONArray.toJSONString(filterParamList(joinPoint)));
+        log.debug("Controller Execute：{}, begin time: {}, input parameter：{}", classAndMethodName, JSONArray.toJSONString(filterParamList(joinPoint)), DateUtil.getStrTime());
         //响应结果
         Object res = joinPoint.proceed();
-        log.debug("Controller Execute：{},output parameter：{}", classAndMethodName, JSON.toJSONString(res));
+        log.debug("Controller Execute：{}, end time: {}, output parameter：{}", classAndMethodName, JSON.toJSONString(res), DateUtil.getStrTime());
         return res;
     }
 
