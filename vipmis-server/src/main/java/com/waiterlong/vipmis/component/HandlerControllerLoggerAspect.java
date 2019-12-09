@@ -1,12 +1,11 @@
 package com.waiterlong.vipmis.component;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.waiterlong.vipmis.utils.DateUtil;
-import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +21,6 @@ import java.util.List;
  *
  * @author walter_long
  */
-@Slf4j
 @Aspect
 @Component
 public class HandlerControllerLoggerAspect {
@@ -34,12 +32,15 @@ public class HandlerControllerLoggerAspect {
      */
     @Around("execution(* com.waiterlong.vipmis.controller.*.*.*(..))")
     public Object process(ProceedingJoinPoint joinPoint) throws Throwable {
+        Logger logger = LoggerFactory.getLogger(joinPoint.getTarget().getClass());
+        long beginTime = System.currentTimeMillis();
         //类和方法名称
-        String classAndMethodName = joinPoint.getTarget().getClass().getSimpleName() + "." + joinPoint.getSignature().getName();
-        log.debug("Controller Execute：{}, begin time: {}, input parameter：{}", classAndMethodName, DateUtil.getStrTime(), JSONArray.toJSONString(filterParamList(joinPoint)));
+//        String classAndMethodName = joinPoint.getTarget().getClass().getSimpleName() + "." + joinPoint.getSignature().getName();
+        logger.debug("{} begin, input parameter: {}", joinPoint.getSignature().getName(), JSON.toJSONString(filterParamList(joinPoint)));
         //响应结果
         Object res = joinPoint.proceed();
-        log.debug("Controller Execute：{}, end time: {}, output parameter：{}", classAndMethodName, DateUtil.getStrTime(), JSON.toJSONString(res));
+        long endTime = System.currentTimeMillis();
+        logger.debug("{} end, spend time: {}ms, output parameter: {}", joinPoint.getSignature().getName(), endTime - beginTime, JSON.toJSONString(res));
         return res;
     }
 
