@@ -1,6 +1,5 @@
 package com.waiterlong.vipmis.job;
 
-import com.waiterlong.vipmis.assets.WeiXinApiUrl;
 import com.waiterlong.vipmis.service.IWeiXinApiService;
 import com.waiterlong.vipmis.utils.DateUtil;
 import org.slf4j.Logger;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.Date;
-import java.util.Map;
 
 /**
  * 定时任务类
