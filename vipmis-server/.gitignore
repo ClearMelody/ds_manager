@@ -5,6 +5,7 @@ src/main/resources/static/static/
 src/main/resources/static/index.html
 *.log
 *.jks
+*.pfx
 application-prod.properties
 
 

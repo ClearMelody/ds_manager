@@ -220,7 +220,7 @@
 
                     <execution>
                         <id>exec-npm-run-build</id>
-                        <phase>prepare-package</phase>
+                        <phase>initialize</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
