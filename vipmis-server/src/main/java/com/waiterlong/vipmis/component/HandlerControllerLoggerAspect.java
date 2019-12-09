@@ -36,10 +36,10 @@ public class HandlerControllerLoggerAspect {
     public Object process(ProceedingJoinPoint joinPoint) throws Throwable {
         //类和方法名称
         String classAndMethodName = joinPoint.getTarget().getClass().getSimpleName() + "." + joinPoint.getSignature().getName();
-        log.debug("Controller Execute：{}, begin time: {}, input parameter：{}", classAndMethodName, JSONArray.toJSONString(filterParamList(joinPoint)), DateUtil.getStrTime());
+        log.debug("Controller Execute：{}, begin time: {}, input parameter：{}", classAndMethodName, DateUtil.getStrTime(), JSONArray.toJSONString(filterParamList(joinPoint)));
         //响应结果
         Object res = joinPoint.proceed();
-        log.debug("Controller Execute：{}, end time: {}, output parameter：{}", classAndMethodName, JSON.toJSONString(res), DateUtil.getStrTime());
+        log.debug("Controller Execute：{}, end time: {}, output parameter：{}", classAndMethodName, DateUtil.getStrTime(), JSON.toJSONString(res));
         return res;
     }
 
