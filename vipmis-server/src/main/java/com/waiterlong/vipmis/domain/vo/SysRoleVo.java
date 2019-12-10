@@ -1,5 +1,6 @@
 package com.waiterlong.vipmis.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.collect.Lists;
 import com.waiterlong.vipmis.domain.SysPermission;
 import com.waiterlong.vipmis.domain.SysRole;
@@ -26,10 +27,10 @@ import java.util.List;
 public class SysRoleVo {
     private String id;
     private String name;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
-    private String createTimeStr;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
-    private String updateTimeStr;
     private String permissionIds;
 
     public static SysRoleVo convertSysRole(SysRole sysRole) {
@@ -38,8 +39,6 @@ public class SysRoleVo {
         }
         SysRoleVo sysRoleVo = new SysRoleVo();
         AbstractMyBeanUtils.copyProperties(sysRole, sysRoleVo);
-        sysRoleVo.setCreateTimeStr(DateUtil.dateToString(sysRoleVo.getCreateTime()));
-        sysRoleVo.setUpdateTimeStr(DateUtil.dateToString(sysRoleVo.getUpdateTime()));
         List<SysPermission> list = sysRole.getSysPermissions();
         if(list != null){
             List<String> permissionIdList = new ArrayList<>(list.size());

@@ -15,8 +15,8 @@
         <el-card class="box-card">
           <el-table v-loading="loading" :data="pageData.rows" stripe style="width: 100%">
             <el-table-column prop="name" label="角色名" min-width="200"></el-table-column>
-            <el-table-column prop="createTimeStr" label="添加时间" min-width="200"></el-table-column>
-            <el-table-column prop="updateTimeStr" label="修改时间" min-width="200"></el-table-column>
+            <el-table-column prop="createTime" label="添加时间" min-width="200"></el-table-column>
+            <el-table-column prop="updateTime" label="修改时间" min-width="200"></el-table-column>
             <el-table-column align="center" min-width="240" label="操作">
               <template slot-scope="scope">
                 <el-button type="primary" size="mini" @click="roleEdit(scope.row)">编辑</el-button>
@@ -79,14 +79,16 @@
     methods: {
       query() {
         let _this = this;
+        _this.loading = true;
         API_ROLE.listSysRolesByPage(_this.queryParam).then(res => {
           if (!res) {
             return;
           }
           res.pageSizes = [5];
           _this.pageData = res;
+          _this.loading = false;
         }).catch(() => {
-
+          _this.loading = false;
         })
       },
       reset() {
@@ -110,7 +112,6 @@
         _this.formLoading = true;
         API_ROLE.getSysRole(row.id).then(res => {
           _this.roleAddVisible = true;
-          _this.formLoading = false;
           _this.role = res;
           _this.initPermissionTree();
         })
@@ -140,6 +141,7 @@
         let _this = this;
         API_PERMISSION.allPermissions(_this.treeParam).then(res => {
           _this.permissionData = res;
+          _this.formLoading = false;
         })
       }
     },
