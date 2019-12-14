@@ -4,10 +4,12 @@ import com.waiterlong.vipmis.component.PageResult;
 import com.waiterlong.vipmis.component.Result;
 import com.waiterlong.vipmis.domain.Cat;
 import com.waiterlong.vipmis.domain.CatLog;
+import com.waiterlong.vipmis.domain.User;
 import com.waiterlong.vipmis.domain.vo.CatVo;
 import com.waiterlong.vipmis.domain.wxvo.WxCatVo;
 import com.waiterlong.vipmis.repository.CatLogRep;
 import com.waiterlong.vipmis.repository.CatRep;
+import com.waiterlong.vipmis.repository.UserRep;
 import com.waiterlong.vipmis.service.ICatService;
 import com.waiterlong.vipmis.utils.AbstractMyBeanUtils;
 import org.slf4j.Logger;
@@ -39,6 +41,8 @@ public class CatServiceImpl implements ICatService {
     private CatRep catRep;
     @Resource(name = "catLogRep")
     private CatLogRep catLogRep;
+    @Resource(name = "userRep")
+    private UserRep userRep;
 
     @Override
     public Result getCatDetail(@NotNull String catId) {
@@ -60,11 +64,16 @@ public class CatServiceImpl implements ICatService {
 
     @Override
     public Result addCat(@NotNull CatVo catVo) {
-        if (null != catVo.getId()) {
+        if (null != catVo.getId() || null == catVo.getUserInfoVo() || null == catVo.getUserInfoVo().getId() || catVo.getUserInfoVo().getId().trim().isEmpty()) {
+            return Result.badArgumentValue();
+        }
+        Optional<User> userOptional = userRep.findById(catVo.getUserInfoVo().getId().trim());
+        if (!userOptional.isPresent()) {
             return Result.badArgumentValue();
         }
         Cat cat = new Cat();
         AbstractMyBeanUtils.copyProperties(catVo, cat);
+        cat.setUser(userOptional.get());
         cat = catRep.save(cat);
         return Result.ok(CatVo.convertCat(cat));
     }

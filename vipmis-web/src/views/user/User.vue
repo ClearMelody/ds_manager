@@ -185,9 +185,11 @@
       style="text-align: center;"
       width="30%"
     >
-      <el-button type="primary">新增猫咪</el-button>
+      <el-button type="primary" @click="addCatDialogShow()">新增猫咪</el-button>
       <el-button type="primary" @click="jumpToCatVue()">猫咪管理</el-button>
     </el-dialog>
+
+    <add-cat v-if="addCatDialog.dialogVisible" :closeDialogFunc="addCatDialogHide" :userId="catDialog.currentData.id"></add-cat>
   </div>
 </template>
 
@@ -195,8 +197,12 @@
   import {mapActions} from 'vuex';
   import API from "../../api/api_user";
   import LABEL_API from "../../api/api_label";
+  import AddCat from "../cat/AddCat";
   export default {
     name: "User",
+    components: {
+      AddCat
+    },
     data() {
       return {
         loading: false,
@@ -279,6 +285,9 @@
         catDialog: {
           dialogVisible: false,
           currentData: {}
+        },
+        addCatDialog: {
+          dialogVisible: false
         }
       };
     },
@@ -453,6 +462,14 @@
         };
         _that.setUserVue2CatVueAct(param);
         _that.$router.push("/home/cat");
+      },
+      addCatDialogShow() {
+        let _that = this;
+        _that.addCatDialog.dialogVisible = true;
+      },
+      addCatDialogHide() {
+        let _that = this;
+        _that.addCatDialog.dialogVisible = false;
       }
     },
     mounted() {
