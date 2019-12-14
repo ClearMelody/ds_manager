@@ -2,6 +2,7 @@ package com.waiterlong.vipmis.domain.vo;
 
 import com.google.common.collect.Lists;
 import com.waiterlong.vipmis.domain.Cat;
+import com.waiterlong.vipmis.domain.User;
 import com.waiterlong.vipmis.utils.AbstractMyBeanUtils;
 import lombok.Data;
 
@@ -55,6 +56,11 @@ public class CatVo {
      * 疫苗下次时间
      */
     private String vaccineNext;
+
+    /**
+     * 主人
+     */
+    private UserInfoVo userInfoVo;
     
     public static List<CatVo> convertCat(List<Cat> cats){
         List<CatVo> catVos = Lists.newArrayList();
@@ -70,6 +76,7 @@ public class CatVo {
         }
         CatVo catVo = new CatVo();
         AbstractMyBeanUtils.copyProperties(cat, catVo);
+        catVo.setUserInfoVo(UserInfoVo.convertUser(cat.getUser()));
         return catVo;
     }
 }

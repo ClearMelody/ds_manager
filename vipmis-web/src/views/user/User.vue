@@ -50,9 +50,10 @@
         </el-table-column>
         <el-table-column align="center" min-width="240" label="操作">
           <template slot-scope="props">
-            <el-button type="primary" size="mini" @click="payDialogShow(props.row)">消费</el-button>
-            <el-button type="primary" size="mini" @click="userGoalDialogShow(props.row)">使用积分</el-button>
-            <el-button type="primary" size="mini" @click="chargeDialogShow(props.row)">充值</el-button>
+            <el-button style="margin-top: 0.5rem;" type="primary" size="mini" @click="payDialogShow(props.row)">消费</el-button>
+            <el-button style="margin-top: 0.5rem;" type="primary" size="mini" @click="userGoalDialogShow(props.row)">使用积分</el-button>
+            <el-button style="margin-top: 0.5rem;" type="primary" size="mini" @click="chargeDialogShow(props.row)">充值</el-button>
+            <el-button style="margin-top: 0.5rem;" type="primary" size="mini" @click="catDialogShow(props.row)">猫咪</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -177,10 +178,21 @@
         <el-button type="primary" :loading="loading" @click="changeLabel()">确 定</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog
+      title="猫咪"
+      :visible.sync="catDialog.dialogVisible"
+      style="text-align: center;"
+      width="30%"
+    >
+      <el-button type="primary">新增猫咪</el-button>
+      <el-button type="primary" @click="jumpToCatVue()">猫咪管理</el-button>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+  import {mapActions} from 'vuex';
   import API from "../../api/api_user";
   import LABEL_API from "../../api/api_label";
   export default {
@@ -263,10 +275,17 @@
         selectLabelFormData: {
           id: ""
         },
-        labels: []
+        labels: [],
+        catDialog: {
+          dialogVisible: false,
+          currentData: {}
+        }
       };
     },
     methods: {
+      ...mapActions('pageJumpValue', [
+        'setUserVue2CatVueAct'
+      ]),
       listUsersByPage() {
         let _that = this;
         _that.loading = true;
@@ -421,6 +440,19 @@
           .catch(() => {
             _that.loading = false;
         });
+      },
+      catDialogShow(val) {
+        let _that = this;
+        _that.catDialog.dialogVisible = true;
+        _that.catDialog.currentData = val;
+      },
+      jumpToCatVue() {
+        let _that = this;
+        let param = {
+          cardCord: _that.catDialog.currentData ? _that.catDialog.currentData.cardCord : ""
+        };
+        _that.setUserVue2CatVueAct(param);
+        _that.$router.push("/home/cat");
       }
     },
     mounted() {

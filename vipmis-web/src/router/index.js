@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from '@/views/Home'
 import Login from '@/views/login/Login'
 import User from '@/views/user/User'
+import Cat from '@/views/cat/Cat'
 import Admin from '@/views/admin/Admin'
 import WxWelcome from '@/views/wxwelcome/WxWelcome'
 import Coupon from '@/views/coupon/Coupon'
@@ -34,6 +35,11 @@ const routes = [
         path: 'admin',
         component: Admin,
         name: 'admin',
+      },
+      {
+        path: 'cat',
+        component: Cat,
+        name: 'cat',
       },
       {
         path: 'wxWelcome',
