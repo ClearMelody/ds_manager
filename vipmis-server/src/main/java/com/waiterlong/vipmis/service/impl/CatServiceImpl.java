@@ -151,7 +151,7 @@ public class CatServiceImpl implements ICatService {
 
     @Override
     public Result listCatLogsByPage(Map<String, Object> paramMap, Pageable pageable) {
-        Page<CatLog> catLogPage = catLogRep.findByOrderByCreateTimeDesc(pageable);
+        Page<CatLog> catLogPage = catLogRep.findByCat_IdIsOrderByCreateTimeDesc((String)paramMap.get("catId"), pageable);
         return Result.ok(PageResult.setPageResult(pageable, catLogPage.getTotalElements(), CatLogVo.convertCatLog(catLogPage.getContent())));
     }
 }

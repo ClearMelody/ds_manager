@@ -72,12 +72,12 @@ public class CatController {
 
     @RequestMapping(value = "/cat/log/list", method = RequestMethod.GET)
     public Result listCatLogsByPage(
-            @RequestParam(defaultValue = "") String cardCord,
-            @RequestParam(defaultValue = "") String name,
+            @RequestParam String catId,
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "limit", defaultValue = "10") Integer limit) {
         Pageable pageable = PageRequest.of(page - 1, limit);
         Map<String, Object> paramMap = Maps.newHashMap();
+        paramMap.put("catId", catId);
         return iCatService.listCatLogsByPage(paramMap, pageable);
     }
 }

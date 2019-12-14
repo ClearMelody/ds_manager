@@ -17,5 +17,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository("catLogRep")
 public interface CatLogRep extends JpaRepository<CatLog, String> {
-    Page<CatLog> findByOrderByCreateTimeDesc(Pageable pageable);
+    Page<CatLog> findByCat_IdIsOrderByCreateTimeDesc(String catId, Pageable pageable);
 }

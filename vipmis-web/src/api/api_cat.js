@@ -11,5 +11,8 @@ export default {
   listCatsByPage: params => API.GET('/cat/list', params),
   addCat: params => API.POST('/cat/add', params),
   updateCat: params => API.POST('/cat/update', params),
-  deleteCat: params => API.POST('/cat/delete', params)
+  deleteCat: params => API.POST('/cat/delete', params),
+  listCatLogsByPage: params => API.GET('/cat/log/list', params),
+  addCatLog: params => API.POST('/cat/log/add', params),
+  deleteCatLog: params => API.POST('/cat/log/delete', params)
 }

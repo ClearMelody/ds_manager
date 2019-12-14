@@ -26,8 +26,9 @@
         <el-table-column align="center" min-width="110" label="主人卡号" prop="userInfoVo.cardCord"></el-table-column>
         <el-table-column align="center" min-width="240" label="操作">
           <template slot-scope="props">
-            <el-button style="margin-top: 0.5rem;" type="primary" size="mini">编辑
-            </el-button>
+            <el-button style="margin-top: 0.5rem;" type="primary" size="mini" @click="editCatDialogShow(props.row)">资料修改</el-button>
+            <el-button style="margin-top: 0.5rem;" type="primary" size="mini" @click="catLogDialogShow(props.row)">日志查看</el-button>
+            <el-button style="margin-top: 0.5rem;" type="primary" size="mini" @click="delDialogShow(props.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -44,15 +45,40 @@
       </div>
     </el-card>
 
+    <el-dialog
+      title="提示"
+      :visible.sync="delDialog.dialogVisible"
+      width="30%">
+      <span>确定删除吗？</span>
+      <span slot="footer" class="dialog-footer">
+          <el-button @click="delDialog.dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="deleteCat()">确 定</el-button>
+        </span>
+    </el-dialog>
+
+    <el-dialog
+      title="猫咪日志"
+      :visible.sync="catLogDialog.dialogVisible"
+      width="90%">
+      <cat-log :catId="catLogDialog.currentData.id"></cat-log>
+    </el-dialog>
+
+    <edit-cat v-if="editCatDialog.dialogVisible" :catInfo="editCatDialog.currentData" :closeDialogFunc="editCatDialogHide"></edit-cat>
   </div>
 </template>
 
 <script>
   import API from "../../api/api_cat";
   import {mapActions, mapGetters} from 'vuex';
+  import CatLog from "./CatLog"
+  import EditCat from "./EditCat"
 
   export default {
-    name: "User",
+    name: "Cat",
+    components: {
+      CatLog,
+      EditCat
+    },
     computed: {
       ...mapGetters('pageJumpValue', [
         'userVue2CatVue'
@@ -73,6 +99,18 @@
           pageSizes: [5],
           total: 0,
           rows: []
+        },
+        delDialog: {
+          dialogVisible: false,
+          currentData: ""
+        },
+        catLogDialog: {
+          dialogVisible: false,
+          currentData: ""
+        },
+        editCatDialog: {
+          dialogVisible: false,
+          currentData: ""
         }
       };
     },
@@ -123,6 +161,35 @@
       reset() {
         let _that = this;
         _that.resetPage();
+      },
+      delDialogShow(val) {
+        let _that = this;
+        _that.delDialog.currentData = val;
+        _that.delDialog.dialogVisible = true;
+      },
+      deleteCat() {
+        let _that = this;
+        API.deleteCat(_that.delDialog.currentData).then(() => {
+          _that.delDialog.dialogVisible = false;
+          _that.query();
+        }).catch(() => {});
+      },
+      catLogDialogShow(val) {
+        let _that = this;
+        _that.catLogDialog.currentData = val;
+        _that.catLogDialog.dialogVisible = true;
+      },
+      editCatDialogShow(val) {
+        let _that = this;
+        _that.editCatDialog.currentData = val;
+        _that.editCatDialog.dialogVisible = true;
+      },
+      editCatDialogHide(needQuery) {
+        let _that = this;
+        _that.editCatDialog.dialogVisible = false;
+        if (needQuery) {
+          _that.query();
+        }
       }
     },
     mounted() {

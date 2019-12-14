@@ -1,15 +1,14 @@
 <template>
   <div>
     <el-dialog
-      append-to-body
-      title="新增猫咪"
+      title="猫咪资料修改"
       :show-close="false"
       :visible.sync="dialogShow"
       :close-on-click-modal="false"
       style="text-align: center;"
       width="30%"
     >
-      <el-form :model="formData" :rules="rule" ref="addCatForm" label-width="100px">
+      <el-form :model="formData" :rules="rule" ref="editCatForm" label-width="100px">
         <el-form-item label="猫咪名字" prop="name">
           <el-input
             maxlength="50"
@@ -52,10 +51,34 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="疫苗初次时间" prop="vaccineFirst">
+          <el-date-picker
+            v-model="formData.vaccineFirst"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="请选择">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="疫苗最近时间" prop="vaccineLast">
+          <el-date-picker
+            v-model="formData.vaccineLast"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="请选择">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="疫苗下次时间" prop="vaccineNext">
+          <el-date-picker
+            v-model="formData.vaccineNext"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="请选择">
+          </el-date-picker>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialog()">取 消</el-button>
-        <el-button type="primary" :loading="loading" @click="addCat()">确 定</el-button>
+        <el-button type="primary" :loading="loading" @click="editCat()">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -64,13 +87,13 @@
 <script>
   import API from "../../api/api_cat"
   export default {
-    name: "AddCat",
+    name: "EditCat",
     props: {
       closeDialogFunc: {
         type: Function
       },
-      userId: {
-        type: String
+      catInfo: {
+        type: Object
       }
     },
     data() {
@@ -84,9 +107,9 @@
           sex: "",
           breed: "",
           sterilization: "",
-          userInfoVo: {
-            id: ""
-          }
+          vaccineFirst: "",
+          vaccineLast: "",
+          vaccineNext: ""
         },
         rule: {
           name: [
@@ -99,34 +122,34 @@
       }
     },
     methods: {
-      closeDialog() {
+      closeDialog(needQuery) {
         let _that = this;
         if (_that.closeDialogFunc) {
-          _that.closeDialogFunc();
+          _that.closeDialogFunc(needQuery);
         }
       },
-      addCat() {
+      editCat() {
         let _that = this;
         _that.loading = true;
-        if (!_that.userId) {
-          alert("页面异常");
-          _that.loading = false;
-          return;
-        }
-        _that.$refs.addCatForm.validate((valid) => {
+        _that.$refs.editCatForm.validate((valid) => {
           if (valid) {
-            _that.formData.userInfoVo.id = _that.userId;
-            API.addCat(_that.formData).then(res => {
+            API.updateCat(_that.formData).then(res => {
               _that.loading = false;
               if (!res) {
                 return;
               }
-              _that.closeDialog();
+              _that.closeDialog(true);
             }).catch(() => {
               _that.loading = false;
             });
           }
         });
+      }
+    },
+    mounted() {
+      let _that = this;
+      if (_that.catInfo) {
+        _that.formData = _that.catInfo;
       }
     }
   }
