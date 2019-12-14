@@ -40,12 +40,15 @@ public class CatLogVo {
      */
     private String vitro;
 
+    private CatVo catVo;
+
     public static CatLogVo convertCatLog(CatLog catLog) {
         if (null == catLog) {
             return null;
         }
         CatLogVo catLogVo = new CatLogVo();
         AbstractMyBeanUtils.copyProperties(catLog, catLogVo);
+        catLogVo.setCatVo(CatVo.convertCat(catLog.getCat()));
         return catLogVo;
     }
 

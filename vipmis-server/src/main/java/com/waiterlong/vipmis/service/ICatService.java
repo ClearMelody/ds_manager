@@ -1,6 +1,7 @@
 package com.waiterlong.vipmis.service;
 
 import com.waiterlong.vipmis.component.Result;
+import com.waiterlong.vipmis.domain.vo.CatLogVo;
 import com.waiterlong.vipmis.domain.vo.CatVo;
 import org.springframework.data.domain.Pageable;
 
@@ -25,4 +26,8 @@ public interface ICatService {
     Result updateCat(CatVo catVo);
 
     Result deleteCat(CatVo catVo);
+
+    Result addCatLog(CatLogVo catLogVo);
+
+    Result deleteCatLog(CatLogVo catLogVo);
 }

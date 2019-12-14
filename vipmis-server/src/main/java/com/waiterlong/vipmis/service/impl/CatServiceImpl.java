@@ -5,6 +5,7 @@ import com.waiterlong.vipmis.component.Result;
 import com.waiterlong.vipmis.domain.Cat;
 import com.waiterlong.vipmis.domain.CatLog;
 import com.waiterlong.vipmis.domain.User;
+import com.waiterlong.vipmis.domain.vo.CatLogVo;
 import com.waiterlong.vipmis.domain.vo.CatVo;
 import com.waiterlong.vipmis.domain.wxvo.WxCatVo;
 import com.waiterlong.vipmis.repository.CatLogRep;
@@ -110,6 +111,38 @@ public class CatServiceImpl implements ICatService {
         catLogRep.deleteAll(catLogList);
 
         catRep.delete(cat);
+
+        return Result.ok();
+    }
+
+    @Override
+    public Result addCatLog(CatLogVo catLogVo) {
+        if (null != catLogVo.getId() || null == catLogVo.getCatVo() || null == catLogVo.getCatVo().getId() || catLogVo.getCatVo().getId().trim().isEmpty()) {
+            return Result.badArgumentValue();
+        }
+        Optional<Cat> catOptional = catRep.findById(catLogVo.getCatVo().getId().trim());
+        if (!catOptional.isPresent()) {
+            return Result.badArgumentValue();
+        }
+        CatLog catLog = new CatLog();
+        AbstractMyBeanUtils.copyProperties(catLogVo, catLog);
+        catLog.setCat(catOptional.get());
+        catLog = catLogRep.save(catLog);
+        return Result.ok(CatLogVo.convertCatLog(catLog));
+    }
+
+    @Override
+    public Result deleteCatLog(CatLogVo catLogVo) {
+        if (null == catLogVo.getId() || catLogVo.getId().trim().isEmpty()) {
+            return Result.badArgumentValue();
+        }
+        Optional<CatLog> catLogOptional = catLogRep.findById(catLogVo.getId().trim());
+        if (!catLogOptional.isPresent()) {
+            return Result.badArgumentValue();
+        }
+        CatLog catLog = catLogOptional.get();
+
+        catLogRep.delete(catLog);
 
         return Result.ok();
     }

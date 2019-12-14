@@ -2,6 +2,7 @@ package com.waiterlong.vipmis.controller.admin;
 
 import com.google.common.collect.Maps;
 import com.waiterlong.vipmis.component.Result;
+import com.waiterlong.vipmis.domain.vo.CatLogVo;
 import com.waiterlong.vipmis.domain.vo.CatVo;
 import com.waiterlong.vipmis.service.ICatService;
 import org.springframework.data.domain.PageRequest;
@@ -55,5 +56,17 @@ public class CatController {
     public Result deleteCat(
             @RequestBody CatVo catVo) {
         return iCatService.deleteCat(catVo);
+    }
+
+    @RequestMapping(value = "/cat/log/add", method = RequestMethod.POST)
+    public Result addCatLog(
+            @RequestBody CatLogVo catLogVo) {
+        return iCatService.addCatLog(catLogVo);
+    }
+
+    @RequestMapping(value = "/cat/log/delete", method = RequestMethod.POST)
+    public Result deleteCatLog(
+            @RequestBody CatLogVo catLogVo) {
+        return iCatService.deleteCatLog(catLogVo);
     }
 }
