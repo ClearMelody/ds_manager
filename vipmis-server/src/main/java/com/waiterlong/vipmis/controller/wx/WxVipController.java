@@ -86,6 +86,11 @@ public class WxVipController {
         return iWelcomeService.getLastWelcome();
     }
 
+    @RequestMapping(value = "/cardDesc", method = RequestMethod.GET)
+    public Result getCardDescription(){
+        return iWelcomeService.getCardDescription();
+    }
+
     /**
      * 微信小程序获取openid
      * @param code String

@@ -1,6 +1,7 @@
 package com.waiterlong.vipmis.service;
 
 import com.waiterlong.vipmis.component.Result;
+import com.waiterlong.vipmis.domain.vo.CardDescriptionVo;
 import com.waiterlong.vipmis.service.base.IBaseService;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,4 +27,8 @@ public interface IWelcomeService extends IBaseService {
      * @return Object
      */
     Result getLastWelcome();
+
+    Result addCardDescription(CardDescriptionVo cardDescriptionVo);
+
+    Result getCardDescription();
 }

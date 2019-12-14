@@ -4,6 +4,7 @@ import Home from '@/views/Home'
 import Login from '@/views/login/Login'
 import User from '@/views/user/User'
 import Cat from '@/views/cat/Cat'
+import CardDescription from '@/views/carddescription/CardDescription'
 import Admin from '@/views/admin/Admin'
 import WxWelcome from '@/views/wxwelcome/WxWelcome'
 import Coupon from '@/views/coupon/Coupon'
@@ -40,6 +41,11 @@ const routes = [
         path: 'cat',
         component: Cat,
         name: 'cat',
+      },
+      {
+        path: 'cardDescription',
+        component: CardDescription,
+        name: 'cardDescription',
       },
       {
         path: 'wxWelcome',

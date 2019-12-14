@@ -67,7 +67,7 @@
       let _that = this;
       this.menus.push({id: 1, name: "首页", hasChild: false, link: "/home/index"});
       this.menus.push({id: 6, name: "用户管理", icon:"el-icon-s-custom", hasChild: true, childs: [{id: 8, name: "会员管理", link: "/home/user"}, {id: 18, name: "猫咪管理", link: "/home/cat"},{id: 7, name: "分组管理", link: "/home/label"}]});
-      this.menus.push({id: 2, name: "系统管理", icon:"el-icon-s-tools", hasChild: true, childs: [{id: 5, name: "分享管理", link: "/home/wxWelcome"}, {id: 3, name: "管理员管理", link: "/home/admin"}, {id: 4, name: "角色管理", link: "/home/role"}, {id: 10, name: "权限管理", link: "/home/permission"}]});
+      this.menus.push({id: 2, name: "系统管理", icon:"el-icon-s-tools", hasChild: true, childs: [{id: 5, name: "分享管理", link: "/home/wxWelcome"}, {id: 3, name: "管理员管理", link: "/home/admin"}, {id: 4, name: "角色管理", link: "/home/role"}, {id: 10, name: "权限管理", link: "/home/permission"}, {id: 11, name: "会员卡说明", link: "/home/cardDescription"}]});
       _that.menuDefaultActive = _that.$route.path;
     }
   };
