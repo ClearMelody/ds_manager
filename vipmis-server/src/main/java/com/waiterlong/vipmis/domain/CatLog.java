@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -48,6 +49,9 @@ public class CatLog {
      */
     @Column(name = "vitro")
     private String vitro;
+
+    @Column(name = "create_time")
+    private Date createTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Cat cat;

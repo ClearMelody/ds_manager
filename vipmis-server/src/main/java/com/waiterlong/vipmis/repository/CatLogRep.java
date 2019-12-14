@@ -1,6 +1,8 @@
 package com.waiterlong.vipmis.repository;
 
 import com.waiterlong.vipmis.domain.CatLog;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +17,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository("catLogRep")
 public interface CatLogRep extends JpaRepository<CatLog, String> {
+    Page<CatLog> findByOrderByCreateTimeDesc(Pageable pageable);
 }

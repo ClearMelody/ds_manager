@@ -69,4 +69,15 @@ public class CatController {
             @RequestBody CatLogVo catLogVo) {
         return iCatService.deleteCatLog(catLogVo);
     }
+
+    @RequestMapping(value = "/cat/log/list", method = RequestMethod.GET)
+    public Result listCatLogsByPage(
+            @RequestParam(defaultValue = "") String cardCord,
+            @RequestParam(defaultValue = "") String name,
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "limit", defaultValue = "10") Integer limit) {
+        Pageable pageable = PageRequest.of(page - 1, limit);
+        Map<String, Object> paramMap = Maps.newHashMap();
+        return iCatService.listCatLogsByPage(paramMap, pageable);
+    }
 }

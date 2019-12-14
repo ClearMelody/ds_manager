@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -127,6 +128,7 @@ public class CatServiceImpl implements ICatService {
         CatLog catLog = new CatLog();
         AbstractMyBeanUtils.copyProperties(catLogVo, catLog);
         catLog.setCat(catOptional.get());
+        catLog.setCreateTime(new Date());
         catLog = catLogRep.save(catLog);
         return Result.ok(CatLogVo.convertCatLog(catLog));
     }
@@ -145,5 +147,11 @@ public class CatServiceImpl implements ICatService {
         catLogRep.delete(catLog);
 
         return Result.ok();
+    }
+
+    @Override
+    public Result listCatLogsByPage(Map<String, Object> paramMap, Pageable pageable) {
+        Page<CatLog> catLogPage = catLogRep.findByOrderByCreateTimeDesc(pageable);
+        return Result.ok(PageResult.setPageResult(pageable, catLogPage.getTotalElements(), CatLogVo.convertCatLog(catLogPage.getContent())));
     }
 }

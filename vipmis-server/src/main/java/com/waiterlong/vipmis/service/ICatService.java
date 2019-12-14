@@ -30,4 +30,6 @@ public interface ICatService {
     Result addCatLog(CatLogVo catLogVo);
 
     Result deleteCatLog(CatLogVo catLogVo);
+
+    Result listCatLogsByPage(Map<String, Object> paramMap, Pageable pageable);
 }
