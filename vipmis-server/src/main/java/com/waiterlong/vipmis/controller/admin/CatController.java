@@ -8,6 +8,7 @@ import com.waiterlong.vipmis.service.ICatService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -38,6 +39,12 @@ public class CatController {
         paramMap.put("name", name);
         paramMap.put("cardCord", cardCord);
         return iCatService.listCatsByPage(paramMap, pageable);
+    }
+
+    @RequestMapping(value = "/cat/detail", method = RequestMethod.GET)
+    public Result getCatDetail(
+            @RequestParam String catId) {
+        return iCatService.getCatDetail(catId);
     }
 
     @RequestMapping(value = "/cat/add", method = RequestMethod.POST)

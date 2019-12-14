@@ -13,5 +13,6 @@ export default {
     NOTISSUE: "未发布",
     ISSUE: "已发布"
   },
-  WELCOME_UPLOAD_URL: `${base}/welcome/img/upload`
+  WELCOME_UPLOAD_URL: `${base}/welcome/img/upload`,
+  IMG_2_BASE64_URL: `${base}/img/2/base64`,
 }

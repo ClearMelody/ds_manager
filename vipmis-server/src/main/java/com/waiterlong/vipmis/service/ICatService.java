@@ -4,6 +4,7 @@ import com.waiterlong.vipmis.component.Result;
 import com.waiterlong.vipmis.domain.vo.CatLogVo;
 import com.waiterlong.vipmis.domain.vo.CatVo;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -17,6 +18,8 @@ import java.util.Map;
  * @author walter_long
  */
 public interface ICatService {
+    Result getWxCatDetail(String catId);
+
     Result getCatDetail(String catId);
 
     Result listCatsByPage(Map<String, Object> paramMap, Pageable pageable);

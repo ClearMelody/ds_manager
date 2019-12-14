@@ -78,7 +78,7 @@ public class WxVipController {
     @RequestMapping(value = "/cat/detail", method = RequestMethod.GET)
     public Result getCatDetail(
             @RequestParam String catId) {
-        return iCatService.getCatDetail(catId);
+        return iCatService.getWxCatDetail(catId);
     }
 
     @RequestMapping(value = "/welcome", method = RequestMethod.GET)

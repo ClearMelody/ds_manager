@@ -1,12 +1,15 @@
 package com.waiterlong.vipmis.service.impl;
 
+import com.waiterlong.vipmis.assets.Constant;
 import com.waiterlong.vipmis.component.PageResult;
 import com.waiterlong.vipmis.component.Result;
 import com.waiterlong.vipmis.domain.Cat;
 import com.waiterlong.vipmis.domain.CatLog;
 import com.waiterlong.vipmis.domain.User;
+import com.waiterlong.vipmis.domain.Welcome;
 import com.waiterlong.vipmis.domain.vo.CatLogVo;
 import com.waiterlong.vipmis.domain.vo.CatVo;
+import com.waiterlong.vipmis.domain.vo.WelcomeVo;
 import com.waiterlong.vipmis.domain.wxvo.WxCatVo;
 import com.waiterlong.vipmis.repository.CatLogRep;
 import com.waiterlong.vipmis.repository.CatRep;
@@ -18,6 +21,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Base64Utils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
@@ -47,7 +52,7 @@ public class CatServiceImpl implements ICatService {
     private UserRep userRep;
 
     @Override
-    public Result getCatDetail(@NotNull String catId) {
+    public Result getWxCatDetail(@NotNull String catId) {
         if (catId.isEmpty()) {
             return Result.badArgumentValue();
         }
@@ -56,6 +61,18 @@ public class CatServiceImpl implements ICatService {
             return Result.badArgumentValue();
         }
         return Result.ok(WxCatVo.convertCat(catOptional.get()));
+    }
+
+    @Override
+    public Result getCatDetail(@NotNull String catId) {
+        if (catId.isEmpty()) {
+            return Result.badArgumentValue();
+        }
+        Optional<Cat> catOptional = catRep.findById(catId);
+        if (!catOptional.isPresent()) {
+            return Result.badArgumentValue();
+        }
+        return Result.ok(CatVo.convertCat(catOptional.get()));
     }
 
     @Override

@@ -5,10 +5,23 @@
       :show-close="false"
       :visible.sync="dialogShow"
       :close-on-click-modal="false"
+      :destroy-on-close="true"
       style="text-align: center;"
-      width="30%"
+      width="40%"
     >
       <el-form :model="formData" :rules="rule" ref="editCatForm" label-width="100px">
+        <el-form-item label="猫咪照片" prop="img">
+          <img v-if="formData.img" :src="formData.img" class="avatar">
+          <el-upload
+            class="avatar-uploader"
+            :action="uploadUrl"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            list-type="picture-card"
+            :before-upload="beforeAvatarUpload">
+            <i class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+        </el-form-item>
         <el-form-item label="猫咪名字" prop="name">
           <el-input
             maxlength="50"
@@ -85,6 +98,7 @@
 </template>
 
 <script>
+  import CONSTANTS from "../../common/constants"
   import API from "../../api/api_cat"
   export default {
     name: "EditCat",
@@ -92,8 +106,13 @@
       closeDialogFunc: {
         type: Function
       },
-      catInfo: {
-        type: Object
+      catId: {
+        type: String
+      }
+    },
+    computed: {
+      uploadUrl() {
+        return CONSTANTS.IMG_2_BASE64_URL;
       }
     },
     data() {
@@ -144,17 +163,70 @@
             });
           }
         });
+      },
+      handleAvatarSuccess(res, file) {
+        // console.log(res);
+        // console.log(file);
+        this.formData.img = URL.createObjectURL(file.raw);
+      },
+      beforeAvatarUpload(file) {
+        const isJPG = file.type === 'image/jpeg';
+        const isLt500M = file.size / 1024 / 1024 < 500;
+
+        if (!isJPG) {
+          this.$message.error('上传图片只能是 JPG 格式!');
+        }
+        if (!isLt500M) {
+          this.$message.error('上传图片大小不能超过 500MB!');
+        }
+        return isJPG && isLt500M;
       }
     },
     mounted() {
       let _that = this;
-      if (_that.catInfo) {
-        _that.formData = _that.catInfo;
+      if (_that.catId) {
+        API.getCatDetail({catId: _that.catId}).then(res => {
+          if (!res) {
+            return;
+          }
+          _that.formData = res;
+        }).catch(() => {});
       }
     }
   }
 </script>
 
 <style scoped>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    line-height: 148px;
+    text-align: center;
+  }
+  .el-upload{
+    float: left;
 
+  }
+  .avatar {
+    width: 148px;
+    height:148px;
+    float: left;
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    margin-right: 20px;
+  }
+  .box-card:after{
+    content: "";
+    clear: both;
+  }
 </style>

@@ -20,6 +20,12 @@
     </el-card>
     <el-card class="box-card">
       <el-table v-loading="loading" :data="pageData.rows" stripe>
+        <el-table-column align="center" min-width="80" label="猫咪照片">
+          <template slot-scope="props">
+            <el-image v-if="props.row.img" :src="props.row.img"></el-image>
+            <div v-else>无照片</div>
+          </template>
+        </el-table-column>
         <el-table-column align="center" min-width="80" label="猫咪名字" prop="name"></el-table-column>
         <el-table-column align="center" min-width="120" label="生日" prop="birthday"></el-table-column>
         <el-table-column align="center" min-width="110" label="性别" prop="sex"></el-table-column>
@@ -58,12 +64,13 @@
 
     <el-dialog
       title="猫咪日志"
+      :destroy-on-close="true"
       :visible.sync="catLogDialog.dialogVisible"
       width="90%">
       <cat-log :catId="catLogDialog.currentData.id"></cat-log>
     </el-dialog>
 
-    <edit-cat v-if="editCatDialog.dialogVisible" :catInfo="editCatDialog.currentData" :closeDialogFunc="editCatDialogHide"></edit-cat>
+    <edit-cat v-if="editCatDialog.dialogVisible" :catId="editCatDialog.currentData.id" :closeDialogFunc="editCatDialogHide"></edit-cat>
   </div>
 </template>
 
