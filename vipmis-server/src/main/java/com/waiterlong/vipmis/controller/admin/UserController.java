@@ -34,6 +34,7 @@ public class UserController {
             @RequestParam(defaultValue = "") String phone,
             @RequestParam(defaultValue = "") String idCard,
             @RequestParam(defaultValue = "") String cardCord,
+            @RequestParam(defaultValue = "") String labelId,
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "limit", defaultValue = "10") Integer limit) {
         Pageable pageable = PageRequest.of(page - 1, limit);
@@ -43,6 +44,7 @@ public class UserController {
         paramMap.put("phone", phone);
         paramMap.put("idCard", idCard);
         paramMap.put("cardCord", cardCord);
+        paramMap.put("labelId", labelId);
         return iVipService.listVipsByPage(paramMap, pageable);
     }
 

@@ -133,7 +133,13 @@ public class VipServiceImpl extends BaseServiceImpl implements IVipService {
         logger.debug("listVipsByPage paramMap: {}", paramMap);
         logger.debug("listVipsByPage pageable: {}", pageable);
 
-        Page<User> userPage = userRep.findByRealNameContainsAndCardCordContainsAndIdCardContainsAndPhoneContainsAndWeChatNameContainsOrderByRegisterTimeDesc((String)paramMap.get("realName"), (String)paramMap.get("cardCord"), (String)paramMap.get("idCard"), (String)paramMap.get("phone"), (String)paramMap.get("weChatName"), pageable);
+        String labelIdKey = "labelId";
+        Page<User> userPage;
+        if (null != paramMap.get(labelIdKey) && !((String)paramMap.get(labelIdKey)).isEmpty()) {
+            userPage = userRep.findByRealNameContainsAndCardCordContainsAndIdCardContainsAndPhoneContainsAndWeChatNameContainsAndLabel_IdIsOrderByRegisterTimeDesc((String)paramMap.get("realName"), (String)paramMap.get("cardCord"), (String)paramMap.get("idCard"), (String)paramMap.get("phone"), (String)paramMap.get("weChatName"), (String)paramMap.get(labelIdKey), pageable);
+        } else {
+            userPage = userRep.findByRealNameContainsAndCardCordContainsAndIdCardContainsAndPhoneContainsAndWeChatNameContainsOrderByRegisterTimeDesc((String)paramMap.get("realName"), (String)paramMap.get("cardCord"), (String)paramMap.get("idCard"), (String)paramMap.get("phone"), (String)paramMap.get("weChatName"), pageable);
+        }
         return Result.ok(PageResult.setPageResult(pageable, userPage.getTotalElements(), UserInfoVo.convertUser(userPage.getContent())));
     }
 

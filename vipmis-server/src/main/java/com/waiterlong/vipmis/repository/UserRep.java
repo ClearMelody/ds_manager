@@ -31,6 +31,7 @@ public interface UserRep extends JpaRepository<User, String> {
      */
     Page<User> findByRealNameIsContainingOrderByRegisterTimeDesc(String realName, Pageable pageable);
     Page<User> findByRealNameContainsAndCardCordContainsAndIdCardContainsAndPhoneContainsAndWeChatNameContainsOrderByRegisterTimeDesc(String realName, String cardCord, String idCard, String phone, String weChatName, Pageable pageable);
+    Page<User> findByRealNameContainsAndCardCordContainsAndIdCardContainsAndPhoneContainsAndWeChatNameContainsAndLabel_IdIsOrderByRegisterTimeDesc(String realName, String cardCord, String idCard, String phone, String weChatName, String labelId, Pageable pageable);
 
     /**
      * 根据openid找用户

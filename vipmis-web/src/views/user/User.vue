@@ -21,6 +21,19 @@
         <el-form-item label="VIP卡号">
           <el-input v-model="queryParam.cardCord" placeholder @keyup.enter.native.prevent="query()"></el-input>
         </el-form-item>
+        <el-form-item label="分组">
+          <el-select v-model="queryParam.labelId" filterable placeholder="全部" @change="query()">
+            <el-option
+              v-for="item in labels"
+              :key="item.id"
+              :color="item.color"
+              :label="item.name"
+              :value="item.id"
+            >
+              <el-tag effect="dark" :color="item.color">{{item.name}}</el-tag>
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="query()" :loading="loading">查询</el-button>
           <el-button type="primary" @click="reset()">重置</el-button>
@@ -45,15 +58,21 @@
               style="cursor: pointer;"
               @click="selectLabelDialogShow(props.row)"
               :color="props.row.labelVo ? props.row.labelVo.color : ''"
-            >{{props.row.labelVo ? props.row.labelVo.name : '无分组'}}</el-tag>
+            >{{props.row.labelVo ? props.row.labelVo.name : '无分组'}}
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column align="center" min-width="240" label="操作">
           <template slot-scope="props">
-            <el-button style="margin-top: 0.5rem;" type="primary" size="mini" @click="payDialogShow(props.row)">消费</el-button>
-            <el-button style="margin-top: 0.5rem;" type="primary" size="mini" @click="userGoalDialogShow(props.row)">使用积分</el-button>
-            <el-button style="margin-top: 0.5rem;" type="primary" size="mini" @click="chargeDialogShow(props.row)">充值</el-button>
-            <el-button style="margin-top: 0.5rem;" type="primary" size="mini" @click="catDialogShow(props.row)">猫咪</el-button>
+            <el-button style="margin-top: 0.5rem;" type="primary" size="mini" @click="payDialogShow(props.row)">消费
+            </el-button>
+            <el-button style="margin-top: 0.5rem;" type="primary" size="mini" @click="userGoalDialogShow(props.row)">
+              使用积分
+            </el-button>
+            <el-button style="margin-top: 0.5rem;" type="primary" size="mini" @click="chargeDialogShow(props.row)">充值
+            </el-button>
+            <el-button style="margin-top: 0.5rem;" type="primary" size="mini" @click="catDialogShow(props.row)">猫咪
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -189,7 +208,8 @@
       <el-button type="primary" @click="jumpToCatVue()">猫咪管理</el-button>
     </el-dialog>
 
-    <add-cat v-if="addCatDialog.dialogVisible" :closeDialogFunc="addCatDialogHide" :userId="catDialog.currentData.id"></add-cat>
+    <add-cat v-if="addCatDialog.dialogVisible" :closeDialogFunc="addCatDialogHide"
+             :userId="catDialog.currentData.id"></add-cat>
   </div>
 </template>
 
@@ -198,6 +218,7 @@
   import API from "../../api/api_user";
   import LABEL_API from "../../api/api_label";
   import AddCat from "../cat/AddCat";
+
   export default {
     name: "User",
     components: {
@@ -212,6 +233,7 @@
           phone: "",
           idCard: "",
           cardCord: "",
+          labelId: "",
           limit: 10,
           page: 1
         },
@@ -246,7 +268,7 @@
           peripheralProducts: ""
         },
         rules: {
-          money: [{ required: true, message: "必填", trigger: "blur" }]
+          money: [{required: true, message: "必填", trigger: "blur"}]
         },
         payRules: {
           catSell: [
@@ -295,22 +317,30 @@
       ...mapActions('pageJumpValue', [
         'setUserVue2CatVueAct'
       ]),
+      initLabels() {
+        let _that = this;
+        LABEL_API.listAllLabels().then(res => {
+          if (!res || res.length === 0) {
+            return;
+          }
+          _that.labels = res;
+        }).catch(() => {
+        });
+      },
       listUsersByPage() {
         let _that = this;
         _that.loading = true;
-        API.listUsersByPage(_that.queryParam)
-          .then(result => {
-            if (!result) {
-              _that.loading = false;
-              return;
-            }
-            result.pageSizes = [5];
-            _that.pageData = result;
+        API.listUsersByPage(_that.queryParam).then(result => {
+          if (!result) {
             _that.loading = false;
+            return;
+          }
+          result.pageSizes = [5];
+          _that.pageData = result;
+          _that.loading = false;
           // console.log(result);
-          })
-          .catch(() => {
-            _that.loading = false;
+        }).catch(() => {
+          _that.loading = false;
         });
       },
       resetPage() {
@@ -321,6 +351,7 @@
           phone: "",
           idCard: "",
           cardCord: "",
+          labelId: "",
           limit: 10,
           page: 1
         };
@@ -371,14 +402,12 @@
         _that.loading = true;
         let params = _that.chargeDialog.currentData;
         params.deposit = _that.chargeFormData.money;
-        API.charge(params)
-          .then(() => {
-            _that.loading = false;
-            _that.chargeDialog.dialogVisible = false;
-            _that.query();
-          })
-          .catch(() => {
-            _that.loading = false;
+        API.charge(params).then(() => {
+          _that.loading = false;
+          _that.chargeDialog.dialogVisible = false;
+          _that.query();
+        }).catch(() => {
+          _that.loading = false;
         });
       },
       useGoal() {
@@ -386,14 +415,12 @@
         _that.loading = true;
         let params = _that.useGoalDialog.currentData;
         params.goal = _that.useGoalFormData.goal;
-        API.useGoal(params)
-          .then(() => {
-            _that.loading = false;
-            _that.useGoalDialog.dialogVisible = false;
-            _that.query();
-          })
-          .catch(() => {
-            _that.loading = false;
+        API.useGoal(params).then(() => {
+          _that.loading = false;
+          _that.useGoalDialog.dialogVisible = false;
+          _that.query();
+        }).catch(() => {
+          _that.loading = false;
         });
       },
       pay() {
@@ -404,32 +431,23 @@
           _that.payFormData.washProtectService;
         _that.payDialog.currentData.peripheralProducts =
           _that.payFormData.peripheralProducts;
-        API.pay(_that.payDialog.currentData)
-          .then(() => {
-            _that.loading = false;
-            _that.payDialog.dialogVisible = false;
-            _that.query();
-          })
-          .catch(() => {
-            _that.loading = false;
+        API.pay(_that.payDialog.currentData).then(() => {
+          _that.loading = false;
+          _that.payDialog.dialogVisible = false;
+          _that.query();
+        }).catch(() => {
+          _that.loading = false;
         });
       },
       selectLabelDialogShow(val) {
         let _that = this;
+        if (!_that.labels || _that.labels.length === 0) {
+          _that.selectLabelDialog.dialogVisible = false;
+          return;
+        }
         _that.selectLabelDialog.dialogVisible = true;
         _that.selectLabelDialog.currentData = val;
         _that.selectLabelFormData.id = val.labelVo ? val.labelVo.name : "";
-        LABEL_API.listAllLabels()
-          .then(res => {
-            if (!res || res.length === 0) {
-              _that.selectLabelDialog.dialogVisible = false;
-              return;
-            }
-            _that.labels = res;
-          })
-          .catch(() => {
-            _that.selectLabelDialog.dialogVisible = false;
-        });
       },
       changeLabel() {
         let _that = this;
@@ -440,14 +458,12 @@
             id: _that.selectLabelFormData.id
           }
         };
-        LABEL_API.changeUserLabel(userVo)
-          .then(() => {
-            _that.loading = false;
-            _that.selectLabelDialog.dialogVisible = false;
-            _that.query();
-          })
-          .catch(() => {
-            _that.loading = false;
+        LABEL_API.changeUserLabel(userVo).then(() => {
+          _that.loading = false;
+          _that.selectLabelDialog.dialogVisible = false;
+          _that.query();
+        }).catch(() => {
+          _that.loading = false;
         });
       },
       catDialogShow(val) {
@@ -474,13 +490,14 @@
     },
     mounted() {
       let _that = this;
+      _that.initLabels();
       _that.resetPage();
     }
   };
 </script>
 
 <style scoped>
-.el-form-item__label{
-  width: 80px!important;
-}
+  .el-form-item__label {
+    width: 80px !important;
+  }
 </style>
