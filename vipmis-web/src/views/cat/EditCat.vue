@@ -167,7 +167,9 @@
       handleAvatarSuccess(res, file) {
         // console.log(res);
         // console.log(file);
-        this.formData.img = URL.createObjectURL(file.raw);
+        if (res) {
+          this.formData.img = res.data;
+        }
       },
       beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg';
