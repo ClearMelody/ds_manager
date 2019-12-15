@@ -7,6 +7,7 @@ import com.waiterlong.vipmis.domain.SysRole;
 import com.waiterlong.vipmis.utils.AbstractMyBeanUtils;
 import com.waiterlong.vipmis.utils.DateUtil;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.tomcat.util.buf.StringUtils;
 
 import javax.persistence.Column;
@@ -24,6 +25,7 @@ import java.util.List;
  * @author walter_long
  */
 @Data
+@NoArgsConstructor
 public class SysRoleVo {
     private String id;
     private String name;
@@ -32,6 +34,11 @@ public class SysRoleVo {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
     private String permissionIds;
+
+    public SysRoleVo(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public static SysRoleVo convertSysRole(SysRole sysRole) {
         if (null == sysRole) {

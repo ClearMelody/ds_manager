@@ -50,11 +50,14 @@
         <el-form-item label="权限名称" :label-width="formLabelWidth">
           <el-input v-model="form.name" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item label="权限标识" :label-width="formLabelWidth">
+          <el-input v-model="form.permission" autocomplete="off"></el-input>
+        </el-form-item>
         <el-form-item label="路径" :label-width="formLabelWidth">
           <el-input v-model="form.href" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="权限标识" :label-width="formLabelWidth">
-          <el-input v-model="form.permission" autocomplete="off"></el-input>
+        <el-form-item label="样式（图标）" :label-width="formLabelWidth">
+          <el-input v-model="form.icon" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="类型" :label-width="formLabelWidth">
           <el-select v-model="form.type" placeholder="请选择">
@@ -90,6 +93,9 @@
         },{
           label: '按钮',
           value: 2
+        },{
+          label: '面板',
+          value: 3
         }],
         queryParam: {
           name: null,
@@ -104,6 +110,7 @@
           path: null,
           name: null,
           href: null,
+          icon: null,
           type: null,
           sort: null
         },
@@ -113,7 +120,7 @@
     },
     methods: {
       formatType(row, column, cellValue, index) {
-        return row.type == 1 ? '菜单' : row.type == 2 ? '按钮' : '未知';
+        return row.type == 1 ? '菜单' : row.type == 2 ? '按钮' : (row.type == 3 ? '面板' : '未知');
       },
       reset() {
         this.queryParam = {
@@ -143,6 +150,7 @@
             path: row.path,
             name: null,
             href: null,
+            icon: null,
             type: null,
             sort: null
           };
@@ -154,6 +162,7 @@
             path: null,
             name: null,
             href: null,
+            icon: null,
             type: null,
             sort: null
           };

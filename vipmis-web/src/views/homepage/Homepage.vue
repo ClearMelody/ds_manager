@@ -2,7 +2,7 @@
   <div>
     <el-row>
       <el-col :span="12">
-        <el-card class="box-card">
+        <el-card class="box-card" v-if="hasPerm('statistic:product:proportion')">
           <div slot="header" class="clearfix">
           <span>产品消费占比</span>
         </div>
@@ -10,7 +10,7 @@
         </el-card>
       </el-col>
       <el-col :span="12">
-        <el-card class="box-card">
+        <el-card class="box-card" v-if="hasPerm('statistic:user:growth')">
           <div slot="header" class="clearfix">
           <span>用户增长</span>
         </div>
@@ -19,7 +19,7 @@
       </el-col>
     </el-row>
     <el-row :span="12">
-      <el-card class="box-card">
+      <el-card class="box-card" v-if="hasPerm('statistic:consume-limit:growth')">
         <div slot="header" class="clearfix">
           <span>消费统计</span>
         </div>

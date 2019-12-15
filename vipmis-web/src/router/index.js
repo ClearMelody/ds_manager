@@ -12,6 +12,7 @@ import Homepage from '@/views/homepage/Homepage'
 import Label from '@/views/label/Label'
 import Role from '@/views/role/Role'
 import Permission from '@/views/permission/Permission'
+import SysUser from '@/views/sysUser/SysUser'
 
 Vue.use(Router)
 
@@ -68,6 +69,11 @@ const routes = [
         name: 'index',
       },
       {
+        path: 'sysUser',
+        component: SysUser,
+        name: 'sysUser',
+      },
+      {
         path: 'role',
         component: Role,
         name: 'role',
@@ -90,15 +96,15 @@ const router = new Router({
   routes
 });
 
-router.beforeEach((to, from, next) => {
-  let loginFlag = sessionStorage.getItem("loginFlag");
-  if (to.fullPath === "/login" || loginFlag === "isLogin") {
-    next();
-  } else {
-    next({
-      path: '/login'
-    })
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   let loginFlag = sessionStorage.getItem("loginFlag");
+//   if (to.fullPath === "/login" || loginFlag === "isLogin") {
+//     next();
+//   } else {
+//     next({
+//       path: '/login'
+//     })
+//   }
+// });
 
 export default router

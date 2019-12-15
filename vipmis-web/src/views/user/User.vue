@@ -35,7 +35,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="query()" :loading="loading">查询</el-button>
+          <el-button type="primary" @click="query()" v-if="hasPerm('user:list')" :loading="loading">查询</el-button>
           <el-button type="primary" @click="reset()">重置</el-button>
         </el-form-item>
       </el-form>
@@ -330,6 +330,9 @@
       listUsersByPage() {
         let _that = this;
         _that.loading = true;
+        if (!this.hasPerm('user:list')) {
+          this.noPermTip();
+        }
         API.listUsersByPage(_that.queryParam).then(result => {
           if (!result) {
             _that.loading = false;

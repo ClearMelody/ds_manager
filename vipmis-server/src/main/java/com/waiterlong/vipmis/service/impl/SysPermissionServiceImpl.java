@@ -7,6 +7,7 @@ import com.waiterlong.vipmis.repository.SysPermissionRep;
 import com.waiterlong.vipmis.service.ISysPermissionService;
 import com.waiterlong.vipmis.service.base.BaseServiceImpl;
 import com.waiterlong.vipmis.utils.AbstractMyBeanUtils;
+import com.waiterlong.vipmis.utils.PermissionLoop;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -61,8 +62,8 @@ public class SysPermissionServiceImpl extends BaseServiceImpl implements ISysPer
             }
         });
         //List<SysPermissionVo> permissionVos = getPermissionListByPid(null, list);
-        List<SysPermissionVo> permissionVos = getNonePidPermissionList(list);
-        permissionVos = loopPermissions(permissionVos, list);
+        List<SysPermissionVo> permissionVos = PermissionLoop.getNonePidPermissionList(list);
+        permissionVos = PermissionLoop.loopPermissions(permissionVos, list);
         return Result.ok(permissionVos);
     }
 
@@ -124,64 +125,5 @@ public class SysPermissionServiceImpl extends BaseServiceImpl implements ISysPer
         sysPermissionRep.deleteAllByOneId(id);
         return Result.ok();
     }
-
-    /**
-     * 遍历获取当前list中没有父节点的对象
-     * @param permissions
-     * @return
-     */
-    private List<SysPermissionVo> getNonePidPermissionList(List<SysPermission> permissions){
-        List<SysPermissionVo> children = new ArrayList<>();
-        for (SysPermission permission : permissions) {
-            boolean pExist = false;
-            for(SysPermission temp : permissions){
-                if(temp.getId().equals(permission.getPid())){
-                    pExist = true;break;
-                }
-            }
-            if(!pExist){
-                SysPermissionVo sysPermissionVo= SysPermissionVo.convertSysPermission(permission);
-                children.add(sysPermissionVo);
-            }
-        }
-        return children;
-    }
-
-    /**
-     * 根据pid获取children
-     * @param id
-     * @param permissions
-     * @return
-     */
-    private List<SysPermissionVo> getPermissionListByPid(String id,List<SysPermission> permissions){
-        List<SysPermissionVo> children = new ArrayList<>();
-        for (SysPermission permission : permissions) {
-            boolean checkParam = (id == null && null == permission.getPid()) || (id != null && id.equals(permission.getPid()));
-            if(checkParam){
-                SysPermissionVo temp= SysPermissionVo.convertSysPermission(permission);
-                children.add(temp);
-            }
-        }
-        return children;
-    }
-
-    /**
-     * 递归遍历所有节点
-     * @param permissionVos
-     * @param permissions
-     * @return
-     */
-    private List<SysPermissionVo> loopPermissions(List<SysPermissionVo> permissionVos, List<SysPermission> permissions) {
-
-        for (SysPermissionVo permissionVo : permissionVos) {
-            permissionVo.setChildren(getPermissionListByPid(permissionVo.getId(), permissions));
-            if(permissionVo.getChildren().isEmpty()) {
-                continue;
-            }
-            loopPermissions(permissionVo.getChildren(), permissions);
-        }
-        return permissionVos;
-    }
-
 
 }

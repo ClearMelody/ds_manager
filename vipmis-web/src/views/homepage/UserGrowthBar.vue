@@ -76,6 +76,9 @@
         _that.datePicker.value = [start, end];
       },
       refreshPie() {
+        if (!this.hasPerm('statistic:user:growth')) {
+          this.noPermTip();
+        }
         let _that = this;
         let params = {
           start: dateUtil.dateFormat(_that.datePicker.value[0], "yyyy-MM-dd"),

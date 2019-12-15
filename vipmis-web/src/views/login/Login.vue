@@ -2,16 +2,16 @@
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-position="left" label-width="0px"
            class="login-container">
     <h3 class="title">后台管理登录</h3>
-    <el-form-item prop="userName">
-      <el-input type="text" v-model="ruleForm.userName" @keyup.enter.native.prevent="submitForm('ruleForm')"
+    <el-form-item prop="username">
+      <el-input type="text" v-model="ruleForm.username" @keyup.enter.native.prevent="handleLogin('ruleForm')"
                 auto-complete="off" placeholder="账号"></el-input>
     </el-form-item>
     <el-form-item prop="password">
-      <el-input type="password" v-model="ruleForm.password" @keyup.enter.native.prevent="submitForm('ruleForm')"
+      <el-input type="password" v-model="ruleForm.password" @keyup.enter.native.prevent="handleLogin('ruleForm')"
                 auto-complete="off" placeholder="密码"></el-input>
     </el-form-item>
     <el-form-item style="width:100%;">
-      <el-button type="primary" style="width:100%;" @click.native.prevent="submitForm('ruleForm')" :loading="loading">登录
+      <el-button type="primary" style="width:100%;" @click.native.prevent="handleLogin('ruleForm')" :loading="loading">登录
       </el-button>
     </el-form-item>
   </el-form>
@@ -25,11 +25,11 @@
     data() {
       return {
         ruleForm: {
-          userName: '',
+          username: '',
           password: ''
         },
         rules: {
-          userName: [
+          username: [
             {required: true, message: '请输入账号', trigger: 'blur'}
           ],
           password: [
@@ -40,29 +40,24 @@
       }
     },
     methods: {
-      submitForm(formName) {
-        let _self = this;
-        _self.loading = true;
-        this.$refs[formName].validate((valid) => {
+      handleLogin() {
+        this.$refs.ruleForm.validate(valid => {
           if (valid) {
-            //TODO
-            // Api.user.adminLogin(_self.ruleForm).then(data => {
-            //   if (data.success) {
-            sessionStorage.setItem("loginFlag", "isLogin");
-            // this.$message(data.message);
-            this.$router.push("/home");
-            // } else {
-            //   _self.$message(data.message);
-            // }
-            _self.loading = false;
-            // }).catch(e => {
-            //   _self.$message('网络异常');
-            //   _self.loading = false;
-            // });
+            this.loading = true
+            this.$store.dispatch('Login', this.ruleForm).then(data => {
+              this.loading = false
+              if (data.result === "success") {
+                this.$router.push({path: '/home'})
+              } else {
+                this.$message.error(data.result);
+              }
+            }).catch(() => {
+              this.loading = false
+            })
           } else {
-            _self.loading = false;
+            return false
           }
-        });
+        })
       }
     }
   }

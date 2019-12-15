@@ -4,6 +4,9 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from "./store"
+import '@/permission'
+import {hasPermission} from "./utils/hasPermission";
+import {noPermissionTips} from "./utils/noPermissionTips";
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import VueLogger from 'vuejs-logger';
@@ -23,6 +26,8 @@ Vue.use(VueLogger, options);
 Vue.use(ElementUI);
 
 Vue.config.productionTip = false
+Vue.prototype.hasPerm = hasPermission
+Vue.prototype.noPermTip = noPermissionTips
 
 /* eslint-disable no-new */
 new Vue({

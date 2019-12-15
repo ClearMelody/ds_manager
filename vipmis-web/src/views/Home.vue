@@ -16,8 +16,8 @@
           active-text-color="#ffd04b"
         >
           <div v-for="(item) in menus" :key="item.id">
-            <el-menu-item v-if="!item.hasChild" :index="item.link">
-              <i class="el-icon-s-home"></i>
+            <el-menu-item v-if="item.children.length == 0" :index="item.href">
+              <i :class="item.icon"></i>
               <span slot="title">{{item.name}}</span>
             </el-menu-item>
             <el-submenu v-else :index="item.id.toString()">
@@ -26,7 +26,7 @@
                 <span>{{item.name}}</span>
               </template>
               <el-menu-item-group>
-                <el-menu-item v-for="(it) in item.childs" :key="it.id" :index="it.link">
+                <el-menu-item v-for="(it) in item.children" :key="it.id" :index="it.href">
                   <i :class="it.icon"></i>
                   <span slot="title">{{it.name}}</span>
                 </el-menu-item>
@@ -37,6 +37,7 @@
       </el-aside>
       <el-main width="100%">
         <el-header>
+          <el-link @click="logout" class="logout" type="primary">登出</el-link>
         </el-header>
         <router-view class="myview"></router-view>
       </el-main>
@@ -50,24 +51,25 @@
     name: "Home",
     data() {
       return {
-        menus: [],
+        //menus: [],
         menuDefaultActive: ""
       };
     },
     computed: {
-      ...mapGetters("user", {
-        currentUser: "currentUser",
-        area: "area",
-        user: "users"
-      }),
-      ...mapGetters("user", ["currentUser", "area", "users"])
+      ...mapGetters(["menus"])
     },
-    methods: {},
+    methods: {
+      logout() {
+        this.$store.dispatch('LogOut').then(() => {
+          location.reload()
+        })
+      }
+    },
     mounted() {
       let _that = this;
-      this.menus.push({id: 1, name: "首页", hasChild: false, link: "/home/index"});
-      this.menus.push({id: 6, name: "用户管理", icon:"el-icon-s-custom", hasChild: true, childs: [{id: 8, name: "会员管理", link: "/home/user"}, {id: 18, name: "猫咪管理", link: "/home/cat"},{id: 7, name: "分组管理", link: "/home/label"}]});
-      this.menus.push({id: 2, name: "系统管理", icon:"el-icon-s-tools", hasChild: true, childs: [{id: 5, name: "分享管理", link: "/home/wxWelcome"}, {id: 3, name: "管理员管理", link: "/home/admin"}, {id: 4, name: "角色管理", link: "/home/role"}, {id: 10, name: "权限管理", link: "/home/permission"}, {id: 11, name: "会员卡说明", link: "/home/cardDescription"}]});
+      //this.menus.push({id: 1, name: "首页", hasChild: false, href: "/home/index", children: []});
+      //this.menus.push({id: 6, name: "用户管理", icon:"el-icon-s-custom", hasChild: true, children: [{id: 8, name: "会员管理", href: "/home/user"}, {id: 7, name: "分组管理", href: "/home/label"}]});
+      //this.menus.push({id: 2, name: "系统管理", icon:"el-icon-s-tools", hasChild: true, children: [{id: 5, name: "分享管理", href: "/home/wxWelcome"}, {id: 3, name: "管理员管理", href: "/home/admin"},{id: 11, name: "系统用户管理", href: "/home/sysUser"}, {id: 4, name: "角色管理", href: "/home/role"}, {id: 10, name: "权限管理", href: "/home/permission"}]});
       _that.menuDefaultActive = _that.$route.path;
     }
   };
@@ -125,4 +127,10 @@ z-index: 2;
   background: #e6a23c!important;
   color: #fff!important;
 }
+  .logout{
+    float: right;
+    display: block;
+    padding: 10px;
+    font-size: 16px;
+  }
 </style>

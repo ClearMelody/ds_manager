@@ -11,5 +11,6 @@ export default {
   saveRole: params => API.PUT('/sysrole/saveRole', params),
   listSysRolesByPage: params => API.POST('/sysrole/listSysRolesByPage', params),
   getSysRole: id => API.GET('/sysrole/getSysRole/' + id, null),
-  deleteSysRole: id => API.DELETE('/sysrole/deleteSysRole/' + id, null)
+  deleteSysRole: id => API.DELETE('/sysrole/deleteSysRole/' + id, null),
+  listAllBaseRoleInfos: params => API.GET('/sysrole/listAllBaseRoleInfos', null)
 }

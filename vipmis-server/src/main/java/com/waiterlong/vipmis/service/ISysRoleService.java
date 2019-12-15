@@ -44,4 +44,10 @@ public interface ISysRoleService {
      * @return
      */
     Result deleteSysRoleById(String id);
+
+    /**
+     * 查询所有角色基本信息
+     * @return
+     */
+    Result listAllBaseRoleInfos();
 }

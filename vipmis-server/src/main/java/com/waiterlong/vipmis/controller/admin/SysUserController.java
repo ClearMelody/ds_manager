@@ -3,7 +3,9 @@ package com.waiterlong.vipmis.controller.admin;
 import com.google.common.collect.Maps;
 import com.waiterlong.vipmis.component.Result;
 import com.waiterlong.vipmis.controller.base.BaseController;
+import com.waiterlong.vipmis.domain.vo.SysUserVo;
 import com.waiterlong.vipmis.domain.vo.UserVo;
+import com.waiterlong.vipmis.service.ISysUserService;
 import com.waiterlong.vipmis.service.IUserService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,27 +26,24 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/admin/sysuser")
 public class SysUserController extends BaseController {
-    @Resource(name = "iUserService")
-    private IUserService iUserService;
+    @Resource(name = "iSysUserService")
+    private ISysUserService iSysUserService;
 
-    @RequestMapping(value = "/find", method = RequestMethod.GET)
-    public Result findUserInfoById(@RequestParam(defaultValue = "") String id){
-        return  iUserService.findUserInfoById(id);
+    @GetMapping(value = "/find/{id}")
+    public Result findSysUserInfoById(@PathVariable(value = "id") String id){
+        return  iSysUserService.findSysUserInfoById(id);
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public Result addUser(@RequestBody UserVo userVo){
-        return  iUserService.addUser(userVo);
+    @PutMapping(value = "/saveSysUser")
+    public Result saveSysUser(@RequestBody SysUserVo sysUserVo){
+        return iSysUserService.addSysUser(sysUserVo);
     }
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public Result listTasksByPage(
-                                  @RequestParam(defaultValue = "") String realName,
-                                  @RequestParam(value = "page", defaultValue = "1") Integer page,
-                                  @RequestParam(value = "limit", defaultValue = "10") Integer limit){
+    @PostMapping(value = "/list")
+    public Result listByPage(@RequestBody Map<String,Object> params,
+                             @RequestParam(value = "page", defaultValue = "1") Integer page,
+                             @RequestParam(value = "limit", defaultValue = "10") Integer limit){
         Pageable pageable = PageRequest.of(page - 1, limit);
-        Map<String, Object> paramMap = Maps.newHashMap();
-        paramMap.put("realName", realName);
-        return iUserService.listUsersByPage(paramMap, pageable);
+        return iSysUserService.listSysUsersByPage(params, pageable);
     }
 }

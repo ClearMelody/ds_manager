@@ -6,7 +6,7 @@
               <el-input v-model="queryParam.name" placeholder="角色名" @keyup.enter.native.prevent="query()"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="query()">查询</el-button>
+              <el-button type="primary" v-if="hasPerm('role:query')" @click="query()">查询</el-button>
               <el-button type="primary" @click="reset()">重置</el-button>
               <el-button type="success" @click="roleAdd()">添加</el-button>
             </el-form-item>
@@ -31,7 +31,7 @@
               <el-input v-model="role.name" placeholder="角色名" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="角色权限" :label-width="'120'"></el-form-item>
-            <el-tree :data="permissionData" :default-checked-keys="role.permissionIds == null?[]:role.permissionIds.split(',')" default-expand-all ref="tree" highlight-current show-checkbox node-key="id" :props="defaultProps"></el-tree>
+            <el-tree :data="permissionData" :default-checked-keys="role.permissionIds == null?[]:role.permissionIds.split(',')" check-strictly default-expand-all ref="tree" highlight-current show-checkbox node-key="id" :props="defaultProps"></el-tree>
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="roleAddVisible = false">取 消</el-button>
@@ -78,6 +78,9 @@
     },
     methods: {
       query() {
+        if (!this.hasPerm('role:query')) {
+          this.noPermTip();
+        }
         let _this = this;
         _this.loading = true;
         API_ROLE.listSysRolesByPage(_this.queryParam).then(res => {

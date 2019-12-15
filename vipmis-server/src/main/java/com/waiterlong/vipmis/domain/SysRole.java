@@ -1,5 +1,6 @@
 package com.waiterlong.vipmis.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.collect.Lists;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
@@ -21,6 +22,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "sys_role")
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true, value =
+        {"hibernateLazyInitializer", "handler", "fieldHandler"})
 public class SysRole {
     @Id
     @GenericGenerator(name = "system_uuid", strategy = "uuid")
@@ -36,6 +39,7 @@ public class SysRole {
 
 
     @ManyToMany
+    @JsonIgnoreProperties(value = "sysRoles")
     @JoinTable(name = "sys_role_permission",joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id"))
     private List<SysPermission> sysPermissions = Lists.newLinkedList();

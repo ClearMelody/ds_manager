@@ -43,4 +43,7 @@ public class SysRoleController {
 
     @DeleteMapping("/deleteSysRole/{id}")
     public Result deleteSysRoleById(@PathVariable(value = "id") String id){return iSysRoleService.deleteSysRoleById(id);};
+
+    @GetMapping("/listAllBaseRoleInfos")
+    public Result listAllBaseRoleInfos(){return iSysRoleService.listAllBaseRoleInfos();};
 }

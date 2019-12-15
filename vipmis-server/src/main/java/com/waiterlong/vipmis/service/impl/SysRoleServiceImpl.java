@@ -46,14 +46,14 @@ public class SysRoleServiceImpl extends BaseServiceImpl implements ISysRoleServi
     public Result saveSysRole(@NotNull SysRoleVo sysRoleVo) {
         SysRole role = null;
         String permissionIds = sysRoleVo.getPermissionIds();
-        if (sysRoleVo.getId() != null) {// 修改
+        if (StringUtils.isNotBlank(sysRoleVo.getId())) {
             role = sysRoleRep.getOne(sysRoleVo.getId());
             AbstractMyBeanUtils.copyProperties(sysRoleVo, role);
             logger.debug("更新角色{}", role.getName());
         } else {// 新增
             role = new SysRole();
-            AbstractMyBeanUtils.copyProperties(sysRoleVo, role);
             SysRole r = sysRoleRep.findByName(role.getName());
+            AbstractMyBeanUtils.copyProperties(sysRoleVo, role);
             if (r != null) {
                 return Result.fail(Result.ERROR_CODE, "保存失败，角色" + role.getName() + "已存在！");
             }
@@ -102,6 +102,11 @@ public class SysRoleServiceImpl extends BaseServiceImpl implements ISysRoleServi
         }
         sysRoleRep.deleteById(id);
         return Result.ok();
+    }
+
+    @Override
+    public Result listAllBaseRoleInfos() {
+        return Result.ok(sysRoleRep.findAllBaseRoleInfos());
     }
 
 }

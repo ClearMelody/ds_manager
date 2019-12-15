@@ -23,6 +23,7 @@ public class SysPermissionVo {
     private String pid;
     private String name;
     private String href;
+    private String icon;
     private String permission;
     private String path;
     private Integer type;

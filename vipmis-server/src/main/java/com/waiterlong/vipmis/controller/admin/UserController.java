@@ -5,6 +5,7 @@ import com.waiterlong.vipmis.component.Result;
 import com.waiterlong.vipmis.domain.vo.UserInfoVo;
 import com.waiterlong.vipmis.domain.vo.UserVo;
 import com.waiterlong.vipmis.service.IVipService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,7 @@ public class UserController {
     @Resource(name = "iVipService")
     private IVipService iVipService;
 
+    @RequiresPermissions("user:list")
     @RequestMapping(value = "/user/list", method = RequestMethod.GET)
     public Result listDepositLogByPage(
             @RequestParam(defaultValue = "") String realName,
@@ -48,16 +50,19 @@ public class UserController {
         return iVipService.listVipsByPage(paramMap, pageable);
     }
 
+    //@RequiresPermissions("user:charge")
     @RequestMapping(value = "/user/charge", method = RequestMethod.POST)
     public Result charge(@RequestBody UserInfoVo userInfoVo) {
         return iVipService.charge(userInfoVo);
     }
 
+    //@RequiresPermissions("user:pay")
     @RequestMapping(value = "/user/pay", method = RequestMethod.POST)
     public Result pay(@RequestBody UserInfoVo userInfoVo) {
         return iVipService.pay(userInfoVo);
     }
 
+    //@RequiresPermissions("user:goal:use")
     @RequestMapping(value = "/user/goal/use", method = RequestMethod.POST)
     public Result useGoal(@RequestBody UserInfoVo userInfoVo) {
         return iVipService.useGoal(userInfoVo);
