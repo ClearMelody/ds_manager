@@ -204,7 +204,7 @@
       style="text-align: center;"
       width="30%"
     >
-      <el-button type="primary" @click="addCatDialogShow()">新增猫咪</el-button>
+      <el-button type="success" @click="addCatDialogShow()">添加猫咪</el-button>
       <el-button type="primary" @click="jumpToCatVue()">猫咪管理</el-button>
     </el-dialog>
 

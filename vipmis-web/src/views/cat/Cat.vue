@@ -34,7 +34,7 @@
           <template slot-scope="props">
             <el-button style="margin-top: 0.5rem;" type="primary" size="mini" @click="editCatDialogShow(props.row)">资料修改</el-button>
             <el-button style="margin-top: 0.5rem;" type="primary" size="mini" @click="catLogDialogShow(props.row)">日志查看</el-button>
-            <el-button style="margin-top: 0.5rem;" type="primary" size="mini" @click="delDialogShow(props.row)">删除</el-button>
+            <el-button style="margin-top: 0.5rem;" type="danger" size="mini" @click="delDialogShow(props.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>

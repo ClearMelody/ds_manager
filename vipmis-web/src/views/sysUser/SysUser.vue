@@ -133,11 +133,11 @@
       save() {
         let _this = this;
         _this.formLoading = true;
-        // API_SYSUSER.saveSysUser(_this.form).then(res => {
-        //   _this.addVisible = false;
-        //   _this.formLoading = false;
-        //   _this.query();
-        // })
+        API_SYSUSER.saveSysUser(_this.form).then(res => {
+          _this.addVisible = false;
+          _this.formLoading = false;
+          _this.query();
+        })
       },
       initRoleSelect() {
         let _this = this;

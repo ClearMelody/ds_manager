@@ -161,6 +161,8 @@
             }).catch(() => {
               _that.loading = false;
             });
+          } else {
+            _that.loading = false;
           }
         });
       },

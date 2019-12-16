@@ -64,7 +64,6 @@
           if (!res) {
             return;
           }
-          console.log(res);
           _that.content = res.content;
         }).catch(() => {});
       }

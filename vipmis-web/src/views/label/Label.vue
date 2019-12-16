@@ -9,7 +9,7 @@
           <el-form-item>
             <el-button :loading="loading" type="primary" @click="query()">查询</el-button>
             <el-button type="primary" @click="resetPage()">重置</el-button>
-            <el-button type="primary" @click="addDialogShow()">添加</el-button>
+            <el-button type="success" @click="addDialogShow()">添加</el-button>
           </el-form-item>
         </el-form>
       </el-card>
@@ -23,7 +23,7 @@
           <el-table-column align="center" min-width="160" label="操作">
             <template slot-scope="props">
               <el-button type="primary" size="mini" @click="editDialogShow(props.row)">编辑</el-button>
-              <el-button type="primary" size="mini" @click="deleteDialogShow(props.row)">删除</el-button>
+              <el-button type="danger" size="mini" @click="deleteDialogShow(props.row)">删除</el-button>
               <!--          <el-button type="primary" size="mini" :disabled="false">详情</el-button>-->
             </template>
           </el-table-column>
