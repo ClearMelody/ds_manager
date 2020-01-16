@@ -1,0 +1,55 @@
+server:
+  port: 9091
+  tomcat:
+    max-http-header-size: 8192
+spring:
+  session:
+    store-type: none
+  devtools:
+    livereload:
+      enabled: true
+  datasource:
+    url: 'jdbc:mysql://192.168.0.110:3306/ds_manager?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai'
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+    tomcat:
+      initial-size: 5
+      max-wait: 30000
+      max-active: 5
+      min-idle: 2
+      remove-abandoned-timeout: 100
+      remove-abandoned: false
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      validation-query: select 1
+      validation-query-timeout: 1
+      time-between-eviction-runs-millis: 30000
+      num-tests-per-eviction-run: 100
+  cache:
+    ehcache:
+      config: classpath:ehcache.xml
+  jpa:
+    database-platform: MYSQL
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      generate_statistics: true
+      cache:
+        use_second_level_cache: true
+        region:
+          factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
+          use_query_cache: true
+          provider_class: org.hibernate.cache.ehcache.StrategyRegistrationProviderImpl
+          provider_configuration: classpath:ehcache.xml
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
+    open-in-view: true
+logging:
+  level:
+    root: info
+  file: dsmanager.log
