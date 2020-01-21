@@ -1,8 +1,6 @@
 #数据资源管理_监测
 
-## UML diagrams
 ```mermaid
-graph LR
 A[数据资源管理与监测]
 A --> B(数据监测)
 A --> C(数据资源)
