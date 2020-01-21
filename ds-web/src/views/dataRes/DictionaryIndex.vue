@@ -40,7 +40,7 @@
         </el-form>
       </el-card>
       <el-card class="box-card content-view">
-        <el-table v-loading="loadingDict" :data="pageData.rows" stripe>
+        <el-table v-loading="loadingDict" border :data="pageData.rows" stripe>
           <el-table-column align="center" min-width="80" label="字典名称" prop="name" sortable></el-table-column>
           <el-table-column align="center" min-width="120" label="字典编号" prop="code" sortable></el-table-column>
           <el-table-column align="center" min-width="110" label="父编号" prop="pcode" sortable></el-table-column>

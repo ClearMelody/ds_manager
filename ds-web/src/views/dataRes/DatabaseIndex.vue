@@ -28,7 +28,7 @@
       </el-form>
     </el-card>
     <el-card class="box-card content-view">
-      <el-table v-loading="queryLoading" :data="pageData.rows" stripe>
+      <el-table v-loading="queryLoading" border :data="pageData.rows" stripe>
         <el-table-column align="center" min-width="80" label="数据源类型" prop="dbType">
           <template slot-scope="scope">
             <svg-icon :icon-class="getDbIcon(scope.row.dbType)"/>
@@ -216,7 +216,7 @@
   }
 
   .svg-icon {
-    font-size: 25px;
+    font-size: 30px;
   }
 
 </style>

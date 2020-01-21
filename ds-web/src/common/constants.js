@@ -7,6 +7,7 @@
 import Env from '../api/env';
 let base = Env.baseURL;
 export default {
+  IMPORT_FILE_UPLOAD_URL: `${base}/base-db/import-table-data`,
   DB_TYPES : [
     {
       name: 'Oracle',
@@ -31,6 +32,28 @@ export default {
       icon: 'db_elasticsearch',
       tagColor: '#e6a23c',
       urlModel: null
+    }
+  ],
+  COLUMN_TYPES: [
+    {
+      name: '文本',
+      value: 1
+    },
+    {
+      name: '大文本',
+      value: 2
+    },
+    {
+      name: '数值',
+      value: 3
+    },
+    {
+      name: '数值(带小数)',
+      value: 4
+    },
+    {
+      name: '日期',
+      value: 5
     }
   ]
 }

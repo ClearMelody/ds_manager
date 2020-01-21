@@ -57,8 +57,8 @@
     mounted() {
       this.menus.push({
         id: 1,
-        name: "资源统计",
-        icon: "el-icon-s-data",
+        name: "数据监控",
+        icon: "el-icon-data-line",
         hasChild: false,
         href: "/main/monitorIndex",
         children: []
@@ -84,7 +84,7 @@
         name: "数据字典",
         icon: "el-icon-collection",
         hasChild: false,
-        href: "/main/dictionary",
+        href: "/main/dictionaryIndex",
         children: []
       });
       this.menuDefaultActive = this.$route.path;

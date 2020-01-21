@@ -46,7 +46,7 @@
           <div class="table_item">
             <el-dropdown trigger="click" @command="handleCommand">
               <el-link :underline="false">
-                <svg-icon icon-class="data_table" style="font-size: 50px;margin-left: 15px;"/>
+                <svg-icon :icon-class="item.buildType == 0?'data_table_green':'data_table_blue'" style="font-size: 50px;margin-left: 15px;"/>
                 <span class="link-item" :title="item.dtNameCn">{{item.dtNameCn}}</span>
               </el-link>
               <el-dropdown-menu slot="dropdown">
@@ -79,15 +79,6 @@
             </el-radio>
           </el-radio-group>
         </div>
-        <!--<div v-show="active == 1" style="margin-top: 20px;width:100%;">
-          <el-radio-group v-model="tbForm.createType">
-            <el-radio border label="1">新建</el-radio>
-            <el-radio border label="2">关联已有表</el-radio>
-          </el-radio-group>
-        </div>
-        <div v-show="active == 2 && tbForm.createType == 1" style="margin-top: 20px;width:100%;">
-          <el-input type="textarea" style="width:100%;height:300px;" placeholder="请输入SQL" v-model="sql"></el-input>
-        </div>-->
         <div v-show="active == 1">
           <el-radio-group v-model="tbForm.dtName">
             <el-radio class="el-radio-icon" border v-for="item in relateTables" :key="item" :label="item">
@@ -100,7 +91,6 @@
           <el-table ref="filterTable" :data="tbForm.columns" style="width: 100%">
             <el-table-column prop="columnName" label="字段名称"></el-table-column>
             <el-table-column prop="dataType" label="数据类型"></el-table-column>
-            <el-table-column label="长度" align="center"></el-table-column>
             <el-table-column prop="columnTitle" label="列标题" align="center">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.columnTitle"></el-input>
@@ -116,17 +106,50 @@
                 <el-checkbox v-model="scope.row.visiable" :true-label="1" :false-label="0"></el-checkbox>
               </template>
             </el-table-column>
+            <el-table-column label="是否作为导入字段" align="center">
+              <template slot-scope="scope">
+                <el-checkbox v-model="scope.row.importAlias" :true-label="1" :false-label="0"></el-checkbox>
+              </template>
+            </el-table-column>
+            <el-table-column label="是否作为导出字段" align="center">
+              <template slot-scope="scope">
+                <el-checkbox v-model="scope.row.exportAlias" :true-label="1" :false-label="0"></el-checkbox>
+              </template>
+            </el-table-column>
           </el-table>
         </div>
-        <div v-show="active == 3" style="width:800px;margin: 200px auto;">
-          <el-form label-width="120px">
+        <div v-show="active == 3" style="width:800px;margin: 100px auto;">
+          <el-form label-width="160px">
             <el-form-item label="数据源名称：">
               <el-input v-model="tbForm.dtNameCn" maxlength="20" show-word-limit></el-input>
+            </el-form-item>
+            <el-form-item label="是否开启数据监控：">
+              <el-switch
+                v-model="tbForm.isMonitor"
+                active-color="#13ce66"
+                inactive-color="#C0CCDA"
+                :active-value="1"
+                :inactive-value="0">
+              </el-switch>
+            </el-form-item>
+            <el-form-item label="数据监控日期字段：">
+              <el-select v-model="tbForm.monitorColumn" clearable placeholder="请选择">
+                <el-option
+                  v-for="item in tbForm.columns"
+                  :key="item.columnName"
+                  :label="item.columnName"
+                  :value="item.columnName">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="数据监控异常阈值：">
+              <el-input v-model="tbForm.monitorThreshold"  placeholder="单位：秒"></el-input>
             </el-form-item>
           </el-form>
         </div>
       </el-card>
       <span slot="footer" class="dialog-footer">
+        <el-button v-show="active == 1" type="success" @click="addTableStructure">新增资源表</el-button>
         <el-button v-show="active > 0" type="info" @click="prevStep">上一步</el-button>
         <el-button type="primary" @click="nextStep" v-text="active == 3?'保存':'下一步'" v-loading="loading_save"></el-button>
       </span>
@@ -136,7 +159,7 @@
       <el-header style="height:40px;">
         <el-row style="margin:10px 0px;">
           <el-col :span="3/48">
-            <el-link :underline="false">
+            <el-link @click="addTableData" :underline="false">
               <svg-icon icon-class="table_data_add"/>
               新增
             </el-link>
@@ -154,7 +177,7 @@
             </el-link>
           </el-col>
           <el-col :span="3/48">
-            <el-link :underline="false">
+            <el-link @click="importTableData" :underline="false">
               <svg-icon icon-class="table_data_import"/>
               导入
             </el-link>
@@ -163,12 +186,6 @@
             <el-link @click="exportTableData" :underline="false">
               <svg-icon icon-class="table_data_export"/>
               导出
-            </el-link>
-          </el-col>
-          <el-col :span="3/48">
-            <el-link @click="openImportModel" :underline="false">
-              <svg-icon icon-class="excel"/>
-              导入模板
             </el-link>
           </el-col>
         </el-row>
@@ -205,6 +222,74 @@
       </el-main>
     </el-dialog>
     <el-dialog :visible.sync="modelDialogVisible" :close-on-click-modal="false" width="600px">
+      <div style="width:360px;margin:auto;">
+        <el-upload
+          class="upload-demo"
+          drag
+          :action="uploadUrl"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess">
+          <i class="el-icon-upload"></i>
+          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        </el-upload>
+        <el-link @click="downloadImportModel" :underline="false" style="margin-top: 20px;">
+          <svg-icon icon-class="excel"/>
+          导入模板
+        </el-link>
+      </div>
+    </el-dialog>
+    <el-dialog :visible.sync="structureDialogVisible" :close-on-click-modal="false" title="新建资源表" width="1000px">
+      <el-form ref="form" label-width="150px">
+        <el-form-item label="资源中文名称">
+          <el-input v-model="newTbForm.tbNameCn" @input="pinyinLetterTb()"></el-input>
+        </el-form-item>
+        <el-form-item label="资源名称">
+          <el-input v-model="newTbForm.tbName"></el-input>
+        </el-form-item>
+      </el-form>
+      <el-table ref="structureTable" :data="newTbForm.columns" style="width: 100%">
+        <el-table-column label="字段中文名称" align="center">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.comment" @input="pinyinLetter(scope.row)"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="name" label="字段名称" align="center">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.name"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="字段类型" align="center">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.type" clearable placeholder="请选择">
+              <el-option
+                v-for="item in columnTypes"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column label="字段长度" align="center">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.length"></el-input>
+          </template>
+        </el-table-column>
+      </el-table>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="success" @click="addTableColumn">新增字段</el-button>
+        <el-button type="primary" @click="createTable">创建</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog :visible.sync="rowDataAddDialogVisible" :close-on-click-modal="false" title="添加数据">
+      <el-form ref="form_add" label-width="150px">
+          <el-form-item v-for="row in tableRows" :key="row.id" :label="row.label">
+            <el-input v-model="rowData[row.prop]"></el-input>
+          </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="success" @click="addRowData">保存</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -214,6 +299,8 @@
   import API_BASE_DB from "../../../api/api_base_db"
   import API_DATA_TABLE from "../../../api/api_data_table"
   import API_DICT_TYPE from "../../../api/api_dictionary_type"
+  import CONSTANTS from "../../../common/constants"
+  import pinyin from 'pinyin'
 
   export default {
     name: "DataTableMain",
@@ -225,17 +312,38 @@
           dbId: null,
           dtName: null,
           dtNameCn: null,
+          isMonitor: 0,
+          monitorColumn: null,
+          monitorThreshold: 0,
           columns: []
         },
         centerDialogVisible: false,
         detailDialogVisible: false,
         modelDialogVisible: false,
+        structureDialogVisible: false,
+        rowDataAddDialogVisible: false,
         active: 0,
         tables: [],
         dbList: [],
         relateTables: [],
         tableRows: [],
         dictTypeList: [],
+        rowData: {},
+        newTbForm: {
+          dbId: null,
+          tbName: null,
+          tbNameCn: null,
+          columns: [
+            {
+              comment: null,
+              name: null,
+              type: null,
+              length: null
+            }
+          ],
+        },
+        columnTypes: CONSTANTS.COLUMN_TYPES,
+        fileUrl: null,
         dictProps: {
           children: 'children',
           label: 'name',
@@ -264,6 +372,11 @@
         progress: false,
         progress_percent: 0,
         timer: null,
+      }
+    },
+    computed: {
+      uploadUrl() {
+        return CONSTANTS.IMPORT_FILE_UPLOAD_URL + "?tbId=" + this.tbForm.id;
       }
     },
     methods: {
@@ -353,6 +466,10 @@
           })
         })
       },
+      addTableData() {
+        let _this = this;
+        _this.rowDataAddDialogVisible = true;
+      },
       refreshTableData() {
         this.tableDataQuery();
       },
@@ -372,10 +489,19 @@
           API_BASE_DB.exportTableDataProgress(null).then(res => {
             _this.progress_percent = res;
           }).catch(() => {window.clearInterval(_this.timer);})
-        }, 1000);
+        }, 100);
       },
-      openImportModel() {
-
+      importTableData() {
+        let _this = this;
+        _this.modelDialogVisible = true;
+      },
+      handleAvatarSuccess(res, file) {
+        let _this = this;
+        _this.modelDialogVisible = false;
+        _this.tableDataQuery();
+      },
+      downloadImportModel() {
+        API_BASE_DB.downloadImportModel(this.tbForm.dtNameCn + "_模板.xls", {tbId:this.tbForm.id})
       },
       openEditDialog() {
         let _this = this;
@@ -390,6 +516,39 @@
         }
         this.centerDialogVisible = true;
         this.listAllDbs();
+      },
+      addTableStructure() {
+        this.structureDialogVisible = true;
+      },
+      addTableColumn() {
+        this.newTbForm.columns.push({
+          comment: null,
+          name: null,
+          type: null,
+          length: null
+        });
+      },
+      pinyinLetter(row) {
+        let letter = pinyin(row.comment, {
+          style: pinyin.STYLE_FIRST_LETTER,
+          heteronym: false
+        });
+        row.name = letter.toString().replace(/,/g,'').toUpperCase();
+      },
+      pinyinLetterTb() {
+        this.newTbForm.tbName = pinyin(this.newTbForm.tbNameCn, {
+          style: pinyin.STYLE_FIRST_LETTER,
+          heteronym: false
+        }).toString().replace(/,/g,'').toUpperCase();
+      },
+      createTable() {
+        let _this = this;
+        _this.newTbForm.dbId = _this.tbForm.dbId;
+        API_BASE_DB.createTable(_this.newTbForm).then(res => {
+          _this.structureDialogVisible = false;
+          _this.tbForm.dtNameCn = _this.newTbForm.tbNameCn;
+          _this.listRelateTables();
+        })
       },
       prevStep() {
         if (--this.active <= 1) {
@@ -454,6 +613,8 @@
                     columnName: item.columnName,
                     columnTitle: item.columnTitle,
                     visiable: item.visiable,
+                    importAlias: item.importAlias,
+                    exportAlias: item.exportAlias,
                     dictId: item.dictId,
                     isNullable: obj.isNullable,
                     dataType: obj.dataType,

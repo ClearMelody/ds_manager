@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Main from '@/views/Main'
-import MonitorIndex from '@/views/dataRes/MonitorIndex'
+import MonitorIndex from '@/views/dataRes/monitor/MonitorIndex'
 import ResourceIndex from '@/views/dataRes/resource/ResourceIndex'
 import DatabaseIndex from '@/views/dataRes/DatabaseIndex'
-import Dictionary from '@/views/dataRes/Dictionary'
+import DictionaryIndex from '@/views/dataRes/DictionaryIndex'
 
 Vue.use(Router)
 
@@ -36,9 +36,14 @@ const routes = [
         name: 'databaseIndex'
       },
       {
-        path: 'Dictionary',
-        component: Dictionary,
-        name: 'dictionary'
+        path: 'DictionaryIndex',
+        component: DictionaryIndex,
+        name: 'dictionaryIndex'
+      },
+      {
+        path: 'MonitorIndex',
+        component: MonitorIndex,
+        name: 'monitorIndex'
       }
     ]
   }
