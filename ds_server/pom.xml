@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.wyk</groupId>
-    <artifactId>dsmanager</artifactId>
+    <artifactId>ds_manager</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>ds-server</name>
     <description>数据资源系统</description>

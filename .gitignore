@@ -1,5 +1,6 @@
 HELP.md
 /target/
+node_modules/
 !.mvn/wrapper/maven-wrapper.jar
 *.log
 *.gz
@@ -10,4 +11,3 @@ HELP.md
 *.iml
 *.ipr
 Dockerfile
-
